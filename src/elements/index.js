@@ -1,5 +1,11 @@
 import Block from './Block'
+import Input from './Input'
+import Text from './Text'
+import Button from './Button'
 
 export {
-  Block
+  Block,
+  Input,
+  Text,
+  Button
 }
