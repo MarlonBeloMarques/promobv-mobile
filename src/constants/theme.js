@@ -7,6 +7,7 @@ const colors = {
   black: "#000000",
   gray: "#454545",
   gray2: "#E1E7E3",
+  gray3: '#BEBEBE',
   google: "#C71615",
   facebook: "#3B5998"
 }

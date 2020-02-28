@@ -41,7 +41,8 @@ const styles = StyleSheet.create({
     borderRadius: theme.sizes.radius,
     height: theme.sizes.base * 3,
     justifyContent: "center",
-    marginVertical: theme.sizes.padding / 3
+    marginVertical: theme.sizes.padding / 3,
+    marginTop: theme.sizes.base * 2
   },
   shadow: {
     shadowColor: theme.colors.black,

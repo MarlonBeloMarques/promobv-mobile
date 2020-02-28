@@ -14,7 +14,7 @@ export default function Input(props) {
     const { label, error } = props;
 
     return (
-      <Block padding={[0,0, theme.sizes.body, 4]} flex={false}>
+      <Block padding={[0,0, theme.sizes.base - 10, 4]} flex={false}>
         {label ? 
           (<Text gray={!error} accent={error}>{label}</Text>)
         : null}
@@ -88,7 +88,6 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: theme.colors.gray,
     height: theme.sizes.base * 3,
-    paddingTop: theme.sizes.base * 1,
     paddingLeft: theme.sizes.base - 6
   },
   toggle: {
@@ -96,8 +95,8 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     width: theme.sizes.base * 2,
     height: theme.sizes.base * 2,
-    top: theme.sizes.base * 3,
-    paddingRight: theme.sizes.base - 8,
+    top: theme.sizes.base * 2.4,
+    paddingRight: theme.sizes.base - 6,
     right: 0
   }
 });
