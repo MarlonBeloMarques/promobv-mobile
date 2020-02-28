@@ -1,12 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+
+import AppContainer from './src/routes'
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>PromoBV</Text>
-    </View>
-  );
+  return <AppContainer />
 }
 
 const styles = StyleSheet.create({
