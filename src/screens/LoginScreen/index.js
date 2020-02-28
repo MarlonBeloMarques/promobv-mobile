@@ -13,6 +13,10 @@ export default function LoginScreen(props) {
     props.navigation.navigate('signup')
   }
 
+  function onPasswordClicked() {
+    props.navigation.navigate("password");
+  }
+
   return (
     <KeyboardAvoidingView style={styles.container}>
       <Block padding={[0, theme.sizes.base * 2]}>
@@ -26,7 +30,7 @@ export default function LoginScreen(props) {
             label="Senha" 
             style={[styles.input]} 
             defaultValue={password} />
-            <Button style={styles.forgotPassword}>
+            <Button onPress={onPasswordClicked} style={styles.forgotPassword}>
               <Text 
                 caption
                 primary

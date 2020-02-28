@@ -4,6 +4,7 @@ import { createStackNavigator } from 'react-navigation-stack'
 
 import LoginScreen from '../screens/LoginScreen'
 import SignupScreen from '../screens/SignupScreen'
+import PasswordScreen from '../screens/PasswordScreen'
 import { Image } from 'react-native'
 
 import { theme } from '../constants'
@@ -12,11 +13,18 @@ import { Text } from '../elements'
 const screens = createStackNavigator(
   {
     login: LoginScreen,
-    signup: { 
+    signup: {
       screen: SignupScreen,
       navigationOptions: {
         title: <Text gray>Cadastro</Text>,
-        headerTitleAlign: 'left'
+        headerTitleAlign: "left"
+      }
+    },
+    password: {
+      screen: PasswordScreen,
+      navigationOptions: {
+        title: <Text gray>Recuperar senha</Text>,
+        headerTitleAlign: "left"
       }
     }
   },
