@@ -7,11 +7,18 @@ import SignupScreen from '../screens/SignupScreen'
 import { Image } from 'react-native'
 
 import { theme } from '../constants'
+import { Text } from '../elements'
 
 const screens = createStackNavigator(
   {
     login: LoginScreen,
-    signup: SignupScreen
+    signup: { 
+      screen: SignupScreen,
+      navigationOptions: {
+        title: <Text gray>Cadastro</Text>,
+        headerTitleAlign: 'left'
+      }
+    }
   },
   {
     defaultNavigationOptions: {
@@ -21,7 +28,9 @@ const screens = createStackNavigator(
         backgroundColor: theme.colors.white
       },
       cardStyle: { backgroundColor: "white" },
-      headerBackImage: <Image source={require('../../assets/icons/back.png')} />,
+      headerBackImage: (
+        <Image source={require("../../assets/icons/back.png")} />
+      ),
       headerBackTitleVisible: null,
       title: null,
       headerLeftContainerStyle: {
@@ -31,7 +40,6 @@ const screens = createStackNavigator(
       headerRightContainerStyle: {
         alignItems: "center",
         padding: theme.sizes.base
-
       }
     }
   }
