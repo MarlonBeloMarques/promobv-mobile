@@ -1,12 +1,11 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TextInput } from "react-native";
 
-export default function SignupScreen(props) {
+export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Signup Screen</Text>
-    </View>
-  );
+
+    <TextInput></TextInput>
+  )
 }
 
 const styles = StyleSheet.create({

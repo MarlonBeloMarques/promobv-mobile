@@ -1,10 +1,13 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { Block } from '../../elements'
 
-export default function App() {
+export default function LoginScreen(props) {
   return (
     <View style={styles.container}>
-      <Text>Login Screen</Text>
+      <Block>
+        <Text>Ola</Text>
+      </Block>
     </View>
   );
 }
