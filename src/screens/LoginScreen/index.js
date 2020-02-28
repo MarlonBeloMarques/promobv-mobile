@@ -9,6 +9,10 @@ export default function LoginScreen(props) {
   const [email, setEmail] = useState('promobv@react.com')
   const [password, setPassword] = useState('promobv')
 
+  function onSignupClicked() {
+    props.navigation.navigate('signup')
+  }
+
   return (
     <KeyboardAvoidingView style={styles.container}>
       <Block padding={[0, theme.sizes.base * 2]}>
@@ -46,7 +50,7 @@ export default function LoginScreen(props) {
         <Button color={theme.colors.facebook}>
           <Text bold white center >Entrar com o Facebook</Text>
         </Button>
-        <Button style={styles.signup}>
+        <Button onPress={onSignupClicked} style={styles.signup}>
           <Text 
             caption
             primary
