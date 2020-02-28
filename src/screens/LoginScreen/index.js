@@ -3,6 +3,8 @@ import { StyleSheet, View, KeyboardAvoidingView } from "react-native";
 import { Block, Input, Button, Text} from '../../elements'
 import { theme } from "../../constants";
 
+import styles from './styles'
+
 export default function LoginScreen(props) {
   const [email, setEmail] = useState('promobv@react.com')
   const [password, setPassword] = useState('promobv')
@@ -58,34 +60,3 @@ export default function LoginScreen(props) {
     </KeyboardAvoidingView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center"
-  },
-
-  input: {
-    borderColor: "transparent",
-    borderWidth: 1,
-    borderColor: theme.colors.gray3
-  },
-
-  inputError: {
-    borderBottomColor: theme.colors.accent
-  },
-
-  forgotPassword: {
-    marginTop: 1
-  }, 
-
-  signup: {
-    marginTop: theme.sizes.base 
-  }, 
-
-  end: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    marginBottom: theme.sizes.padding * 2
-  }
-})
