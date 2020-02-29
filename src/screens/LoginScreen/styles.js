@@ -29,5 +29,11 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
     marginBottom: theme.sizes.padding * 2
+  },
+
+  logo: {
+    width: 150,
+    height: 150,
+    marginBottom: theme.sizes.base * 5
   }
 });

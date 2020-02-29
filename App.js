@@ -3,15 +3,13 @@ import { StyleSheet, View } from 'react-native';
 
 import AppContainer from './src/routes'
 
+console.disableYellowBox = true
+
 export default function App() {
-  return <AppContainer />
+  return (
+    <View style={{flex: 1}}>
+      <AppContainer/>
+    </View>
+  )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
