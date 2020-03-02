@@ -4,29 +4,28 @@ import { StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'
 
 import { theme } from '../constants';
-import Text from './Text'
+import { Text, Block } from './index'
 
 export default function Header(props) {
 
   return (
-    <View style={styles.header}>
+    <Block 
+      color={theme.colors.primary} 
+      flex={false} 
+      padding={[50, 0, 0]}
+      row
+      center
+      >
       <StatusBar barStyle="light-content"></StatusBar>
       <TouchableOpacity style={styles.trigger} {...props}>
         <Ionicons name={"ios-menu"} size={30} color={theme.colors.white} />
       </TouchableOpacity>
       <Text style={styles.title}>{props.children}</Text>
-    </View>
+    </Block>
   );
 }
 
 const styles = StyleSheet.create({
-  header: {
-    paddingTop: 50,
-    backgroundColor: theme.colors.primary,
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-
   trigger: {
     marginLeft: 27.5,
     width: 40,
