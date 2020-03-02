@@ -1,14 +1,23 @@
 import React from 'react'
 import { createAppContainer } from 'react-navigation'
+import createAnimatedSwitchNavigator from 'react-navigation-animated-switch'
 import { createStackNavigator } from 'react-navigation-stack'
+import { createDrawerNavigator } from 'react-navigation-drawer'
 
 import LoginScreen from '../screens/LoginScreen'
 import SignupScreen from '../screens/SignupScreen'
 import PasswordScreen from '../screens/PasswordScreen'
+import PromotionsScreen from '../screens/PromotionsScreen'
+
 import { Image } from 'react-native'
 
 import { theme } from '../constants'
 import { Text } from '../elements'
+import { Transition } from 'react-native-reanimated'
+
+const menu = createDrawerNavigator({
+  promoções: PromotionsScreen
+})
 
 const screens = createStackNavigator(
   {
@@ -53,4 +62,24 @@ const screens = createStackNavigator(
   }
 );
 
-export default createAppContainer(screens);
+const routes =createAnimatedSwitchNavigator({
+  auth: screens,
+  menu: menu
+},
+{
+  transition: (
+    <Transition.Together>
+      <Transition.Out
+        type='slide-left'
+        interpolation='easeIn'
+        durationMs={400}
+      />
+      <Transition.In 
+        type='fade'
+        durationMs={500}
+      />
+    </Transition.Together>
+  )
+})
+
+export default createAppContainer(routes);

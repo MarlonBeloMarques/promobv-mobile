@@ -14,6 +14,10 @@ export default function LoginScreen(props) {
     props.navigation.navigate('signup')
   }
 
+  function onLoginClicked() {
+    props.navigation.navigate("promoções");
+  }
+
   function onPasswordClicked() {
     props.navigation.navigate("password");
   }
@@ -42,7 +46,7 @@ export default function LoginScreen(props) {
                 Recuperar senha?
             </Text>
           </Button>
-          <Button color={theme.colors.primary}>
+          <Button onPress={onLoginClicked} color={theme.colors.primary}>
             <Text bold white center >Entrar</Text>
           </Button>
             
