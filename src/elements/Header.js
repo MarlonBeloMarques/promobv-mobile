@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity, StatusBar } from "react-native";
 import { StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'
 
@@ -10,12 +10,9 @@ export default function Header(props) {
 
   return (
     <View style={styles.header}>
+      <StatusBar barStyle="light-content"></StatusBar>
       <TouchableOpacity style={styles.trigger} {...props}>
-        <Ionicons
-          name={'ios-menu'}
-          size={30}
-          color={theme.colors.white}
-        />
+        <Ionicons name={"ios-menu"} size={30} color={theme.colors.white} />
       </TouchableOpacity>
       <Text style={styles.title}>{props.children}</Text>
     </View>
