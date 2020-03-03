@@ -46,9 +46,10 @@ export default function LoginScreen(props) {
                 Recuperar senha?
             </Text>
           </Button>
-          <Button onPress={onLoginClicked} color={theme.colors.primary}>
+        
+         <Button onPress={onLoginClicked} color={theme.colors.primary}>
             <Text bold white center >Entrar</Text>
-          </Button>
+          </Button> 
             
       </Block>
 
