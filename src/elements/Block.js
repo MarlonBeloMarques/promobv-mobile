@@ -115,11 +115,13 @@ export default function Block(props) {
     animated,
     wrap,
     style,
+    border,
     children
   } = props
 
   const blockStyles = [
     styles.block,
+    border && styles.border,
     flex && { flex },
     flex === false && { flex: 0 }, // redefinir / desativar flex
     row && styles.row,
@@ -194,6 +196,11 @@ export const styles = StyleSheet.create({
     shadowRadius: 13,
     elevation: 2
   },
+  border: {
+    borderBottomWidth: 1,
+    borderColor: theme.colors.gray3
+  },
+
   accent: { backgroundColor: theme.colors.accent },
   primary: { backgroundColor: theme.colors.primary },
   secondary: { backgroundColor: theme.colors.secondary },
