@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { KeyboardAvoidingView, FlatList, StyleSheet, View } from "react-native";
-import { Block, Text, Button, Header } from "../../elements";
+import { Block, Text, Button, Header, Photo } from "../../elements";
 import { theme } from "../../constants";
 
-import { Post, HeaderStyled, Avatar, Name, PostImage, Localization, Price } from "./styles";
+import { } from "./styles";
 import { DrawerActions } from "react-navigation-drawer";
 
 export default function PasswordScreen(props) {
@@ -41,16 +41,18 @@ export default function PasswordScreen(props) {
         data={feed}
         keyExtractor={post => String(post.id)}
         renderItem={({item}) => (
-          <Post>
-            <PostImage source={{uri: item.image}} />
-            <Block>
-              <Name>{item.author.name}</Name>
+          <Block button size={140} flex={false} row border>
+            <Photo size={40} image={item.image}/>
+            <Block padding={[15, 10, 0]}>
+              <Text gray bold size={18}>{item.author.name}</Text>
               <Block style={styles.end}>
-                <Price> {item.price}</Price>
-                <Localization> {item.description}</Localization>
+                <Text secondary size={15} bold> {item.price}</Text>
+                <Block padding={[5, 0, 0]} flex={false}>
+                  <Text gray3 bold> {item.description}</Text>
+                </Block>
               </Block>
             </Block>
-          </Post>
+          </Block>
         )}>
       </FlatList>
 </KeyboardAvoidingView>

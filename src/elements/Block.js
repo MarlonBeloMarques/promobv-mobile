@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, Animated } from 'react-native'
+import { StyleSheet, View, Animated, TouchableOpacity } from 'react-native'
 import { theme } from '../constants'
 
 export default function Block(props) {
@@ -107,12 +107,14 @@ export default function Block(props) {
     top,
     bottom,
     card,
+    size,
     shadow,
     color,
     space,
     padding,
     margin,
     animated,
+    button,
     wrap,
     style,
     border,
@@ -121,6 +123,7 @@ export default function Block(props) {
 
   const blockStyles = [
     styles.block,
+    size && { height: size },
     border && styles.border,
     flex && { flex },
     flex === false && { flex: 0 }, // redefinir / desativar flex
@@ -151,11 +154,19 @@ export default function Block(props) {
     )
   }
 
+  if(button) {
     return (
-      <View style={blockStyles}>
-        {children}
-      </View>
-    );
+      <TouchableOpacity style={blockStyles}>
+      {children}
+    </TouchableOpacity>
+    )
+  }
+
+  return (
+    <View style={blockStyles}>
+      {children}
+    </View>
+  );
   }
 
 export const styles = StyleSheet.create({
