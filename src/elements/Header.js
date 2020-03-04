@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, TouchableOpacity, StatusBar } from "react-native";
+import { StatusBar } from "react-native";
 import { StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'
 
 import { theme } from '../constants';
-import { Text, Block } from './index'
+import { Text, Block, Button } from './index'
 
 export default function Header(props) {
 
@@ -12,31 +12,19 @@ export default function Header(props) {
     <Block 
       color={theme.colors.primary} 
       flex={false} 
-      padding={[50, 0, 0]}
+      padding={[50, 0, 0, theme.sizes.base]}
+      size={theme.sizes.base * 6}
       row
       center
       >
       <StatusBar barStyle="light-content"></StatusBar>
-      <TouchableOpacity style={styles.trigger} {...props}>
+      <Button style {...props}>
         <Ionicons name={"ios-menu"} size={30} color={theme.colors.white} />
-      </TouchableOpacity>
-      <Text style={styles.title}>{props.children}</Text>
+      </Button>
+      <Block padding={[0,0,0,theme.sizes.base * 2.2]}>
+        <Text white bold>{props.children}</Text>
+      </Block>
     </Block>
   );
 }
-
-const styles = StyleSheet.create({
-  trigger: {
-    marginLeft: 27.5,
-    width: 40,
-    height: 40
-  },
-
-  title: {
-    color: theme.colors.white,
-    fontWeight: 'bold',
-    paddingBottom: theme.sizes.base - 5,
-    marginLeft: theme.sizes.base
-  }
-});
 

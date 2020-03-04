@@ -10,6 +10,10 @@ export default function PasswordScreen(props) {
   
   const [feed, setFeed] = useState([]);
 
+  function onDetailsClicked() {
+    props.navigation.navigate("Detalhes");
+  }
+
   useEffect(() => {
     async function loadFeed() {
       const response = await fetch(
@@ -41,7 +45,7 @@ export default function PasswordScreen(props) {
         data={feed}
         keyExtractor={post => String(post.id)}
         renderItem={({item}) => (
-          <Block button size={140} flex={false} row border>
+          <Block onPress={onDetailsClicked} button size={140} flex={false} row border>
             <Photo size={40} image={item.image}/>
             <Block padding={[15, 10, 0]}>
               <Text gray bold size={18}>{item.author.name}</Text>

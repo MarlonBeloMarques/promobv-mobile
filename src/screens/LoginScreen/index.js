@@ -15,7 +15,7 @@ export default function LoginScreen(props) {
   }
 
   function onLoginClicked() {
-    props.navigation.navigate("promoções");
+    props.navigation.navigate("Promoções");
   }
 
   function onPasswordClicked() {

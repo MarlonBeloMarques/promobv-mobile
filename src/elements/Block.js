@@ -156,10 +156,10 @@ export default function Block(props) {
 
   if(button) {
     return (
-      <TouchableOpacity style={blockStyles}>
-      {children}
-    </TouchableOpacity>
-    )
+      <TouchableOpacity style={blockStyles} {...props}>
+        {children}
+      </TouchableOpacity>
+    );
   }
 
   return (

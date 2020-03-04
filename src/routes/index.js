@@ -8,6 +8,7 @@ import LoginScreen from '../screens/LoginScreen'
 import SignupScreen from '../screens/SignupScreen'
 import PasswordScreen from '../screens/PasswordScreen'
 import PromotionsScreen from '../screens/PromotionsScreen'
+import DetailsScreen from '../screens/DetailsScreen'
 
 import { Image } from 'react-native'
 
@@ -16,8 +17,41 @@ import { Text } from '../elements'
 import { Transition } from 'react-native-reanimated'
 
 const menu = createDrawerNavigator({
-  promoções: PromotionsScreen
+  Promoções: PromotionsScreen
 })
+
+const childrens = createStackNavigator({
+  menu: {
+    screen: menu,
+    navigationOptions: {
+      header: null
+    }
+  },
+  Detalhes: {
+    screen: DetailsScreen,
+    navigationOptions: {
+      title: <Text bold white>Detalhes</Text>,
+      headerTitleAlign: "left",
+      headerStyle: {
+        height: theme.sizes.base * 6,
+        shadowColor: "transparent",
+        backgroundColor: theme.colors.primary
+      },
+      headerBackImage: (
+        <Image source={require("../../assets/icons/back.png")} />
+      ),
+      headerBackTitleVisible: null,
+      headerLeftContainerStyle: {
+        alignItems: "center",
+        padding: theme.sizes.base
+      },
+      headerRightContainerStyle: {
+        alignItems: "center",
+        padding: theme.sizes.base
+      }
+    }
+  }
+});
 
 const screens = createStackNavigator(
   {
@@ -25,14 +59,14 @@ const screens = createStackNavigator(
     signup: {
       screen: SignupScreen,
       navigationOptions: {
-        title: <Text gray>Cadastro</Text>,
+        title: <Text bold gray>Cadastro</Text>,
         headerTitleAlign: "left"
       }
     },
     password: {
       screen: PasswordScreen,
       navigationOptions: {
-        title: <Text gray>Recuperar senha</Text>,
+        title: <Text bold gray>Recuperar senha</Text>,
         headerTitleAlign: "left"
       }
     }
@@ -64,7 +98,7 @@ const screens = createStackNavigator(
 
 const routes =createAnimatedSwitchNavigator({
   auth: screens,
-  menu: menu
+  childrens : childrens
 },
 {
   transition: (
