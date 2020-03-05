@@ -89,39 +89,61 @@ export default function DetailsScreen(props) {
               </Text>
             </Block>
             <Block flex={false} border>
-              <Block flex={false} row padding={5}>
-                <Ionicons
-                  name={"ios-share"}
-                  size={20}
-                  color={theme.colors.gray3}
-                />
-                <Block margin={4}>
-                  <Text>Eu aliquip sunt.</Text>
+              <Block flex={false} row>
+                <Block flex={false} center column>
+                  <Block padding={5}>
+                    <Ionicons
+                      name={"ios-locate"}
+                      size={20}
+                      color={theme.colors.gray3}
+                    />
+                  </Block>
+                  <Block padding={5}>
+                    <Ionicons
+                      name={"ios-phone-portrait"}
+                      size={20}
+                      color={theme.colors.gray3}
+                    />
+                  </Block>
                 </Block>
-              </Block>
-              <Block flex={false} row padding={5}>
-                <Ionicons
-                  name={"ios-share"}
-                  size={20}
-                  color={theme.colors.gray3}
-                />
-                <Block margin={4}>
-                  <Text>Eu aliquip sunt.</Text>
+                <Block>
+                  <Block margin={5} padding={[2, 0]}>
+                    <Text>Eu aliquip sunt.</Text>
+                  </Block>
+                  <Block margin={5} padding={[2, 0]}>
+                    <Text>Eu aliquip sunt.</Text>
+                  </Block>
                 </Block>
               </Block>
             </Block>
-            <Block margin={[8,0,0,0]} size={200}>
-              <Text bold h3 gray>Galeria</Text>
+            <Block margin={[8, 0, 0, 0]} size={200}>
+              <Text bold h3 gray>
+                Galeria
+              </Text>
               <Block padding={[15]} row flex={false}>
-                <Block padding={[0,10,0,0]} flex={false}>  
-                  <Photo content={true} size={80} height={80} card image={image} />
-                </Block>
-                <Block flex={false}>  
-                  <Photo content={true} size={80} height={80} card image={image} />
+                <Block padding={[0, 10, 0, 0]} flex={false}>
+                  <Photo
+                    content={true}
+                    size={80}
+                    height={80}
+                    card
+                    image={image}
+                  />
                 </Block>
                 <Block flex={false}>
-                  <Button style={styles.plus} >
-                    <Text h3 gray>+</Text>
+                  <Photo
+                    content={true}
+                    size={80}
+                    height={80}
+                    card
+                    image={image}
+                  />
+                </Block>
+                <Block flex={false}>
+                  <Button style={styles.plus}>
+                    <Text h3 gray>
+                      +
+                    </Text>
                   </Button>
                 </Block>
               </Block>
