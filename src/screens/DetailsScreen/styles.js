@@ -3,7 +3,14 @@ import { theme } from "../../constants";
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "center"
-  }
+    flex: 1
+  },
+
+  plus: {
+    backgroundColor: theme.colors.gray2,
+    padding: 20,
+    borderRadius: theme.sizes.radius,
+    marginHorizontal: 10
+  },
+
 })

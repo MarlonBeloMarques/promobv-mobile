@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { KeyboardAvoidingView, FlatList, StyleSheet, View } from "react-native";
+import { KeyboardAvoidingView, FlatList, StyleSheet, View, AsyncStorage } from "react-native";
 import { Block, Text, Button, Header, Photo } from "../../elements";
 import { theme } from "../../constants";
 
@@ -9,10 +9,6 @@ import { DrawerActions } from "react-navigation-drawer";
 export default function PasswordScreen(props) {
   
   const [feed, setFeed] = useState([]);
-
-  function onDetailsClicked() {
-    props.navigation.navigate("Detalhes");
-  }
 
   useEffect(() => {
     async function loadFeed() {
@@ -27,6 +23,15 @@ export default function PasswordScreen(props) {
     //executa uma unica vez
     loadFeed();
   }, []);
+
+  async function onDetailsClicked(id) {
+
+  const _id = id;
+
+  await AsyncStorage.setItem('promotion', JSON.stringify(_id))
+   
+  props.navigation.navigate("Detalhes", { id });
+  }
 
   function onClickMenu() {
     props.navigation.dispatch(DrawerActions.openDrawer())
@@ -45,8 +50,13 @@ export default function PasswordScreen(props) {
         data={feed}
         keyExtractor={post => String(post.id)}
         renderItem={({item}) => (
-          <Block onPress={onDetailsClicked} button size={140} flex={false} row border>
-            <Photo size={40} image={item.image}/>
+          <Block onPress={() => onDetailsClicked(item.id)} 
+            button 
+            size={140} 
+            flex={false} 
+            row 
+            border>
+            <Photo height={140} size={40} image={item.image}/>
             <Block padding={[15, 10, 0]}>
               <Text gray bold size={18}>{item.author.name}</Text>
               <Block style={styles.end}>

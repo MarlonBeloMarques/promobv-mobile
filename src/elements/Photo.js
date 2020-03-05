@@ -21,11 +21,16 @@ export default function Photo(props) {
     animated,
     wrap,
     size,
-    style
+    height,
+    style,
+    content,
+    avatar
   } = props;
 
   const blockStyles = [
-    size,
+    content === true && { width: size, height: height },
+    size && height && Image,
+    avatar && styles.avatar,
     flex && { flex },
     flex === false && { flex: 0 }, // redefinir / desativar flex
     row && styles.row,
@@ -44,6 +49,7 @@ export default function Photo(props) {
 
   const Image = styled.Image`
     width: ${size}%;
+    height: ${height}%;
   `;
 
   if (animated) {
@@ -56,6 +62,11 @@ export default function Photo(props) {
 export const styles = StyleSheet.create({
   block: {
     flex: 1
+  },
+  avatar: {
+    width: 42,
+    height: 42,
+    borderRadius: 26
   },
   row: {
     flexDirection: "row"
