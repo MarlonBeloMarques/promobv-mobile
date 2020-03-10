@@ -5,6 +5,7 @@ import CheckboxFormX from "react-native-checkbox-form";
 import { theme } from "../../constants";
 
 import styles from "./styles";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function SignupScreen(props) {
   const [email, setEmail] = useState("promobv@react.com");
@@ -20,58 +21,59 @@ export default function SignupScreen(props) {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <Block padding={[0, theme.sizes.base * 2]}>
-        <Button color={theme.colors.google}>
-          <Text bold white center>
-            Entrar com o Google
-          </Text>
-        </Button>
-        <Button color={theme.colors.facebook}>
-          <Text bold white center>
-            Entrar com o Facebook
-          </Text>
-        </Button>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Block padding={[0, theme.sizes.base * 2]}>
+          <Button color={theme.colors.google}>
+            <Text bold white center>
+              Entrar com o Google
+            </Text>
+          </Button>
+          <Button color={theme.colors.facebook}>
+            <Text bold white center>
+              Entrar com o Facebook
+            </Text>
+          </Button>
+    
+          <Block flex={false} style={styles.block}>
+            <Input label="Usuário" style={[styles.input]} />
+              <Input
+                label={
+                  <Text style={{ color: theme.colors.gray }}>
+                    E-mail {""}
+                    <Text style={[styles.message, { color: theme.colors.gray }]}>
+                      (Encaminharemos um e-mail de confirmação)
+                    </Text>
+                  </Text>
+                }
+                style={[styles.input]}
+                defaultValue={email}
+              />
+              <Input
+                secure
+                label="Senha"
+                style={[styles.input]}
+                defaultValue={password}
+              />
+  
+              <CheckboxFormX
+                style={{ width: 330 }}
+                dataSource={mockData}
+                itemShowKey="label"
+                itemCheckedKey="RNchecked"
+                iconSize={16}
+                formHorizontal={false}
+                labelHorizontal={true}
+                textStyle={styles.checkbox}
+              />
 
-        <Block flex={false} style={styles.block}>
-          <Input label="Usuário" style={[styles.input]} />
-          <Input
-            label={
-              <Text style={{ color: theme.colors.gray }}>
-                E-mail {""}
-                <Text style={[styles.message, { color: theme.colors.gray }]}>
-                  (Encaminharemos um e-mail de confirmação)
-                </Text>
+              <Button color={theme.colors.primary}>
+              <Text bold white center>
+                Cadastra-se
               </Text>
-            }
-            style={[styles.input]}
-            defaultValue={email}
-          />
-          <Input
-            secure
-            label="Senha"
-            style={[styles.input]}
-            defaultValue={password}
-          />
-
-          <CheckboxFormX
-            style={{ width: 350 - 30 }}
-            dataSource={mockData}
-            itemShowKey="label"
-            itemCheckedKey="RNchecked"
-            iconSize={16}
-            formHorizontal={false}
-            labelHorizontal={true}
-            textStyle={styles.checkbox}
-          />
-
-        <Button color={theme.colors.primary}>
-          <Text bold white center>
-            Cadastra-se
-          </Text>
-        </Button>
-      </Block>
-    </Block>
-
+            </Button>
+          </Block>
+        </Block>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
