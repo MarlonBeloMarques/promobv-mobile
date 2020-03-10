@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { KeyboardAvoidingView, FlatList, StyleSheet, View, AsyncStorage } from "react-native";
 import { Block, Text, Button, Header, Photo } from "../../elements";
 import { theme } from "../../constants";
+import { AntDesign } from "@expo/vector-icons";
 
 import { } from "./styles";
+
 import { DrawerActions } from "react-navigation-drawer";
 
 export default function PasswordScreen(props) {
@@ -46,7 +48,25 @@ export default function PasswordScreen(props) {
        </Button>
      </Block>
 
+    <Block fixed>
+      <Button disableRadiusDefault radius={theme.sizes.radius * 4} color={theme.colors.secondary}>
+        <Block row padding={[0, theme.sizes.base * 2]} flex={false}>
+          <Block padding={[0, 10, 0, 0]} flex={false}>
+            <AntDesign
+                name={"pluscircleo"}
+                size={15}
+                color={theme.colors.gray3}
+            />
+          </Block>
+          <Text white>
+            Inserir promoção
+          </Text>
+        </Block>
+      </Button>
+    </Block>
+
       <FlatList
+        style = {styles.flatlist }
         data={feed}
         keyExtractor={post => String(post.id)}
         renderItem={({item}) => (
@@ -82,5 +102,9 @@ const styles = StyleSheet.create({
   end: {
     justifyContent: "flex-end",
     marginBottom: 10
+  },
+
+  flatlist: {
+    zIndex: 1
   }
 });

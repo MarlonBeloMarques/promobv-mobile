@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, Animated, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Animated, TouchableOpacity, Dimensions } from 'react-native'
 import { theme } from '../constants'
+
+import styled from "styled-components/native";
+
+const { width, height } = Dimensions.get("window");
 
 export default function Block(props) {
   
@@ -117,6 +121,7 @@ export default function Block(props) {
     button,
     wrap,
     style,
+    fixed,
     border,
     children
   } = props
@@ -154,6 +159,14 @@ export default function Block(props) {
     )
   }
 
+  if(fixed) {
+    return(
+      <BlockElement>
+        {children}
+      </BlockElement>
+    )
+  }
+
   if(button) {
     return (
       <TouchableOpacity style={blockStyles} {...props}>
@@ -168,6 +181,20 @@ export default function Block(props) {
     </View>
   );
   }
+
+const BlockElement = styled.View`
+  margin-top: ${height};
+  border-width: 1;
+  border-color: red;
+  position: absolute;
+  justify-content: flex-end;
+  align-items: center;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 5;
+`;
 
 export const styles = StyleSheet.create({
   block: {

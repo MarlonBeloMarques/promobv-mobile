@@ -9,10 +9,13 @@ export default function Button(props) {
     opacity,
     color,
     shadow,
-    children
+    children,
+    radius,
+    disableRadiusDefault
   } = props;
 
   const buttonStyles = [
+    disableRadiusDefault ? { borderRadius: radius } : {borderRadius: theme.sizes.radius },
     styles.button,
     shadow && styles.shadow, // shadow for IOS, elevation for android
     color && styles[color], // predefined styles colors for backgroundColor
@@ -38,7 +41,6 @@ Button.defaultProps = {
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: theme.sizes.radius,
     height: theme.sizes.base * 3,
     justifyContent: "center",
     marginVertical: theme.sizes.padding / 3,
