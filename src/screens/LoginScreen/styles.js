@@ -28,7 +28,7 @@ export default StyleSheet.create({
   end: {
     flex: 1,
     justifyContent: "flex-end",
-    marginBottom: theme.sizes.padding * 2
+    marginBottom: theme.sizes.padding
   },
 
   logo: {
