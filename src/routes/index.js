@@ -96,7 +96,7 @@ const childrens = createStackNavigator({
         height: theme.sizes.base * 6,
         shadowColor: "transparent",
         backgroundColor: theme.colors.primary
-      },
+  },
       headerBackImage: (
         <Image source={require("../../assets/icons/back.png")} />
       ),
@@ -220,7 +220,8 @@ const screens = createStackNavigator(
       headerStyle: {
         height: theme.sizes.base * 6,
         shadowColor: "transparent",
-        backgroundColor: theme.colors.white
+        backgroundColor: theme.colors.white,
+        elevation: 0
       },
       cardStyle: { backgroundColor: "white" },
       headerBackImage: (
@@ -230,10 +231,12 @@ const screens = createStackNavigator(
       title: null,
       headerLeftContainerStyle: {
         alignItems: "center",
+        marginLeft: Platform.OS === 'ios' ? theme.sizes.base : 0,
         padding: theme.sizes.base
       },
       headerRightContainerStyle: {
         alignItems: "center",
+        marginLeft: Platform.OS === 'ios' ? theme.sizes.base : 0,
         padding: theme.sizes.base
       }
     }
