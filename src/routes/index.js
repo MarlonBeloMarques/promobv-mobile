@@ -11,6 +11,7 @@ import PromotionsScreen from '../screens/PromotionsScreen'
 import DetailsScreen from '../screens/DetailsScreen'
 import NotificationsScreen from '../screens/NotificationsScreen'
 import TermsOfServiceScreen from '../screens/TermosOfServiceScreen'
+import MyAccountScreen from '../screens/MyAccountScreen'
 
 import { Insert } from '../components'
 
@@ -24,7 +25,8 @@ const menu = createDrawerNavigator({
   Promoções: PromotionsScreen,
   "Inserir promoção": Insert,
   Notificações: NotificationsScreen,
-  'Termos de Uso': TermsOfServiceScreen
+  'Termos de Uso': TermsOfServiceScreen,
+  'Minha conta': MyAccountScreen
 
 });
 
