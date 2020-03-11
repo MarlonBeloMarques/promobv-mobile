@@ -6,6 +6,10 @@ import { AntDesign } from "@expo/vector-icons";
 
 export default function MyAccountScreen(props) {
 
+  function onClickProfile() {
+    props.navigation.navigate('Perfil')
+  }
+
   return (
     <KeyboardAvoidingView style={styles.container}>
       <Header color={theme.colors.white}>
@@ -23,6 +27,7 @@ export default function MyAccountScreen(props) {
           button
           flex={false}
           padding={[theme.sizes.padding, 0, 0, theme.sizes.padding]}
+          onPress={onClickProfile}
         >
           <Text gray>Editar Perfil</Text>
         </Block>

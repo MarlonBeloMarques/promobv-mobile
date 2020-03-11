@@ -12,6 +12,7 @@ import DetailsScreen from '../screens/DetailsScreen'
 import NotificationsScreen from '../screens/NotificationsScreen'
 import TermsOfServiceScreen from '../screens/TermosOfServiceScreen'
 import MyAccountScreen from '../screens/MyAccountScreen'
+import ProfileScreen from '../screens/ProfileScreen'
 
 import { Insert } from '../components'
 
@@ -46,6 +47,30 @@ const childrens = createStackNavigator({
         height: theme.sizes.base * 6,
         shadowColor: "transparent",
         backgroundColor: theme.colors.primary
+      },
+      headerBackImage: (
+        <Image source={require("../../assets/icons/back.png")} />
+      ),
+      headerBackTitleVisible: null,
+      headerLeftContainerStyle: {
+        alignItems: "center",
+        padding: theme.sizes.base
+      },
+      headerRightContainerStyle: {
+        alignItems: "center",
+        padding: theme.sizes.base
+      }
+    }
+  },
+  Perfil: {
+    screen: ProfileScreen,
+    navigationOptions: {
+      title: <Text bold gray>Perfil</Text>,
+      headerTitleAlign: "left",
+      headerStyle: {
+        height: theme.sizes.base * 6,
+        shadowColor: "transparent",
+        backgroundColor: theme.colors.white
       },
       headerBackImage: (
         <Image source={require("../../assets/icons/back.png")} />
