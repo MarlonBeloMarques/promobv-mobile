@@ -10,6 +10,7 @@ import PasswordScreen from '../screens/PasswordScreen'
 import PromotionsScreen from '../screens/PromotionsScreen'
 import DetailsScreen from '../screens/DetailsScreen'
 import NotificationsScreen from '../screens/NotificationsScreen'
+import TermsOfServiceScreen from '../screens/TermosOfServiceScreen'
 
 import { Insert } from '../components'
 
@@ -22,7 +23,9 @@ import { Transition } from 'react-native-reanimated'
 const menu = createDrawerNavigator({
   Promoções: PromotionsScreen,
   "Inserir promoção": Insert,
-  Notificações: NotificationsScreen
+  Notificações: NotificationsScreen,
+  'Termos de Uso': TermsOfServiceScreen
+
 });
 
 const childrens = createStackNavigator({
