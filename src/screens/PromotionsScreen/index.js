@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { KeyboardAvoidingView, FlatList, StyleSheet, View, AsyncStorage } from "react-native";
 import { Block, Text, Button, Header, Photo } from "../../elements";
+import { Insert } from "../../components";
 import { theme } from "../../constants";
 import { AntDesign } from "@expo/vector-icons";
 
@@ -11,6 +12,7 @@ import { DrawerActions } from "react-navigation-drawer";
 export default function PasswordScreen(props) {
   
   const [feed, setFeed] = useState([]);
+  const [showInsert, setShowInsert] = useState(false);
 
   useEffect(() => {
     async function loadFeed() {
@@ -39,58 +41,98 @@ export default function PasswordScreen(props) {
     props.navigation.dispatch(DrawerActions.openDrawer())
   }
 
-  return (
-   <KeyboardAvoidingView style={styles.container}>
-     <Header onPress={onClickMenu}>Promoções</Header>
-     <Block border center flex={false} padding={[15, 0, 15]}>
-       <Button style>
-         <Text bold color={theme.colors.primary}>Categoria</Text>
-       </Button>
-     </Block>
+  function onClickInsert() {
+    setShowInsert(true)
+  }
 
-    <Block fixed>
-      <Button disableRadiusDefault radius={theme.sizes.radius * 4} color={theme.colors.secondary}>
-        <Block row padding={[0, theme.sizes.base * 2]} flex={false}>
-          <Block padding={[0, 10, 0, 0]} flex={false}>
-            <AntDesign
-                name={"pluscircleo"}
-                size={15}
-                color={theme.colors.gray3}
-            />
-          </Block>
-          <Text white>
-            Inserir promoção
-          </Text>
+  function onHideInsert() {
+    setShowInsert(false)
+  }
+
+  function renderInsert() {
+    return (
+      <Insert
+        visible={showInsert}
+        onRequestClose={onHideInsert}>
+      </Insert>
+    )
+  }
+
+  function renderPromotions() {
+    return (
+      <KeyboardAvoidingView style={styles.container}>
+        <Header onPress={onClickMenu}>Promoções</Header>
+        <Block border center flex={false} padding={[15, 0, 15]}>
+          <Button style>
+            <Text bold color={theme.colors.primary}>
+              Categoria
+            </Text>
+          </Button>
         </Block>
-      </Button>
-    </Block>
 
-      <FlatList
-        style = {styles.flatlist }
-        data={feed}
-        keyExtractor={post => String(post.id)}
-        renderItem={({item}) => (
-          <Block onPress={() => onDetailsClicked(item.id)} 
-            button 
-            size={140} 
-            flex={false} 
-            row 
-            border>
-            <Photo height={140} size={40} image={item.image}/>
-            <Block padding={[15, 10, 0]}>
-              <Text gray bold size={18}>{item.author.name}</Text>
-              <Block style={styles.end}>
-                <Text secondary size={15} bold> {item.price}</Text>
-                <Block padding={[5, 0, 0]} flex={false}>
-                  <Text gray3 bold> {item.description}</Text>
+        <Block fixed>
+          <Button
+            onPress={onClickInsert}
+            disableRadiusDefault
+            radius={theme.sizes.radius * 4}
+            color={theme.colors.secondary}
+          >
+            <Block row padding={[0, theme.sizes.base * 2]} flex={false}>
+              <Block padding={[0, 10, 0, 0]} flex={false}>
+                <AntDesign
+                  name={"pluscircleo"}
+                  size={15}
+                  color={theme.colors.gray3}
+                />
+              </Block>
+              <Text white>Inserir promoção</Text>
+            </Block>
+          </Button>
+        </Block>
+
+        <FlatList
+          style={styles.flatlist}
+          data={feed}
+          keyExtractor={post => String(post.id)}
+          renderItem={({ item }) => (
+            <Block
+              onPress={() => onDetailsClicked(item.id)}
+              button
+              size={140}
+              flex={false}
+              row
+              border
+            >
+              <Photo height={100} size={40} image={item.image} />
+              <Block padding={[15, 10, 0]}>
+                <Text gray bold size={18}>
+                  {item.author.name}
+                </Text>
+                <Block style={styles.end}>
+                  <Text secondary size={15} bold>
+                    {" "}
+                    {item.price}
+                  </Text>
+                  <Block padding={[5, 0, 0]} flex={false}>
+                    <Text gray3 bold>
+                      {" "}
+                      {item.description}
+                    </Text>
+                  </Block>
                 </Block>
               </Block>
             </Block>
-          </Block>
-        )}>
-      </FlatList>
-</KeyboardAvoidingView>
-)
+          )}
+        ></FlatList>
+      </KeyboardAvoidingView>
+    );
+  }
+
+  if(showInsert) {
+    return renderInsert()
+  }
+  return renderPromotions()
+  
 }
 
 const styles = StyleSheet.create({
