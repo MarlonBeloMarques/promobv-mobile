@@ -52,6 +52,7 @@ export default function PasswordScreen(props) {
   function renderInsert() {
     return (
       <Insert
+        modal={true}
         visible={showInsert}
         onRequestClose={onHideInsert}>
       </Insert>

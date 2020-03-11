@@ -10,6 +10,8 @@ import PasswordScreen from '../screens/PasswordScreen'
 import PromotionsScreen from '../screens/PromotionsScreen'
 import DetailsScreen from '../screens/DetailsScreen'
 
+import { Insert } from '../components'
+
 import { Image } from 'react-native'
 
 import { theme } from '../constants'
@@ -17,8 +19,9 @@ import { Text } from '../elements'
 import { Transition } from 'react-native-reanimated'
 
 const menu = createDrawerNavigator({
-  Promoções: PromotionsScreen
-})
+  Promoções: PromotionsScreen,
+  "Inserir promoção": Insert
+});
 
 const childrens = createStackNavigator({
   menu: {

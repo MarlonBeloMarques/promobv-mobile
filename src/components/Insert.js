@@ -14,52 +14,67 @@ export default function Insert(props) {
   const[valor, setValor] = useState('')
   const[categoria, setCategoria] = useState('')
 
-  return (
-    <Modal
-      visible={props.visible}
-      animationType="slide"
-      onRequestClose={props.onRequestClose}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+  function buttonAction(title) {
+    return (
+      <Block middle padding={[theme.sizes.padding / 2, 0]}>
+        <Button onPress={props.onRequestClose} color={theme.colors.primary}>
+          <Text bold center white>
+            {title}
+          </Text>
+        </Button>
+      </Block>
+    );
+  }
+
+  function contentPattern(title) {
+    return (
+      <ScrollView backgroundColor='white' showsVerticalScrollIndicator={false}>
         <Block
-          padding= {[theme.sizes.padding * 3, theme.sizes.padding]}
+          padding={[theme.sizes.padding * 3, theme.sizes.padding]}
           space="between"
-          color={theme.colors.white}>
-          <Text bold gray>Inserir</Text>
+          color={theme.colors.white}
+        >
+          <Text bold gray>
+            Inserir
+          </Text>
           <Block margin={[theme.sizes.header, 0]} flex={false}>
-            <Input 
-              label="Titulo" 
-              style={[styles.input]} 
-              defaultValue={titulo} />
-            <Input 
-              label="Descrição" 
-              style={[styles.input]} 
-              defaultValue={descricao} />
-            <Input 
-              label="Local" 
-              style={[styles.input]} 
-              defaultValue={local} />
-              <Input 
-              label="Endereço" 
-              style={[styles.input]} 
-              defaultValue={endereco} />
-            <Input 
-              label="Telefone" 
-              style={[styles.input]} 
-              defaultValue={telefone} />
+            <Input
+              label="Titulo"
+              style={[styles.input]}
+              defaultValue={titulo}
+            />
+            <Input
+              label="Descrição"
+              style={[styles.input]}
+              defaultValue={descricao}
+            />
+            <Input label="Local" style={[styles.input]} defaultValue={local} />
+            <Input
+              label="Endereço"
+              style={[styles.input]}
+              defaultValue={endereco}
+            />
+            <Input
+              label="Telefone"
+              style={[styles.input]}
+              defaultValue={telefone}
+            />
 
             <Block row>
               <Block padding={[0, theme.sizes.padding, 0, 0]}>
-                <Input 
-                  label="Valor" 
-                  style={[styles.input]} 
-                  defaultValue={valor} />
+                <Input
+                  label="Valor"
+                  style={[styles.input]}
+                  defaultValue={valor}
+                />
               </Block>
 
               <Block>
-                <Input 
-                  label="Categoria" 
-                  style={[styles.input]} 
-                  defaultValue={categoria} />
+                <Input
+                  label="Categoria"
+                  style={[styles.input]}
+                  defaultValue={categoria}
+                />
               </Block>
             </Block>
           </Block>
@@ -77,21 +92,38 @@ export default function Insert(props) {
             </Block>
           </Block>
 
-          <Block
-            middle
-            padding = {[theme.sizes.padding/2, 0]}>
-            <Button onPress={props.onRequestClose} color={theme.colors.primary}>
-              <Text bold center white>Cancelar</Text>
-            </Button>
-          </Block>
+          {buttonAction(title)}
+          
         </Block>
       </ScrollView>
-    </Modal>
-  );
+    )
+  }
+
+  function onModal(title) {
+    return (
+      <Modal
+        visible={props.visible}
+        animationType="slide"
+        onRequestClose={props.onRequestClose}>
+        {contentPattern(title)}
+      </Modal>
+    )
+  }
+
+  if (props.modal) {
+    return onModal('Cancelar')
+  } 
+  else {
+    return (
+      contentPattern('Inserir')
+    )
+  }
+
 };
 
 Insert.propTypes = {
   visible: false,
+  modal: false,
   onRequestClose: () => {}
 };
 
