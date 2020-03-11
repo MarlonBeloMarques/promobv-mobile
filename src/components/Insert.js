@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Modal, StyleSheet } from "react-native";
-import { Block, Text, Button, Input } from "../elements";
+import { Block, Text, Button, Input, Header } from "../elements";
 import { theme } from "../constants";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -28,15 +28,15 @@ export default function Insert(props) {
 
   function contentPattern(title) {
     return (
-      <ScrollView backgroundColor='white' showsVerticalScrollIndicator={false}>
+      <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
+        <Header color={theme.colors.white}>
+          <Text gray>Inserir</Text>
+        </Header>
         <Block
-          padding={[theme.sizes.padding * 3, theme.sizes.padding]}
+          padding={[0, theme.sizes.padding]}
           space="between"
           color={theme.colors.white}
         >
-          <Text bold gray>
-            Inserir
-          </Text>
           <Block margin={[theme.sizes.header, 0]} flex={false}>
             <Input
               label="Titulo"
@@ -93,10 +93,9 @@ export default function Insert(props) {
           </Block>
 
           {buttonAction(title)}
-          
         </Block>
       </ScrollView>
-    )
+    );
   }
 
   function onModal(title) {

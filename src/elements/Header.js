@@ -10,7 +10,7 @@ export default function Header(props) {
 
   return (
     <Block 
-      color={theme.colors.primary} 
+      color={props.color} 
       flex={false} 
       padding={[50, 0, 0, theme.sizes.base]}
       size={theme.sizes.base * 6}
@@ -27,4 +27,8 @@ export default function Header(props) {
     </Block>
   );
 }
+
+Header.propTypes = {
+  color: ''
+};
 
