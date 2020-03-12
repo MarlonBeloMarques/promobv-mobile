@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { Block, Text, Button, Input, Header } from "../elements";
 import { theme } from "../constants";
 import { ScrollView } from "react-native-gesture-handler";

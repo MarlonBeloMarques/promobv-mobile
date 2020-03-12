@@ -14,6 +14,7 @@ import TermsOfServiceScreen from '../screens/TermosOfServiceScreen'
 import MyAccountScreen from '../screens/MyAccountScreen'
 import ProfileScreen from '../screens/ProfileScreen'
 import MyPromotionsScreen from '../screens/MyPromotionsScreen'
+import EditScreen from '../screens/EditScreen'
 
 import { Insert } from '../components'
 
@@ -42,7 +43,11 @@ const childrens = createStackNavigator({
   Detalhes: {
     screen: DetailsScreen,
     navigationOptions: {
-      title: <Text bold white>Detalhes</Text>,
+      title: (
+        <Text bold white>
+          Detalhes
+        </Text>
+      ),
       headerTitleAlign: "left",
       headerStyle: {
         height: theme.sizes.base * 6,
@@ -66,7 +71,11 @@ const childrens = createStackNavigator({
   Perfil: {
     screen: ProfileScreen,
     navigationOptions: {
-      title: <Text bold gray>Perfil</Text>,
+      title: (
+        <Text bold gray>
+          Perfil
+        </Text>
+      ),
       headerTitleAlign: "left",
       headerStyle: {
         height: theme.sizes.base * 6,
@@ -90,7 +99,39 @@ const childrens = createStackNavigator({
   MinhasPromocoes: {
     screen: MyPromotionsScreen,
     navigationOptions: {
-      title: <Text bold gray>Minhas Promoções</Text>,
+      title: (
+        <Text bold gray>
+          Minhas Promoções
+        </Text>
+      ),
+      headerTitleAlign: "left",
+      headerStyle: {
+        height: theme.sizes.base * 6,
+        shadowColor: "transparent",
+        backgroundColor: theme.colors.white
+      },
+      headerBackImage: (
+        <Image source={require("../../assets/icons/back.png")} />
+      ),
+      headerBackTitleVisible: null,
+      headerLeftContainerStyle: {
+        alignItems: "center",
+        padding: theme.sizes.base
+      },
+      headerRightContainerStyle: {
+        alignItems: "center",
+        padding: theme.sizes.base
+      }
+    }
+  },
+  Editar: {
+    screen: EditScreen,
+    navigationOptions: {
+      title: (
+        <Text bold gray>
+          Editar promoções
+        </Text>
+      ),
       headerTitleAlign: "left",
       headerStyle: {
         height: theme.sizes.base * 6,

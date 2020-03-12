@@ -30,6 +30,10 @@ export default function MyPromotionsScreen(props) {
     props.navigation.navigate("Detalhes", { id });
   }
 
+  function onClickEdit() {
+    props.navigation.navigate("Editar")
+  }
+
   return (
     <KeyboardAvoidingView style={styles.container}>
       <FlatList
@@ -77,7 +81,7 @@ export default function MyPromotionsScreen(props) {
                 />     
               </Button>
               <Block bottom>
-                <Button style>
+                <Button style onPress={onClickEdit}>
                   <AntDesign
                     name={"edit"}
                     size={18}
