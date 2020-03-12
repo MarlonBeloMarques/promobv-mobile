@@ -13,10 +13,14 @@ import { DrawerActions } from "react-navigation-drawer";
 
 export default function TermsOfServiceScreen(props) {
 
+  function onClickMenu() {
+    props.navigation.dispatch(DrawerActions.openDrawer());
+  }
+
   return (
     <KeyboardAvoidingView style={styles.container}>
       <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
-        <Header color={theme.colors.white}>
+        <Header onPress={onClickMenu} color={theme.colors.white}>
           <Text gray>Termos de Uso</Text>
         </Header>
         <Block

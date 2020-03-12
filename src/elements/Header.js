@@ -19,7 +19,7 @@ export default function Header(props) {
       >
       <StatusBar barStyle="light-content"></StatusBar>
       <Button style {...props}>
-        <Ionicons name={"ios-menu"} size={30} color={theme.colors.white} />
+        <Ionicons name={"ios-menu"} size={30} color={props.colorIcon} />
       </Button>
       <Block padding={[0,0,0,theme.sizes.base * 2.2]}>
         <Text white bold>{props.children}</Text>
@@ -29,6 +29,7 @@ export default function Header(props) {
 }
 
 Header.propTypes = {
-  color: ''
+  color: '',
+  colorIcon: ' '
 };
 

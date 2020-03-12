@@ -4,6 +4,8 @@ import { Block, Text, Button, Input, Header } from "../elements";
 import { theme } from "../constants";
 import { ScrollView } from "react-native-gesture-handler";
 
+import { DrawerActions } from "react-navigation-drawer";
+
 export default function Insert(props) {
 
   const[titulo, setTitulo] = useState('')
@@ -13,6 +15,10 @@ export default function Insert(props) {
   const[telefone, setTelefone] = useState('')
   const[valor, setValor] = useState('')
   const[categoria, setCategoria] = useState('')
+
+  function onClickMenu() {
+    props.navigation.dispatch(DrawerActions.openDrawer());
+  }
 
   function buttonAction(title) {
     return (
@@ -26,12 +32,27 @@ export default function Insert(props) {
     );
   }
 
-  function contentPattern(title) {
-    return (
-      <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
-        <Header color={theme.colors.white}>
+  function header(activeIcon) {
+    if(activeIcon) {
+       return (
+         <Header colorIcon={theme.colors.gray} onPress={onClickMenu} color={theme.colors.white}>
           <Text gray>Inserir</Text>
         </Header>
+       )
+    } else {
+        return (
+          <Header colorIcon={theme.colors.white} color={theme.colors.white}>
+            <Text gray>Inserir</Text>
+          </Header>
+        );
+    }
+      
+  }
+
+  function contentPattern(title, activeIcon) {
+    return (
+      <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
+        {header(activeIcon)}
         <Block
           padding={[0, theme.sizes.padding]}
           space="between"
@@ -114,7 +135,7 @@ export default function Insert(props) {
   } 
   else {
     return (
-      contentPattern('Inserir')
+      contentPattern('Inserir', true)
     )
   }
 

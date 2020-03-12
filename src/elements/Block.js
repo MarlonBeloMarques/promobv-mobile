@@ -123,6 +123,7 @@ export default function Block(props) {
     style,
     fixed,
     border,
+    fullBorder,
     children
   } = props
 
@@ -130,6 +131,7 @@ export default function Block(props) {
     styles.block,
     size && { height: size },
     border && styles.border,
+    fullBorder && styles.fullBorder,
     flex && { flex },
     flex === false && { flex: 0 }, // redefinir / desativar flex
     row && styles.row,
@@ -207,7 +209,7 @@ export const styles = StyleSheet.create({
     flexDirection: "column"
   },
   card: {
-    borderRadius: theme.sizes.radius
+    borderRadius: theme.sizes.radius * 2
   },
   center: {
     alignItems: "center"
@@ -230,12 +232,16 @@ export const styles = StyleSheet.create({
   shadow: {
     shadowColor: theme.colors.black,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 13,
-    elevation: 2
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    elevation: 3 // for android devices
   },
   border: {
     borderBottomWidth: 1,
+    borderColor: theme.colors.gray3
+  },
+  fullBorder: {
+    borderWidth: 1,
     borderColor: theme.colors.gray3
   },
 

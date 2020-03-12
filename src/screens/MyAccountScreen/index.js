@@ -3,16 +3,25 @@ import { KeyboardAvoidingView, AsyncStorage, FlatList, StyleSheet } from "react-
 import { Block, Input, Button, Text, Photo, Header } from "../../elements";
 import { theme } from "../../constants";
 import { AntDesign } from "@expo/vector-icons";
+import { DrawerActions } from "react-navigation-drawer";
 
 export default function MyAccountScreen(props) {
+
+  function onClickMenu() {
+    props.navigation.dispatch(DrawerActions.openDrawer());
+  }
 
   function onClickProfile() {
     props.navigation.navigate('Perfil')
   }
 
+  function onClickMyPromotions() {
+    props.navigation.navigate("MinhasPromocoes");
+  }
+
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <Header color={theme.colors.white}>
+      <Header onPress={onClickMenu} color={theme.colors.white}>
         <Text gray>Minha Conta</Text>
       </Header>
       <Block>
@@ -20,6 +29,7 @@ export default function MyAccountScreen(props) {
           button
           flex={false}
           padding={[theme.sizes.padding, 0, 0, theme.sizes.padding]}
+          onPress={onClickMyPromotions}
         >
           <Text gray>Minhas Promoções</Text>
         </Block>

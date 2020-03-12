@@ -4,8 +4,14 @@ import { Block, Input, Button, Text, Photo, Header } from "../../elements";
 import { theme } from "../../constants";
 import { AntDesign } from "@expo/vector-icons";
 
+import { DrawerActions } from "react-navigation-drawer";
+
 export default function NotificationsScreen(props) {
   const [feed, setFeed] = useState([]);
+
+  function onClickMenu() {
+    props.navigation.dispatch(DrawerActions.openDrawer());
+  }
 
   useEffect(() => {
     async function loadFeed() {
@@ -22,36 +28,36 @@ export default function NotificationsScreen(props) {
   }, []);
 
   return (
-     <KeyboardAvoidingView  style={styles.container}>
-       <Header color={theme.colors.white}>
-         <Text gray>Notificações</Text>
-       </Header>
+    <KeyboardAvoidingView style={styles.container}>
+      <Header onPress={onClickMenu} color={theme.colors.white}>
+        <Text gray>Notificações</Text>
+      </Header>
 
-        <FlatList
-          style={styles.flatlist}
-          data={feed}
-          keyExtractor={post => String(post.id)}
-          renderItem={({ item }) => (
-            <Block
-              onPress={() => onDetailsClicked(item.id)}
-              size={60}
-              flex={false}
-              row
-              border
-              center
-            >
-              <Block flex={false} padding={[0, theme.sizes.base]}>
-                <Photo avatar image={item.author.avatar} />
-              </Block>
-              <Block >
-                <Text gray size={14}>
-                  {item.author.name} curtiu a sua promoção.
-                </Text>
-              </Block>
+      <FlatList
+        style={styles.flatlist}
+        data={feed}
+        keyExtractor={post => String(post.id)}
+        renderItem={({ item }) => (
+          <Block
+            onPress={() => onDetailsClicked(item.id)}
+            size={60}
+            flex={false}
+            row
+            border
+            center
+          >
+            <Block flex={false} padding={[0, theme.sizes.base]}>
+              <Photo avatar image={item.author.avatar} />
             </Block>
-          )}
-        ></FlatList>
-      </KeyboardAvoidingView>
+            <Block>
+              <Text gray size={14}>
+                {item.author.name} curtiu a sua promoção.
+              </Text>
+            </Block>
+          </Block>
+        )}
+      ></FlatList>
+    </KeyboardAvoidingView>
   );
 }
 

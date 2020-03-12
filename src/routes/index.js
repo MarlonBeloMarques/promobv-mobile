@@ -13,6 +13,7 @@ import NotificationsScreen from '../screens/NotificationsScreen'
 import TermsOfServiceScreen from '../screens/TermosOfServiceScreen'
 import MyAccountScreen from '../screens/MyAccountScreen'
 import ProfileScreen from '../screens/ProfileScreen'
+import MyPromotionsScreen from '../screens/MyPromotionsScreen'
 
 import { Insert } from '../components'
 
@@ -66,6 +67,30 @@ const childrens = createStackNavigator({
     screen: ProfileScreen,
     navigationOptions: {
       title: <Text bold gray>Perfil</Text>,
+      headerTitleAlign: "left",
+      headerStyle: {
+        height: theme.sizes.base * 6,
+        shadowColor: "transparent",
+        backgroundColor: theme.colors.white
+      },
+      headerBackImage: (
+        <Image source={require("../../assets/icons/back.png")} />
+      ),
+      headerBackTitleVisible: null,
+      headerLeftContainerStyle: {
+        alignItems: "center",
+        padding: theme.sizes.base
+      },
+      headerRightContainerStyle: {
+        alignItems: "center",
+        padding: theme.sizes.base
+      }
+    }
+  },
+  MinhasPromocoes: {
+    screen: MyPromotionsScreen,
+    navigationOptions: {
+      title: <Text bold gray>Minhas Promoções</Text>,
       headerTitleAlign: "left",
       headerStyle: {
         height: theme.sizes.base * 6,
