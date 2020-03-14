@@ -14,5 +14,10 @@ export default StyleSheet.create({
     borderRadius: theme.sizes.radius,
     marginHorizontal: 10,
     marginTop: 10
+  },
+
+  profile: {
+    width: 50,
+    height: 50
   }
 });

@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { Modal, StyleSheet, StatusBar } from "react-native";
+import { Modal, StyleSheet, StatusBar, Image } from "react-native";
 import { Block, Text, Button, Input, Header } from "../elements";
 import { theme } from "../constants";
 import { ScrollView } from "react-native-gesture-handler";
 
 import { DrawerActions } from "react-navigation-drawer";
+
+import profile from '../../assets/images/profile-image.png'
 
 export default function Insert(props) {
 
@@ -58,6 +60,14 @@ export default function Insert(props) {
           space="between"
           color={theme.colors.white}
         >
+          <Block padding={[theme.sizes.padding, 0, 0, 0]} center row>
+            <Button style>
+              <Image source={profile} style={styles.profile} />
+            </Button>
+            <Block margin={[0, 0, 0, theme.sizes.header]}>
+              <Text gray>Inserir imagem</Text>
+            </Block>
+          </Block>
           <Block margin={[theme.sizes.header, 0]} flex={false}>
             <Input
               label="Titulo"
@@ -160,5 +170,10 @@ const styles = StyleSheet.create({
     borderRadius: theme.sizes.radius,
     marginHorizontal: 10,
     marginTop: 10
+  },
+
+  profile: {
+    width: 50,
+    height: 50,
   }
 });
