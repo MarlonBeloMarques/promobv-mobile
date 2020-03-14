@@ -2,7 +2,7 @@ import React from 'react'
 import { createAppContainer } from 'react-navigation'
 import createAnimatedSwitchNavigator from 'react-navigation-animated-switch'
 import { createStackNavigator } from 'react-navigation-stack'
-import { createDrawerNavigator } from 'react-navigation-drawer'
+import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer'
 
 import LoginScreen from '../screens/LoginScreen'
 import SignupScreen from '../screens/SignupScreen'
@@ -18,11 +18,45 @@ import EditScreen from '../screens/EditScreen'
 
 import { Insert } from '../components'
 
-import { Image } from 'react-native'
+import { DrawerActions } from "react-navigation-drawer";
+
+import { Image, SafeAreaView, ScrollView } from 'react-native'
+import { Ionicons } from "@expo/vector-icons";
 
 import { theme } from '../constants'
-import { Text } from '../elements'
+import { Text, Block, Button } from '../elements'
 import { Transition } from 'react-native-reanimated'
+
+const Header = (props) => {
+
+  function onClickMenu() {
+    props.navigation.dispatch(DrawerActions.closeDrawer());
+  }
+
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <Block size={80} flex={false}>
+        <Block 
+          margin={[theme.sizes.body - 5, 0, 0, theme.sizes.title - 2]}
+          color={theme.colors.primary} 
+          flex={false} 
+          row
+          center
+          >
+          <Button style onPress={onClickMenu}>
+            <Ionicons name={"ios-menu"} size={30} color={theme.colors.white} />
+          </Button>
+        </Block>
+      </Block>
+      <ScrollView>
+        <DrawerItems {...props} ></DrawerItems>
+        <Block onPress={() => props.navigation.navigate('login')} margin={[theme.sizes.body - 5, 0, 0, theme.sizes.title - 2]} button>
+          <Text bold white>Sair</Text>
+        </Block>
+      </ScrollView>
+    </SafeAreaView>
+  );
+} 
 
 const menu = createDrawerNavigator({
   Promoções: PromotionsScreen,
@@ -30,7 +64,15 @@ const menu = createDrawerNavigator({
   Notificações: NotificationsScreen,
   'Termos de Uso': TermsOfServiceScreen,
   'Minha conta': MyAccountScreen
-
+},
+{
+  drawerBackgroundColor: theme.colors.primary,
+  contentOptions: {
+    activeBackgroundColor: 'rgba(18, 42, 72, 0.2)',
+    activeTintColor: theme.colors.secondary,
+    inactiveTintColor: theme.colors.white,
+  },
+  contentComponent: Header
 });
 
 const childrens = createStackNavigator({
