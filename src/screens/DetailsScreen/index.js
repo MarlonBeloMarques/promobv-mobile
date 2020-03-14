@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { KeyboardAvoidingView, AsyncStorage } from "react-native";
+import { KeyboardAvoidingView, AsyncStorage, StatusBar } from "react-native";
 import { Block, Input, Button, Text, Photo } from "../../elements";
 import { Ionicons } from "@expo/vector-icons";
 import { theme } from "../../constants";
@@ -37,6 +37,7 @@ export default function DetailsScreen(props) {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
+      <StatusBar barStyle='light-content'></StatusBar>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Block
           padding={theme.sizes.header}

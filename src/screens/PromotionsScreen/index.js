@@ -62,7 +62,7 @@ export default function PasswordScreen(props) {
   function renderPromotions() {
     return (
       <KeyboardAvoidingView style={styles.container}>
-        <Header colorIcon={theme.colors.white} color={theme.colors.primary} onPress={onClickMenu}>Promoções</Header>
+        <Header barStyle='light-content' colorIcon={theme.colors.white} color={theme.colors.primary} onPress={onClickMenu}>Promoções</Header>
         <Block border center flex={false} padding={[15, 0, 15]}>
           <Button style>
             <Text bold color={theme.colors.primary}>

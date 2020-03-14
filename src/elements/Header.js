@@ -17,7 +17,7 @@ export default function Header(props) {
       row
       center
       >
-      <StatusBar barStyle="light-content"></StatusBar>
+      <StatusBar {...props}></StatusBar>
       <Button style {...props}>
         <Ionicons name={"ios-menu"} size={30} color={props.colorIcon} />
       </Button>

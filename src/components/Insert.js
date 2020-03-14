@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, StyleSheet } from "react-native";
+import { Modal, StyleSheet, StatusBar } from "react-native";
 import { Block, Text, Button, Input, Header } from "../elements";
 import { theme } from "../constants";
 import { ScrollView } from "react-native-gesture-handler";
@@ -35,13 +35,13 @@ export default function Insert(props) {
   function header(activeIcon) {
     if(activeIcon) {
        return (
-         <Header colorIcon={theme.colors.gray} onPress={onClickMenu} color={theme.colors.white}>
+         <Header barStyle='dark-content' colorIcon={theme.colors.gray} onPress={onClickMenu} color={theme.colors.white}>
           <Text gray>Inserir</Text>
         </Header>
        )
     } else {
         return (
-          <Header colorIcon={theme.colors.white} color={theme.colors.white}>
+          <Header barStyle='dark-content' colorIcon={theme.colors.white} color={theme.colors.white}>
             <Text gray>Inserir</Text>
           </Header>
         );
