@@ -72,7 +72,8 @@ const menu = createDrawerNavigator({
     activeTintColor: theme.colors.secondary,
     inactiveTintColor: theme.colors.white,
   },
-  contentComponent: Header
+  contentComponent: Header,
+  unmountInactiveRoutes: true
 });
 
 const childrens = createStackNavigator({

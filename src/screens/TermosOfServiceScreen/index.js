@@ -19,10 +19,10 @@ export default function TermsOfServiceScreen(props) {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
+      <Header onPress={onClickMenu} color={theme.colors.white}>
+        <Text gray>Termos de Uso</Text>
+      </Header>
       <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
-        <Header onPress={onClickMenu} color={theme.colors.white}>
-          <Text gray>Termos de Uso</Text>
-        </Header>
         <Block
           padding={[0, theme.sizes.padding]}
           space="between"
