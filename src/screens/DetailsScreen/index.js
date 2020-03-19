@@ -57,7 +57,7 @@ export default function DetailsScreen(props) {
         </Block>
         <Block>
           <Block border padding={[10, 50]} flex={false} row>
-            <Button style {...props}>
+            <Button style>
               <Ionicons
                 name={"ios-heart"}
                 size={30}
@@ -65,7 +65,7 @@ export default function DetailsScreen(props) {
               />
             </Button>
             <Block row right>
-              <Button style {...props}>
+              <Button style>
                 <Ionicons
                   name={"ios-share"}
                   size={30}
