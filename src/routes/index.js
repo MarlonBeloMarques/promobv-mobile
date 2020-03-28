@@ -20,7 +20,7 @@ import { Insert } from '../components'
 
 import { DrawerActions } from "react-navigation-drawer";
 
-import { Image, SafeAreaView, ScrollView } from 'react-native'
+import { Image, SafeAreaView, ScrollView, Platform } from 'react-native'
 import { Ionicons } from "@expo/vector-icons";
 
 import { theme } from '../constants'
@@ -223,7 +223,7 @@ const screens = createStackNavigator(
   {
     defaultNavigationOptions: {
       headerStyle: {
-        height: theme.sizes.base * 6,
+        height: Platform.OS === 'ios' ? theme.sizes.base * 6 : theme.sizes.base * 5,
         shadowColor: "transparent",
         backgroundColor: theme.colors.white,
         elevation: 0

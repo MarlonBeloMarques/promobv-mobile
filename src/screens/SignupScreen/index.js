@@ -1,39 +1,41 @@
 import React, { useState } from "react";
-import { KeyboardAvoidingView } from "react-native";
+import { KeyboardAvoidingView, Dimensions } from "react-native";
 import { Block, Input, Button, Text } from "../../elements";
-import CheckboxFormX from "react-native-checkbox-form";
 import { theme } from "../../constants";
 
 import styles from "./styles";
 import { ScrollView } from "react-native-gesture-handler";
 
+import { CheckBox } from 'react-native-elements'
+
+const { width } = Dimensions.get('window')
+
 export default function SignupScreen(props) {
   const [email, setEmail] = useState("promobv@react.com");
   const [password, setPassword] = useState("promobv");
 
-  const mockData = [
-    {
-      label:
-        "Concordo com os TERMOS DE CONDIÇÕES DE USO e POLÍTICA DE PRIVACIDADE.",
-    }
-  ];
+  const [ checked, setChecked ] = useState(false)
+
+  const mockData = "Concordo com os TERMOS DE CONDIÇÕES DE USO e POLÍTICA DE PRIVACIDADE."
 
   return (
     <KeyboardAvoidingView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Block padding={[0, theme.sizes.base * 2]}>
-          <Button color={theme.colors.google}>
-            <Text bold white center>
-              Entrar com o Google
-            </Text>
-          </Button>
-          <Button color={theme.colors.facebook}>
-            <Text bold white center>
-              Entrar com o Facebook
-            </Text>
-          </Button>
+          <Block flex={0.3}>
+            <Button color={theme.colors.google}>
+              <Text bold white center>
+                Entrar com o Google
+              </Text>
+            </Button>
+            <Button color={theme.colors.facebook}>
+              <Text bold white center>
+                Entrar com o Facebook
+              </Text>
+            </Button>
+          </Block>
 
-          <Block flex={false} style={styles.block}>
+          <Block flex={0.7} padding={[theme.sizes.base, 0]}>
             <Input label="Usuário" style={[styles.input]} />
             <Input
               label={
@@ -54,12 +56,16 @@ export default function SignupScreen(props) {
               defaultValue={password}
             />
 
-            <CheckboxFormX
-              style={{ width: 350 }}
-              dataSource={mockData}
-              itemShowKey="label"
-              iconSize={14}
-              textStyle={styles.textCheckbox}
+            <CheckBox
+              title={mockData}
+              checked={checked}
+              onPress={() => setChecked(!checked)}
+              containerStyle={styles.checkbox}
+              textStyle={{
+                fontSize: 10,
+                color: theme.colors.gray,
+                fontWeight: "normal"
+              }}
             />
 
             <Button color={theme.colors.primary}>
