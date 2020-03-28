@@ -185,13 +185,12 @@ export default function Block(props) {
   }
 
 const BlockElement = styled.View`
-  margin-top: ${height};
   border-width: 1;
   border-color: red;
   position: absolute;
   justify-content: flex-end;
   align-items: center;
-  top: 0;
+  top: ${height / 1.1};
   right: 0;
   bottom: 0;
   left: 0;
