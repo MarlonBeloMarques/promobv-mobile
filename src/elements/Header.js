@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusBar } from "react-native";
+import { StatusBar, Platform } from "react-native";
 import { StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'
 
@@ -12,8 +12,8 @@ export default function Header(props) {
     <Block 
       color={props.color} 
       flex={false} 
-      padding={[50, 0, 0, theme.sizes.base]}
-      size={theme.sizes.base * 6}
+      padding={[ Platform.OS === 'ios' ? 50 : 25, 0, 0, theme.sizes.base]}
+      size={ Platform.OS === 'ios' ? theme.sizes.base * 6 :  theme.sizes.base * 5}
       row
       center
       >

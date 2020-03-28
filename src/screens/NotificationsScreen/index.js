@@ -16,7 +16,7 @@ export default function NotificationsScreen(props) {
   useEffect(() => {
     async function loadFeed() {
       const response = await fetch(
-        "http://192.168.4.10:3000/feed?_expand=author&_limit=5&_page=1"
+        "http://192.168.4.5:3000/feed?_expand=author&_limit=5&_page=1"
       );
 
       const data = await response.json();

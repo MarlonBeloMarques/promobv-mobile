@@ -37,7 +37,7 @@ const Header = (props) => {
     <SafeAreaView style={{ flex: 1 }}>
       <Block size={80} flex={false}>
         <Block 
-          margin={[theme.sizes.body - 5, 0, 0, theme.sizes.title - 2]}
+          margin={[ Platform.OS === 'ios' ? theme.sizes.body - 5 : theme.sizes.body * 2.5, 0, 0, theme.sizes.title - 2]}
           color={theme.colors.primary} 
           flex={false} 
           row
@@ -93,10 +93,9 @@ const childrens = createStackNavigator({
       ),
       headerTitleAlign: "left",
       headerStyle: {
-        height: theme.sizes.base * 6,
-        shadowColor: "transparent",
+        height: Platform.OS === 'ios' ? theme.sizes.base * 6 : theme.sizes.base * 5,        shadowColor: "transparent",
         backgroundColor: theme.colors.primary
-  },
+      },
       headerBackImage: (
         <Image source={require("../../assets/icons/back.png")} />
       ),
@@ -121,7 +120,7 @@ const childrens = createStackNavigator({
       ),
       headerTitleAlign: "left",
       headerStyle: {
-        height: theme.sizes.base * 6,
+        height: Platform.OS === "ios" ? theme.sizes.base * 6 : theme.sizes.base * 5,
         shadowColor: "transparent",
         backgroundColor: theme.colors.white
       },
@@ -149,7 +148,8 @@ const childrens = createStackNavigator({
       ),
       headerTitleAlign: "left",
       headerStyle: {
-        height: theme.sizes.base * 6,
+        height:
+          Platform.OS === "ios" ? theme.sizes.base * 6 : theme.sizes.base * 5,
         shadowColor: "transparent",
         backgroundColor: theme.colors.white
       },
@@ -177,7 +177,8 @@ const childrens = createStackNavigator({
       ),
       headerTitleAlign: "left",
       headerStyle: {
-        height: theme.sizes.base * 6,
+        height:
+          Platform.OS === "ios" ? theme.sizes.base * 6 : theme.sizes.base * 5,
         shadowColor: "transparent",
         backgroundColor: theme.colors.white
       },

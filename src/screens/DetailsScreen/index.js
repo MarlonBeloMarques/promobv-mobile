@@ -20,7 +20,7 @@ export default function DetailsScreen(props) {
 
     async function loadDetail() {
       const response = await fetch(
-        `http://192.168.4.10:3000/feed/${id}/?_expand=author`
+        `http://192.168.4.5:3000/feed/${id}/?_expand=author`
       );
       const data = await response.json();
 
