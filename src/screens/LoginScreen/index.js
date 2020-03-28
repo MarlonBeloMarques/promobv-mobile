@@ -24,39 +24,43 @@ export default function LoginScreen(props) {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-        <Block
-          padding={[0, theme.sizes.base * 2]}
-          margin={[theme.sizes.base * 8, 0]}
-        >
-          <Block center middle>
-            <Image source={logo} style={styles.logo} />
+        <Block padding={[theme.sizes.base, theme.sizes.base * 2, 0, theme.sizes.base * 2]}>
+          
+          <Block middle flex={0.3} center>
+            <Image resizeMode='contain' source={logo} style={styles.logo} />
           </Block>
-          <Input label="E-mail" style={[styles.input]} defaultValue={email} />
-          <Input
-            secure
-            label="Senha"
-            style={[styles.input]}
-            defaultValue={password}
-          />
-          <Button onPress={onPasswordClicked} style={styles.forgotPassword}>
-            <Text
-              caption
-              primary
-              right
-              style={{ textDecorationLine: "underline" }}
-            >
-              Recuperar senha?
-            </Text>
-          </Button>
+          
+          <Block middle flex={0.7}>
+            <Input label="E-mail" style={[styles.input]} defaultValue={email} />
+            <Input
+              secure
+              label="Senha"
+              style={[styles.input]}
+              defaultValue={password}
+            />
+            <Button onPress={onPasswordClicked} style={styles.forgotPassword}>
+              <Text
+                caption
+                primary
+                right
+                style={{ textDecorationLine: "underline" }}
+              >
+                Recuperar senha?
+              </Text>
+            </Button>
 
-          <Button onPress={onLoginClicked} color={theme.colors.primary}>
-            <Text bold white center>
-              Entrar
-            </Text>
-          </Button>
+            <Button onPress={onLoginClicked} color={theme.colors.primary}>
+              <Text bold white center>
+                Entrar
+              </Text>
+            </Button>
+          </Block>
         </Block>
 
-        <Block padding={[0, theme.sizes.base * 2]} style={styles.end}>
+        <Block
+          padding={[theme.sizes.base, theme.sizes.base * 2]}
+          style={styles.end}
+        >
           <Button color={theme.colors.google}>
             <Text bold white center>
               Entrar com o Google

@@ -17,22 +17,21 @@ export default StyleSheet.create({
   },
 
   forgotPassword: {
-    marginTop: 1
+    marginTop: 1,
+    marginBottom: theme.sizes.base
   },
 
   signup: {
-    marginTop: theme.sizes.base
+    marginTop: theme.sizes.base / 2
   },
 
   end: {
-    flex: 1,
-    justifyContent: "flex-end",
-    marginBottom: theme.sizes.padding
+    flex: 0.3,
+    justifyContent: "flex-end"
   },
 
   logo: {
     width: 150,
-    height: 150,
-    marginBottom: theme.sizes.base * 5
+    height: 150
   }
 });

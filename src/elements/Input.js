@@ -63,7 +63,7 @@ export default function Input(props) {
                   : "default";
 
   return (
-    <Block flex={false} margin={[theme.sizes.base, 0]}>
+    <Block flex={false} margin={[theme.sizes.base / 1.5, 0]}>
       {renderLabel()}
       <TextInput
         style={inputStyles}
