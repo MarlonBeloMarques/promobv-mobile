@@ -20,14 +20,15 @@ export default function PasswordScreen(props) {
           recuperar seu acesso.
         </Text>
 
-        <Block>
+        <Block margin={[theme.sizes.base, 0]}>
           <Input label="E-mail" style={[styles.input]} />
-
-          <Button color={theme.colors.primary}>
-            <Text bold white center>
-              Receber instruções
-            </Text>
-          </Button>
+          <Block margin={[theme.sizes.base, 0]} flex={false}>
+            <Button color={theme.colors.primary}>
+              <Text bold white center>
+                Receber instruções
+              </Text>
+            </Button>
+          </Block>
         </Block>
       </Block>
     </KeyboardAvoidingView>
