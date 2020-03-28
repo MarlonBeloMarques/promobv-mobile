@@ -1,10 +1,9 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 import { theme } from "../../constants";
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "center"
+    flex: 1
   },
 
   input: {
@@ -17,11 +16,10 @@ export default StyleSheet.create({
     fontSize: theme.sizes.caption
   },
 
-  checkbox: {
-    marginTop: theme.sizes.body,
-    fontSize: theme.sizes.caption,
-    paddingHorizontal: theme.sizes.base,
-    color: theme.colors.gray
+  textCheckbox: {
+    fontSize: 10,
+    color: theme.colors.gray,
+    width: 300
   },
 
   block: {

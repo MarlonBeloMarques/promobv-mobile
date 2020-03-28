@@ -15,7 +15,6 @@ export default function SignupScreen(props) {
     {
       label:
         "Concordo com os TERMOS DE CONDIÇÕES DE USO e POLÍTICA DE PRIVACIDADE.",
-      value: "one"
     }
   ];
 
@@ -33,40 +32,37 @@ export default function SignupScreen(props) {
               Entrar com o Facebook
             </Text>
           </Button>
-    
+
           <Block flex={false} style={styles.block}>
             <Input label="Usuário" style={[styles.input]} />
-              <Input
-                label={
-                  <Text style={{ color: theme.colors.gray }}>
-                    E-mail {""}
-                    <Text style={[styles.message, { color: theme.colors.gray }]}>
-                      (Encaminharemos um e-mail de confirmação)
-                    </Text>
+            <Input
+              label={
+                <Text style={{ color: theme.colors.gray }}>
+                  E-mail {""}
+                  <Text style={[styles.message, { color: theme.colors.gray }]}>
+                    (Encaminharemos um e-mail de confirmação)
                   </Text>
-                }
-                style={[styles.input]}
-                defaultValue={email}
-              />
-              <Input
-                secure
-                label="Senha"
-                style={[styles.input]}
-                defaultValue={password}
-              />
-  
-              <CheckboxFormX
-                style={{ width: 330 }}
-                dataSource={mockData}
-                itemShowKey="label"
-                itemCheckedKey="RNchecked"
-                iconSize={16}
-                formHorizontal={false}
-                labelHorizontal={true}
-                textStyle={styles.checkbox}
-              />
+                </Text>
+              }
+              style={[styles.input]}
+              defaultValue={email}
+            />
+            <Input
+              secure
+              label="Senha"
+              style={[styles.input]}
+              defaultValue={password}
+            />
 
-              <Button color={theme.colors.primary}>
+            <CheckboxFormX
+              style={{ width: 350 }}
+              dataSource={mockData}
+              itemShowKey="label"
+              iconSize={14}
+              textStyle={styles.textCheckbox}
+            />
+
+            <Button color={theme.colors.primary}>
               <Text bold white center>
                 Cadastra-se
               </Text>
