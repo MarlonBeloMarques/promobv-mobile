@@ -199,7 +199,12 @@ const childrens = createStackNavigator({
 
 const screens = createStackNavigator(
   {
-    login: LoginScreen,
+    login: {
+      screen: LoginScreen,
+      navigationOptions: {
+        header: null
+      }
+    },
     signup: {
       screen: SignupScreen,
       navigationOptions: {

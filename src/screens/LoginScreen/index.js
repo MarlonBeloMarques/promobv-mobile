@@ -24,53 +24,60 @@ export default function LoginScreen(props) {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <Block middle padding={[0, theme.sizes.base * 2]} margin={[theme.sizes.base * 8 ,0]}>
-        <Block center middle>
-            <Image source={logo} style={styles.logo}/>
-        </Block>  
-        <Input 
-          label="E-mail" 
-          style={[styles.input]} 
-          defaultValue={email} />
-        <Input 
-          secure 
-          label="Senha" 
-          style={[styles.input]} 
-          defaultValue={password} />
+        <Block
+          padding={[0, theme.sizes.base * 2]}
+          margin={[theme.sizes.base * 8, 0]}
+        >
+          <Block center middle>
+            <Image source={logo} style={styles.logo} />
+          </Block>
+          <Input label="E-mail" style={[styles.input]} defaultValue={email} />
+          <Input
+            secure
+            label="Senha"
+            style={[styles.input]}
+            defaultValue={password}
+          />
           <Button onPress={onPasswordClicked} style={styles.forgotPassword}>
-            <Text 
+            <Text
               caption
               primary
               right
-              style={{ textDecorationLine : 'underline' }}>
-                Recuperar senha?
+              style={{ textDecorationLine: "underline" }}
+            >
+              Recuperar senha?
             </Text>
           </Button>
-        
-         <Button onPress={onLoginClicked} color={theme.colors.primary}>
-            <Text bold white center >Entrar</Text>
-          </Button> 
-            
-      </Block>
 
-      <Block padding={[0, theme.sizes.base * 2]} style={styles.end}>
-        <Button color={theme.colors.google}>
-          <Text bold white center >Entrar com o Google</Text>
-        </Button>
-        <Button color={theme.colors.facebook}>
-          <Text bold white center >Entrar com o Facebook</Text>
-        </Button>
-        <Button onPress={onSignupClicked} style={styles.signup}>
-          <Text 
-            caption
-            primary
-            center
-            style={{ textDecorationLine : 'underline' }}>
-            Crie uma conta              
-          </Text>
-        </Button>
-      </Block>
+          <Button onPress={onLoginClicked} color={theme.colors.primary}>
+            <Text bold white center>
+              Entrar
+            </Text>
+          </Button>
+        </Block>
 
+        <Block padding={[0, theme.sizes.base * 2]} style={styles.end}>
+          <Button color={theme.colors.google}>
+            <Text bold white center>
+              Entrar com o Google
+            </Text>
+          </Button>
+          <Button color={theme.colors.facebook}>
+            <Text bold white center>
+              Entrar com o Facebook
+            </Text>
+          </Button>
+          <Button onPress={onSignupClicked} style={styles.signup}>
+            <Text
+              caption
+              primary
+              center
+              style={{ textDecorationLine: "underline" }}
+            >
+              Crie uma conta
+            </Text>
+          </Button>
+        </Block>
     </KeyboardAvoidingView>
   );
 }
