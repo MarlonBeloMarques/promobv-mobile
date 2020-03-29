@@ -3,6 +3,7 @@ import { KeyboardAvoidingView, AsyncStorage, FlatList, StyleSheet, Platform } fr
 import { Block, Input, Button, Text, Photo, Header } from "../../elements";
 import { theme } from "../../constants";
 import { AntDesign } from "@expo/vector-icons";
+import { YOUR_IP } from '../../../config'
 
 export default function MyPromotionsScreen(props) {
 
@@ -11,7 +12,7 @@ export default function MyPromotionsScreen(props) {
   useEffect(() => {
     async function loadFeed() {
       const response = await fetch(
-        "http://192.168.4.5:3000/feed/?_&authorId=1"
+        `http://${YOUR_IP}:3000/feed/?_&authorId=1`
       );
 
       const data = await response.json();

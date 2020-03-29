@@ -6,6 +6,7 @@ import { theme } from "../../constants";
 
 import styles from "./styles";
 import { ScrollView } from "react-native-gesture-handler";
+import { YOUR_IP } from "../../../config"
 
 export default function DetailsScreen(props) {
   const [name, setName] = useState('')
@@ -17,10 +18,9 @@ export default function DetailsScreen(props) {
   const id = props.navigation.getParam('id')
 
   useEffect(() => {
-
     async function loadDetail() {
       const response = await fetch(
-        `http://192.168.4.5:3000/feed/${id}/?_expand=author`
+        `http://${YOUR_IP}:3000/feed/${id}/?_expand=author`
       );
       const data = await response.json();
 
