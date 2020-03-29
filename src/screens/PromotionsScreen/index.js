@@ -71,7 +71,7 @@ export default function PasswordScreen(props) {
           </Button>
         </Block>
 
-        <Block fullBorder fixed>
+        <Block fixed>
           <Button
             onPress={onClickInsert}
             disableRadiusDefault

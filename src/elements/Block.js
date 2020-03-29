@@ -185,8 +185,6 @@ export default function Block(props) {
   }
 
 const BlockElement = styled.View`
-  border-width: 1;
-  border-color: red;
   position: absolute;
   justify-content: flex-end;
   align-items: center;

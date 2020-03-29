@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { KeyboardAvoidingView, AsyncStorage, FlatList, StyleSheet } from "react-native";
+import { KeyboardAvoidingView, AsyncStorage, FlatList, StyleSheet, Platform } from "react-native";
 import { Block, Input, Button, Text, Photo, Header } from "../../elements";
 import { theme } from "../../constants";
 import { AntDesign } from "@expo/vector-icons";
@@ -51,7 +51,7 @@ export default function MyPromotionsScreen(props) {
             shadow
             color={theme.colors.white}
           >
-            <Photo style={styles.radius}  height={100} size={20} image={item.image} />
+            <Photo style={Platform.OS === 'ios' && styles.radius}  height={100} size={20} image={item.image} />
             <Block padding={[15, 10, 0]}>
               <Text gray bold size={14}>
                 {item.description}
