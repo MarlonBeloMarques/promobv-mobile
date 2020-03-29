@@ -61,7 +61,7 @@ https://github.com/MarlonBeloMarques/PromoBV-frontend
 
 ### Servidor Local
 
-- insira seu IP no destino `$ .\config.json` em seguida execute:
+- insira seu IP no destino `.\config.json` em seguida execute:
 
 - `$ yarn json-server --host SEU IP server.json -d 1000 -w`
 
