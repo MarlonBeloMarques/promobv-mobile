@@ -59,6 +59,12 @@ https://github.com/MarlonBeloMarques/PromoBV-frontend
 
 - Baixe o [Expo](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=pt_BR) em seu dispositivo e leia o Qr Code.
 
+### Servidor Local
+
+- insira seu IP no destino `$ .\config.json` em seguida execute:
+
+- `$ yarn json-server --host SEU IP server.json -d 1000 -w`
+
 ## 📌 Suporte
 
 Entre em contato comig em um dos seguintes lugares!
