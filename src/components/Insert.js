@@ -24,7 +24,7 @@ export default function Insert(props) {
 
   function buttonAction(title) {
     return (
-      <Block middle padding={[theme.sizes.padding / 2, 0]}>
+      <Block padding={[theme.sizes.padding, 0]}>
         <Button onPress={props.onRequestClose} color={theme.colors.primary}>
           <Text bold center white>
             {title}

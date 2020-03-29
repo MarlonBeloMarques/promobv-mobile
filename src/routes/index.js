@@ -122,7 +122,8 @@ const childrens = createStackNavigator({
       headerStyle: {
         height: Platform.OS === "ios" ? theme.sizes.base * 6 : theme.sizes.base * 5,
         shadowColor: "transparent",
-        backgroundColor: theme.colors.white
+        backgroundColor: theme.colors.white,
+        elevation: 0
       },
       headerBackImage: (
         <Image source={require("../../assets/icons/back.png")} />
@@ -151,7 +152,8 @@ const childrens = createStackNavigator({
         height:
           Platform.OS === "ios" ? theme.sizes.base * 6 : theme.sizes.base * 5,
         shadowColor: "transparent",
-        backgroundColor: theme.colors.white
+        backgroundColor: theme.colors.white,
+        elevation: 0
       },
       headerBackImage: (
         <Image source={require("../../assets/icons/back.png")} />

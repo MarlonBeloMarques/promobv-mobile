@@ -41,7 +41,7 @@ export default function MyPromotionsScreen(props) {
         keyExtractor={post => String(post.id)}
         renderItem={({ item }) => (
           <Block
-            margin={[theme.sizes.padding, theme.sizes.padding, 0]}
+            margin={[theme.sizes.base, theme.sizes.padding]}
             onPress={() => onDetailsClicked(item.id)}
             button
             size={115}
@@ -51,34 +51,34 @@ export default function MyPromotionsScreen(props) {
             shadow
             color={theme.colors.white}
           >
-            <Photo style={Platform.OS === 'ios' && styles.radius}  height={100} size={20} image={item.image} />
+            <Photo
+              style={Platform.OS === "ios" && styles.radius}
+              height={100}
+              size={20}
+              image={item.image}
+            />
             <Block padding={[15, 10, 0]}>
               <Text gray bold size={14}>
                 {item.description}
               </Text>
               <Block style={styles.end}>
                 <Text secondary size={12} bold>
-                  {" "}
                   {item.price}
                 </Text>
                 <Block padding={[5, 0, 0]} flex={false}>
                   <Text gray3 bold>
-                    {" "}
                     {item.description}
                   </Text>
                 </Block>
               </Block>
             </Block>
-            <Block
-              column
-              flex={false}
-              padding={theme.sizes.base/2}>
+            <Block column flex={false} padding={theme.sizes.base / 2}>
               <Button style>
                 <AntDesign
                   name={"close"}
                   size={18}
                   color={theme.colors.gray3}
-                />     
+                />
               </Button>
               <Block bottom>
                 <Button style onPress={onClickEdit}>
@@ -86,7 +86,7 @@ export default function MyPromotionsScreen(props) {
                     name={"edit"}
                     size={18}
                     color={theme.colors.gray3}
-                  />     
+                  />
                 </Button>
               </Block>
             </Block>
@@ -107,10 +107,6 @@ const styles = StyleSheet.create({
   radius: {
     borderBottomStartRadius: theme.sizes.radius * 2,
     borderTopStartRadius: theme.sizes.radius * 2
-  },
-
-  border: {
-    borderColor: theme.colors.gray
   },
 
   end: {
