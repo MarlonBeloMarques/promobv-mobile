@@ -6,16 +6,22 @@ import { theme } from "../../constants";
 import styles from './styles'
 import logo from '../../../assets/images/promobv.png'
 
+import { signIn } from '../../services/auth'
+
 export default function LoginScreen(props) {
-  const [email, setEmail] = useState('promobv@react.com')
-  const [password, setPassword] = useState('promobv')
+  const [email, setEmail] = useState('marlonmarqsbr@gmail.com')
+  const [password, setPassword] = useState('123')
 
   function onSignupClicked() {
     props.navigation.navigate('signup')
   }
 
   function onLoginClicked() {
-    props.navigation.navigate("Promoções");
+     signIn(email, password).
+       then(res => {
+         console.log(res.headers.authorization)
+       },
+       error => {})
   }
 
   function onPasswordClicked() {
@@ -31,8 +37,13 @@ export default function LoginScreen(props) {
           </Block>
           
           <Block middle flex={0.7}>
-            <Input label="E-mail" style={[styles.input]} defaultValue={email} />
+            <Input 
+              value={email}
+              label="E-mail"  
+              style={[styles.input]} 
+              defaultValue={email} />
             <Input
+              value={password}
               secure
               label="Senha"
               style={[styles.input]}

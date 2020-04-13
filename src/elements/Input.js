@@ -66,6 +66,7 @@ export default function Input(props) {
     <Block flex={false} margin={[theme.sizes.base / 1.5, 0]}>
       {renderLabel()}
       <TextInput
+        value={props.value}
         style={inputStyles}
         secureTextEntry={isSecure}
         autoComplete="off"
