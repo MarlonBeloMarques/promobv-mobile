@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Alert } from 'react-native'
+import * as SecureStore from "expo-secure-store";
 
 const api = axios.create({
   baseURL: 'http://192.168.4.5:8086',
@@ -11,8 +12,21 @@ const api = axios.create({
 })
 
 //solicitacao
-api.interceptors.request.use(function (config) {
+api.interceptors.request.use(async function (config) {
   // Faça algo antes que a solicitação seja enviada
+
+  const userToken = await SecureStore.getItemAsync('user_token')
+
+  let N = api.defaults.baseURL.length
+
+  let requestToApi = config.baseURL.substring(0, N) == api.defaults.baseURL // verifica se os dados do config é igual da api
+
+  // se for entao pode enviar o authorization
+  if(userToken && requestToApi) {
+    config.headers.Authorization = `Bearer${JSON.parse(userToken)}`
+  }
+  console.log(config.headers)
+
   return config
 }, function (error) {
   // Faça algo com erro de solicitação
@@ -79,7 +93,7 @@ api.interceptors.response.use(function (response) {
   }
 
   function handle403() {
-    
+
   }
 
   function listErrors(messages) {
