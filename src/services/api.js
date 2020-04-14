@@ -25,7 +25,6 @@ api.interceptors.request.use(async function (config) {
   if(userToken && requestToApi) {
     config.headers.Authorization = `Bearer${JSON.parse(userToken)}`
   }
-  console.log(config.headers)
 
   return config
 }, function (error) {

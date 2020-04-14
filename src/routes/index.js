@@ -26,11 +26,17 @@ import { Ionicons } from "@expo/vector-icons";
 import { theme } from '../constants'
 import { Text, Block, Button } from '../elements'
 import { Transition } from 'react-native-reanimated'
+import { logout } from '../services/auth'
 
 const Header = (props) => {
 
   function onClickMenu() {
     props.navigation.dispatch(DrawerActions.closeDrawer());
+  }
+
+  function onClickExit() {
+    logout()
+    props.navigation.navigate("login");
   }
 
   return (
@@ -50,7 +56,7 @@ const Header = (props) => {
       </Block>
       <ScrollView>
         <DrawerItems {...props} ></DrawerItems>
-        <Block onPress={() => props.navigation.navigate('login')} margin={[theme.sizes.body - 5, 0, 0, theme.sizes.title - 2]} button>
+        <Block onPress={onClickExit} margin={[theme.sizes.body - 5, 0, 0, theme.sizes.title - 2]} button>
           <Text bold white>Sair</Text>
         </Block>
       </ScrollView>
@@ -251,24 +257,37 @@ const screens = createStackNavigator(
   }
 );
 
-const routes =createAnimatedSwitchNavigator({
-  auth: screens,
-  childrens : childrens
-},
-{
-  transition: (
-    <Transition.Together>
-      <Transition.Out
-        type='slide-left'
-        interpolation='easeIn'
-        durationMs={400}
-      />
-      <Transition.In 
-        type='fade'
-        durationMs={500}
-      />
-    </Transition.Together>
-  )
-})
 
-export default createAppContainer(routes);
+function getInitialRoute(signed) {
+  
+  if(signed) {
+    return 'childrens'
+  }
+
+  return 'auth'
+}
+
+export default (signed) =>
+  createAppContainer(
+    createAnimatedSwitchNavigator({
+      auth: screens,
+      childrens : childrens
+    },
+    {
+      initialRouteName: getInitialRoute(signed),
+      transition: (
+        <Transition.Together>
+          <Transition.Out
+            type='slide-left'
+            interpolation='easeIn'
+            durationMs={400}
+          />
+          <Transition.In 
+            type='fade'
+            durationMs={500}
+          />
+        </Transition.Together>
+      )
+    })
+
+);
