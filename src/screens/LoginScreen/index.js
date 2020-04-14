@@ -6,8 +6,7 @@ import { theme } from "../../constants";
 import styles from './styles'
 import logo from '../../../assets/images/promobv.png'
 
-import { signIn } from '../../services/auth'
-import * as SecureStore from "expo-secure-store";
+import { signIn, successfulLogin } from '../../services/auth'
 
 export default function LoginScreen(props) {
   const [email, setEmail] = useState('marlonmarqsbr@gmail.com')
@@ -41,7 +40,7 @@ export default function LoginScreen(props) {
             'Sucesso'
           )
 
-          await SecureStore.setItemAsync('user_token', JSON.stringify(authorization))
+          successfulLogin(authorization)
 
           props.navigation.navigate('Promoções')
         
