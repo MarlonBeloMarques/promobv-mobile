@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { KeyboardAvoidingView, FlatList, StyleSheet, View, AsyncStorage } from "react-native";
 import { Block, Text, Button, Header, Photo } from "../../elements";
-import { Insert } from "../../components";
+import { Insert, Categories } from "../../components";
 import { theme } from "../../constants";
 import { AntDesign } from "@expo/vector-icons";
 import { YOUR_IP } from "../../../config";
-
-import { } from "./styles";
-
 import { DrawerActions } from "react-navigation-drawer";
 
+import { } from "./styles";
+import { getCategories } from "../../services/category";
+
+
 export default function PasswordScreen(props) {
-  
   const [feed, setFeed] = useState([]);
   const [showInsert, setShowInsert] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [showCategories, setShowCategories] = useState(false);
 
   useEffect(() => {
     async function loadFeed() {
@@ -25,8 +27,17 @@ export default function PasswordScreen(props) {
 
       setFeed(data);
     }
+
+    async function loadCategories() {
+
+      getCategories().then(res => {
+        setCategories(res.data)
+      })
+      
+    }
     //executa uma unica vez
     loadFeed();
+    loadCategories()
   }, []);
 
   async function onDetailsClicked(id) {
@@ -50,6 +61,14 @@ export default function PasswordScreen(props) {
     setShowInsert(false)
   }
 
+  function onClickCategory() {
+    setShowCategories(true);
+  }
+
+  function onHideCategory() {
+    setShowCategories(false);
+  }
+
   function renderInsert() {
     return (
       <Insert
@@ -60,12 +79,22 @@ export default function PasswordScreen(props) {
     )
   }
 
+  function renderCategories() {
+    return (
+      <Categories
+        categories={categories}
+        visible={showCategories}
+        onRequestClose={onHideCategory}>
+      </Categories>
+    )
+  }
+
   function renderPromotions() {
     return (
       <KeyboardAvoidingView style={styles.container}>
         <Header barStyle='light-content' colorIcon={theme.colors.white} color={theme.colors.primary} onPress={onClickMenu}>Promoções</Header>
         <Block border center flex={false} padding={[15, 0, 15]}>
-          <Button style>
+          <Button onPress={onClickCategory} style>
             <Text bold color={theme.colors.primary}>
               Categoria
             </Text>
@@ -132,6 +161,9 @@ export default function PasswordScreen(props) {
 
   if(showInsert) {
     return renderInsert()
+  }
+  if(showCategories) {
+    return renderCategories()
   }
   return renderPromotions()
   
