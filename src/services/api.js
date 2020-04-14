@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { Alert } from 'react-native'
 
 const api = axios.create({
   baseURL: 'http://192.168.4.5:8086',
@@ -29,8 +30,69 @@ api.interceptors.response.use(function (response) {
   // Qualquer código de status que esteja fora do intervalo de 2xx faz com que esta função seja acionada
   // Faça algo com erro de resposta
   // console.log ('resposta interceptada:', error.response.data)
-  console.log(`API RESPONSE ${error.response.status}`)
+
+  let errorObj = error.response
+
+  if(errorObj.error) {
+    errorObj = errorObj.error
+  }
+
+  if(!errorObj.status) {
+    errorObj = JSON.parse(errorObj)
+  }
+
+  console.log(`API RESPONSE: ${errorObj.status}`);
+
+  switch (errorObj.status) {
+    case 401:
+      handle401()
+      break;
+
+    case 403:
+      handle403()
+      break;
+
+    case 422:
+      handle422(errorObj)
+      break;
+
+    default:
+      handleDefaultError(errorObj)
+      break;
+
+  }
+
+  function handleDefaultError(errorObj) {
+    console.log(`DEFAULT ERROR: ${errorObj.status} : ${errorObj.error}, message: ${errorObj.message}`)
+  }
+
+  function handle422(errorObj) {
+    Alert.alert(
+      'Validação',
+      `${listErrors(errorObj.errors)}`
+
+    )
+  }
+
+  function handle401() {
+      Alert.alert("Atenção", "Email ou senha incorretos");
+  }
+
+  function handle403() {
+    
+  }
+
+  function listErrors(messages) {
+    let s = ''
+    for (let index = 0; index < messages.length; index++) {
+      s = s + messages[i].fieldName + ': ' + messages[i].message
+    }
+
+    return s
+  }
+
   return Promise.reject(error)
 })
+
 
 export default api

@@ -13,18 +13,18 @@ export default function LoginScreen(props) {
   const [email, setEmail] = useState('marlonmarqsbr@gmail.com')
   const [password, setPassword] = useState('123')
 
-  useEffect(() => {
-    async function getToken() {
-      try {
-        const token = await SecureStore.getItemAsync('user_token')
-        if(token) {
-          props.navigation.navigate('Promoções')
-        }
-      } catch (error) {
-      }
-    }
-    getToken()
-  }, [])
+  // useEffect(() => {
+  //   async function getToken() {
+  //     try {
+  //       const token = await SecureStore.getItemAsync('user_token')
+  //       if(token) {
+  //         props.navigation.navigate('Promoções')
+  //       }
+  //     } catch (error) {
+  //     }
+  //   }
+  //   getToken()
+  // }, [])
 
   async function handleSubmit() {
     // if(!email || !password) {
@@ -49,17 +49,7 @@ export default function LoginScreen(props) {
       }
 
     } catch ({ response }) {
-      switch (response.status) {
-        case 403:
-          Alert.alert(
-            'Atenção',
-            'Email ou senha incorretos'
-          )
-
-          console.log(response);
-
-          break
-    }
+      
   }
 }
 
