@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { StyleSheet, View, KeyboardAvoidingView, Image } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, KeyboardAvoidingView, Image, Alert } from "react-native";
 import { Block, Input, Button, Text} from '../../elements'
 import { theme } from "../../constants";
 
@@ -7,21 +7,66 @@ import styles from './styles'
 import logo from '../../../assets/images/promobv.png'
 
 import { signIn } from '../../services/auth'
+import * as SecureStore from "expo-secure-store";
 
 export default function LoginScreen(props) {
   const [email, setEmail] = useState('marlonmarqsbr@gmail.com')
   const [password, setPassword] = useState('123')
 
+  useEffect(() => {
+    async function getToken() {
+      try {
+        const token = await SecureStore.getItemAsync('user_token')
+        if(token) {
+          props.navigation.navigate('Promoções')
+        }
+      } catch (error) {
+      }
+    }
+    getToken()
+  }, [])
+
+  async function handleSubmit() {
+    // if(!email || !password) {
+
+    //   //return
+    // }
+
+    try {
+      const { headers : { authorization }, status } = await signIn(email, password)
+      
+      switch (status) {
+        case 200:
+          Alert.alert(
+            'Sucesso'
+          )
+
+          await SecureStore.setItemAsync('user_token', JSON.stringify(authorization))
+
+          props.navigation.navigate('Promoções')
+        
+          break
+      }
+
+    } catch ({ response }) {
+      switch (response.status) {
+        case 403:
+          Alert.alert(
+            'Atenção',
+            'Email ou senha incorretos'
+          )
+
+          console.log(response);
+
+          break
+    }
+  }
+}
+
+
+
   function onSignupClicked() {
     props.navigation.navigate('signup')
-  }
-
-  function onLoginClicked() {
-     signIn(email, password).
-       then(res => {
-         console.log(res.headers.authorization)
-       },
-       error => {})
   }
 
   function onPasswordClicked() {
@@ -60,7 +105,7 @@ export default function LoginScreen(props) {
               </Text>
             </Button>
 
-            <Button onPress={onLoginClicked} color={theme.colors.primary}>
+            <Button onPress={handleSubmit} color={theme.colors.primary}>
               <Text bold white center>
                 Entrar
               </Text>

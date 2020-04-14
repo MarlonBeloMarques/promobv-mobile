@@ -7,7 +7,7 @@ export default async function LocalStorageToken () {
     if(user_token) {
       user_token = JSON.parse(user_token)
 
-      return `${user_token.type} ${user_token.token}`
+      return `${user_token.authorization}`
     }
 
     return null

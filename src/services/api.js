@@ -24,11 +24,12 @@ api.interceptors.response.use(function (response) {
   // Faça algo com dados de resposta
   // console.log ('resposta interceptada:', response.data)
   return response
+  
 }, function (error) {
   // Qualquer código de status que esteja fora do intervalo de 2xx faz com que esta função seja acionada
   // Faça algo com erro de resposta
   // console.log ('resposta interceptada:', error.response.data)
-  console.log(`API RESPONSE ${error.response.data.status} : ${error.response.data.code}`)
+  console.log(`API RESPONSE ${error.response.status}`)
   return Promise.reject(error)
 })
 
