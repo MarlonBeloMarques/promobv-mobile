@@ -9,34 +9,30 @@ import { DrawerActions } from "react-navigation-drawer";
 
 import { } from "./styles";
 import { getCategories } from "../../services/category";
+import { getPromotions } from "../../services/promotion";
 
 
 export default function PasswordScreen(props) {
-  const [feed, setFeed] = useState([]);
+  const [promotions, setPromotions] = useState([]);
   const [showInsert, setShowInsert] = useState(false);
   const [categories, setCategories] = useState([]);
   const [showCategories, setShowCategories] = useState(false);
 
   useEffect(() => {
-    async function loadFeed() {
-      const response = await fetch(
-        `http://${YOUR_IP}:3000/feed?_expand=author&_limit=5&_page=1`
-      );
-
-      const data = await response.json();
-
-      setFeed(data);
+    async function loadPromotions() {
+      getPromotions().then(res => {
+        setPromotions(res.data['content'])
+      })
     }
 
     async function loadCategories() {
-
       getCategories().then(res => {
         setCategories(res.data)
       })
       
     }
-    //executa uma unica vez
-    loadFeed();
+
+    loadPromotions()
     loadCategories()
   }, []);
 
@@ -123,7 +119,7 @@ export default function PasswordScreen(props) {
 
         <FlatList
           style={styles.flatlist}
-          data={feed}
+          data={promotions}
           keyExtractor={post => String(post.id)}
           renderItem={({ item }) => (
             <Block
@@ -137,24 +133,22 @@ export default function PasswordScreen(props) {
               <Photo height={100} size={40} image={item.image} />
               <Block padding={[15, 10, 0]}>
                 <Text gray bold size={18}>
-                  {item.description}
+                  {item.titulo}
                 </Text>
                 <Block style={styles.end}>
                   <Text secondary size={15} bold>
-                    {" "}
-                    {item.price}
+                    {"R$ "}{item.preco}
                   </Text>
                   <Block padding={[5, 0, 0]} flex={false}>
                     <Text gray3 bold>
-                      {" "}
-                      {item.description}
+                      {item.localizacao}
                     </Text>
                   </Block>
                 </Block>
               </Block>
             </Block>
           )}
-        ></FlatList>
+        ></FlatList> 
       </KeyboardAvoidingView>
     );
   }
