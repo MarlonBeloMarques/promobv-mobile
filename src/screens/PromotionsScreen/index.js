@@ -36,15 +36,13 @@ export default function PasswordScreen(props) {
     loadCategories()
   }, []);
 
-  console.log(promotions);
-
   async function onDetailsClicked(id) {
 
-  const _id = id;
+    const _id = id;
 
-  await AsyncStorage.setItem('promotion', JSON.stringify(_id))
-   
-  props.navigation.navigate("Detalhes", { id });
+    await AsyncStorage.setItem('promotion', JSON.stringify(_id))
+    
+    props.navigation.navigate("Detalhes", { id });
   }
 
   function onClickMenu() {

@@ -6,38 +6,47 @@ import { theme } from "../../constants";
 
 import styles from "./styles";
 import { ScrollView } from "react-native-gesture-handler";
-import { YOUR_IP } from "../../../config"
+import { getPromotion } from '../../services/promotion'
+
+import profile from "../../../assets/images/profile-image.png";
 
 export default function DetailsScreen(props) {
-  const [name, setName] = useState('')
-  const [avatar, setAvatar] = useState('')
-  const [image, setImage] = useState('')
-  const [description, setDescription] = useState('')
-  const [price, setPrice] = useState('')
-  const [ratio, setRatio] = useState('')
   const id = props.navigation.getParam('id')
 
-  useEffect(() => {
-    async function loadDetail() {
-      const response = await fetch(
-        `http://${YOUR_IP}:3000/feed/${id}/?_expand=author`
-      );
-      const data = await response.json();
+  const [details, setDetails] = useState({
+    name: '',
+    avatar: '',
+    title: '',
+    image: '',
+    description: '',
+    price: '',
+    localization: '',
+    number: ''
+  })
 
-      setName(data.author.name)
-      setAvatar(data.author.avatar)
-      setImage(data.image)
-      setDescription(data.description)
-      setPrice(data.price)
-      setRatio(data.aspectRatio)
+  useEffect(() => {
+    async function loadDetails() {
+      getPromotion(id).then(res => {
+        const response = res.data
+        setDetails({ name: response.nomeUsuario,
+                     title: response.titulo,
+                     avatar : '',
+                     image: response.imagem,
+                     description: response.descricao,
+                     price: response.preco,
+                     localization: response.localizacao,
+                     number: '' })
+      })
     }
 
-    loadDetail()
+    loadDetails()
   }, []);
+
+  console.log(details)
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <StatusBar barStyle='light-content'></StatusBar>
+      <StatusBar barStyle="light-content"></StatusBar>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Block
           padding={theme.sizes.header}
@@ -45,15 +54,16 @@ export default function DetailsScreen(props) {
           flex={false}
           row
         >
-          <Photo avatar image={avatar} />
+          {details.avatar === "" && <Photo avatar image={profile} />}
+          {details.avatar !== "" && <Photo avatar image={details.image} />}
           <Block padding={[10, 10, 10, 20]}>
             <Text bold size={theme.sizes.header} color={theme.colors.gray}>
-              {name}
+              {details.name}
             </Text>
           </Block>
         </Block>
         <Block size={300} flex={false}>
-          <Photo height={100} size={100} image={image} />
+          <Photo height={100} size={100} image={details.image} />
         </Block>
         <Block>
           <Block border padding={[10, 50]} flex={false} row>
@@ -76,17 +86,17 @@ export default function DetailsScreen(props) {
           </Block>
           <Block padding={[10, 40]}>
             <Text center bold h2 color={theme.colors.gray}>
-              {description}
+              {details.title}
             </Text>
             <Block flex={false} margin={[12, 0]}>
               <Text light color={theme.colors.gray}>
-                Tempor cupidatat occaecat duis excepteur aute tempor nostrud
-                consequat enim labore dolore veniam.
+                {details.description}
               </Text>
             </Block>
             <Block padding={[20, 0, 10, 0]} flex={false} border>
               <Text h3 bold color={theme.colors.secondary}>
-                {price}
+                {"R$ "}
+                {details.price}
               </Text>
             </Block>
             <Block flex={false} border>
@@ -109,10 +119,10 @@ export default function DetailsScreen(props) {
                 </Block>
                 <Block>
                   <Block margin={5} padding={[2, 0]}>
-                    <Text>Eu aliquip sunt.</Text>
+                    <Text>{details.localization}</Text>
                   </Block>
                   <Block margin={5} padding={[2, 0]}>
-                    <Text>Eu aliquip sunt.</Text>
+                    <Text>{details.number}</Text>
                   </Block>
                 </Block>
               </Block>
@@ -128,7 +138,7 @@ export default function DetailsScreen(props) {
                     size={80}
                     height={80}
                     card
-                    image={image}
+                    image={details.image}
                   />
                 </Block>
                 <Block flex={false}>
@@ -137,7 +147,7 @@ export default function DetailsScreen(props) {
                     size={80}
                     height={80}
                     card
-                    image={image}
+                    image={details.image}
                   />
                 </Block>
                 <Block flex={false}>

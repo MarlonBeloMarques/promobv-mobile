@@ -53,10 +53,10 @@ export default function Photo(props) {
   `;
 
   if (animated) {
-    return <Animated.Image style={blockStyles} source={{ uri: props.image }}></Animated.Image>;
+    return <Animated.Image style={blockStyles} source={ typeof props.image === 'string' ? { uri: props.image } : props.image}></Animated.Image>;
   }
 
-  return <Image style={blockStyles} source={{ uri: props.image }}></Image>
+  return <Image style={blockStyles} source={ typeof props.image === 'string' ? { uri: props.image } : props.image}></Image>
 }
 
 export const styles = StyleSheet.create({
