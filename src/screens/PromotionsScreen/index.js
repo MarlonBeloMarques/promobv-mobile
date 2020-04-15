@@ -36,6 +36,8 @@ export default function PasswordScreen(props) {
     loadCategories()
   }, []);
 
+  console.log(promotions);
+
   async function onDetailsClicked(id) {
 
   const _id = id;
@@ -130,7 +132,7 @@ export default function PasswordScreen(props) {
               row
               border
             >
-              <Photo height={100} size={40} image={item.image} />
+              <Photo height={100} size={40} image={item.imagem} />
               <Block padding={[15, 10, 0]}>
                 <Text gray bold size={18}>
                   {item.titulo}
