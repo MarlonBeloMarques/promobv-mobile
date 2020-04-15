@@ -2,30 +2,27 @@ import React, { useState, useEffect } from "react";
 import { KeyboardAvoidingView, AsyncStorage, FlatList, StyleSheet } from "react-native";
 import { Block, Input, Button, Text, Photo, Header } from "../../elements";
 import { theme } from "../../constants";
-import { AntDesign } from "@expo/vector-icons";
-import { YOUR_IP } from "../../../config";
+import { getNotifications } from '../../services/notification'
+
+import profile from "../../../assets/images/profile-image.png";
 
 import { DrawerActions } from "react-navigation-drawer";
 
 export default function NotificationsScreen(props) {
-  const [feed, setFeed] = useState([]);
+  const [notifications, setNotifications] = useState([]);
 
   function onClickMenu() {
     props.navigation.dispatch(DrawerActions.openDrawer());
   }
 
   useEffect(() => {
-    async function loadFeed() {
-      const response = await fetch(
-        `http://${YOUR_IP}:3000/feed?_expand=author&_limit=5&_page=1`
-      );
-
-      const data = await response.json();
-
-      setFeed(data);
+    async function loadNotifications() {
+      getNotifications().then(res => {
+        setNotifications(res.data['content'])
+      })
     }
     //executa uma unica vez
-    loadFeed();
+    loadNotifications();
   }, []);
 
   return (
@@ -36,7 +33,7 @@ export default function NotificationsScreen(props) {
 
       <FlatList
         style={styles.flatlist}
-        data={feed}
+        data={notifications}
         keyExtractor={post => String(post.id)}
         renderItem={({ item }) => (
           <Block
@@ -48,11 +45,20 @@ export default function NotificationsScreen(props) {
             center
           >
             <Block flex={false} padding={[0, theme.sizes.base]}>
-              <Photo avatar image={item.author.avatar} />
+              <Photo avatar image={profile} />
             </Block>
             <Block>
               <Text gray size={14}>
-                {item.author.name} curtiu a sua promoção.
+                {item.tipo === 1 && 
+                  <>
+                    {item.userApelido} curtiu a sua promoção {item.promoTitulo}.
+                  </>
+                }
+                {item.tipo === 2 && 
+                  <>
+                    {item.userApelido} denunciou a sua promoção {item.promoTitulo}.
+                  </>
+                }
               </Text>
             </Block>
           </Block>
