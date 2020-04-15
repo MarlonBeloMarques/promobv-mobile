@@ -7,3 +7,7 @@ export function getPromotions() {
 export function getPromotion(id) {
   return api.get(`/promocoes/${id}`)
 }
+
+export function getMyPromotions() {
+  return api.get('/promocoes/user')
+}

@@ -3,25 +3,23 @@ import { KeyboardAvoidingView, AsyncStorage, FlatList, StyleSheet, Platform } fr
 import { Block, Input, Button, Text, Photo, Header } from "../../elements";
 import { theme } from "../../constants";
 import { AntDesign } from "@expo/vector-icons";
-import { YOUR_IP } from '../../../config'
+import { getMyPromotions } from "../../services/promotion";
 
 export default function MyPromotionsScreen(props) {
 
-  const [feed, setFeed] = useState([]);
+  const [promotions, setPromotions] = useState([]);
 
   useEffect(() => {
-    async function loadFeed() {
-      const response = await fetch(
-        `http://${YOUR_IP}:3000/feed/?_&authorId=1`
-      );
-
-      const data = await response.json();
-
-      setFeed(data);
+    async function loadPromotions() {
+      getMyPromotions().then(res => {
+        setPromotions(res.data)
+      })
     }
     //executa uma unica vez
-    loadFeed();
+    loadPromotions()
   }, []);
+
+  console.log(promotions)
 
   async function onDetailsClicked(id) {
     const _id = id;
@@ -38,7 +36,7 @@ export default function MyPromotionsScreen(props) {
   return (
     <KeyboardAvoidingView style={styles.container}>
       <FlatList
-        data={feed}
+        data={promotions}
         keyExtractor={post => String(post.id)}
         renderItem={({ item }) => (
           <Block
@@ -56,19 +54,19 @@ export default function MyPromotionsScreen(props) {
               style={Platform.OS === "ios" && styles.radius}
               height={100}
               size={20}
-              image={item.image}
+              image={item.imagem}
             />
             <Block padding={[15, 10, 0]}>
               <Text gray bold size={14}>
-                {item.description}
+                {item.titulo}
               </Text>
               <Block style={styles.end}>
                 <Text secondary size={12} bold>
-                  {item.price}
+                  {'R$ '}{item.preco}
                 </Text>
                 <Block padding={[5, 0, 0]} flex={false}>
                   <Text gray3 bold>
-                    {item.description}
+                    {item.localizacao}
                   </Text>
                 </Block>
               </Block>
