@@ -99,13 +99,14 @@ const styles = StyleSheet.create({
 
   icon: {
     justifyContent: 'center',
+    alignItems: 'center',
     position: 'absolute',
     left: 42,
     top: 18,
     backgroundColor: theme.colors.white,
     zIndex: 5,
     borderRadius: 15,
-    padding: 2,
-    height: 20,
+    height: 18,
+    width: 18
   }
 });
