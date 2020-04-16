@@ -28,9 +28,9 @@ export default function DetailsScreen(props) {
     async function loadDetails() {
       getPromotion(id).then(res => {
         const response = res.data
-        setDetails({ name: response.nomeUsuario,
+        setDetails({ name: response.apelidoUsuario,
                      title: response.titulo,
-                     avatar : '',
+                     avatar : response.userUrlProfile,
                      image: response.imagem,
                      description: response.descricao,
                      price: response.preco,
@@ -46,7 +46,6 @@ export default function DetailsScreen(props) {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <StatusBar barStyle="light-content"></StatusBar>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Block
           padding={theme.sizes.header}
@@ -55,7 +54,7 @@ export default function DetailsScreen(props) {
           row
         >
           {details.avatar === "" && <Photo avatar image={profile} />}
-          {details.avatar !== "" && <Photo avatar image={details.image} />}
+          {details.avatar !== "" && <Photo avatar image={details.avatar} />}
           <Block padding={[10, 10, 10, 20]}>
             <Text bold size={theme.sizes.header} color={theme.colors.gray}>
               {details.name}

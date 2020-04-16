@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, StatusBar } from 'react-native';
 import * as SecureStore from "expo-secure-store";
 
 import AppContainer from './src/routes'
@@ -23,9 +23,10 @@ export default function App() {
   }, [])
 
   return (
-    <View style={{flex: 1}}>
-      <Routes/>
+    <View style={{ flex: 1 }}>
+      <StatusBar translucent backgroundColor="transparent" />
+      <Routes />
     </View>
-  )
+  );
 }
 

@@ -62,7 +62,8 @@ export default function NotificationsScreen(props) {
                   />
                 )}
               </Block>
-              <Photo avatar image={profile} />
+              {item.userUrlProfile === "" && <Photo avatar image={profile} />}
+              {item.userUrlProfile !== "" && <Photo avatar image={item.userUrlProfile} />}
             </Block>
             <Block>
               <Text gray size={14}>
