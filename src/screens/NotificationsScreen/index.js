@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { KeyboardAvoidingView, AsyncStorage, FlatList, StyleSheet } from "react-native";
-import { Block, Input, Button, Text, Photo, Header } from "../../elements";
+import { Block, Text, Photo, Header } from "../../elements";
 import { theme } from "../../constants";
 import { getNotifications } from '../../services/notification'
 
 import profile from "../../../assets/images/profile-image.png";
 
 import { DrawerActions } from "react-navigation-drawer";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function NotificationsScreen(props) {
   const [notifications, setNotifications] = useState([]);
@@ -34,7 +35,7 @@ export default function NotificationsScreen(props) {
       <FlatList
         style={styles.flatlist}
         data={notifications}
-        keyExtractor={post => String(post.id)}
+        keyExtractor={(post) => String(post.id)}
         renderItem={({ item }) => (
           <Block
             onPress={() => onDetailsClicked(item.id)}
@@ -45,20 +46,37 @@ export default function NotificationsScreen(props) {
             center
           >
             <Block flex={false} padding={[0, theme.sizes.base]}>
+              <Block style={styles.icon}>
+                {item.tipo === 1 && (
+                  <Ionicons
+                    name={"ios-heart"}
+                    size={16}
+                    color={theme.colors.accent}
+                  />
+                )}
+                {item.tipo === 2 && (
+                  <Ionicons
+                    name={"ios-information-circle"}
+                    size={16}
+                    color={theme.colors.secondary}
+                  />
+                )}
+              </Block>
               <Photo avatar image={profile} />
             </Block>
             <Block>
               <Text gray size={14}>
-                {item.tipo === 1 && 
+                {item.tipo === 1 && (
                   <>
                     {item.userApelido} curtiu a sua promoção {item.promoTitulo}.
                   </>
-                }
-                {item.tipo === 2 && 
+                )}
+                {item.tipo === 2 && (
                   <>
-                    {item.userApelido} denunciou a sua promoção {item.promoTitulo}.
+                    {item.userApelido} denunciou a sua promoção{" "}
+                    {item.promoTitulo}.
                   </>
-                }
+                )}
               </Text>
             </Block>
           </Block>
@@ -71,16 +89,22 @@ export default function NotificationsScreen(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
     backgroundColor: theme.colors.white
-  },
-
-  end: {
-    justifyContent: "flex-end",
-    marginBottom: 10
   },
 
   flatlist: {
     zIndex: 1
+  },
+
+  icon: {
+    justifyContent: 'center',
+    position: 'absolute',
+    left: 42,
+    top: 18,
+    backgroundColor: theme.colors.white,
+    zIndex: 5,
+    borderRadius: 15,
+    padding: 2,
+    height: 20,
   }
 });
