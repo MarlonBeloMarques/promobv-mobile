@@ -1,20 +1,52 @@
 import React, { useState, useEffect } from "react";
-import { KeyboardAvoidingView, AsyncStorage, FlatList, StyleSheet, Image } from "react-native";
-import { Block, Input, Button, Text, Photo, Header } from "../../elements";
+import { Block, Input, Button, Text, Photo } from "../../elements";
 import { theme } from "../../constants";
-import { AntDesign } from "@expo/vector-icons";
+import * as SecureStore from "expo-secure-store";
 
 import profile from '../../../assets/images/profile-image.png'
 import styles from './styles'
 
 import { ScrollView } from "react-native-gesture-handler";
 
+import { getUser } from "../../services/user";
+
 export default function ProfileScreen(props) {
 
-  const [nome, setNome] = useState("");
-  const [cpf, setCpf] = useState("");
-  const [dataDeNascimento, setDataDeNascimento] = useState("");
-  const [telefone, setTelefone] = useState("");
+  const [profile, setProfile] = useState({
+    id: 0,
+    name: '',
+    nickname: '',
+    cpf: '',
+    avatar: '',
+    dateOfBirth: '',
+    number: '',
+    email: ''
+  })
+
+  useEffect(() => {
+    async function loadProfile() {
+
+      const email = await SecureStore.getItemAsync('user_email')
+
+      getUser(JSON.parse(email)).then((res) => {
+        const response = res.data;
+        setProfile({
+          id : response.id,
+          name: response.nome,
+          nickname : response.nickname,
+          cpf: response.cpf,
+          avatar: response.urlProfile,
+          dateOfBirth: response.dataDeNascimento,
+          number: response.telefone,
+          email: response.email
+        })
+      });
+    }
+
+    loadProfile();
+  }, []);
+
+  console.log(profile)
 
   return (
     <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
@@ -25,7 +57,8 @@ export default function ProfileScreen(props) {
       >
         <Block padding={[theme.sizes.padding, 0, 0, 0]} center row>
           <Button style>
-            <Image source={profile} style={styles.profile} />
+            {profile.avatar === null && <Photo avatar image={profile} />}
+            {profile.avatar !== null && <Photo avatar image={profile.avatar} />}          
           </Button>
           <Block margin={[0, 0, 0, theme.sizes.header]}>
             <Text gray>Inserir imagem</Text>
@@ -35,13 +68,13 @@ export default function ProfileScreen(props) {
           <Input
             label="Nome completo"
             style={[styles.input]}
-            defaultValue={nome}
+            defaultValue={profile.name}
           />
-          <Input label="CPF" style={[styles.input]} defaultValue={cpf} />
+          <Input label="CPF" style={[styles.input]} defaultValue={profile.cpf} />
           <Input
             label="Telefone"
             style={[styles.input]}
-            defaultValue={telefone}
+            defaultValue={profile.telefone}
           />
         </Block>
 
@@ -50,7 +83,7 @@ export default function ProfileScreen(props) {
             <Input
               label="Data de nascimento"
               style={[styles.input]}
-              defaultValue={dataDeNascimento}
+              defaultValue={profile.dateOfBirth}
             />
           </Block>
         </Block>

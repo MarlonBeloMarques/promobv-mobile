@@ -35,7 +35,7 @@ export default function DetailsScreen(props) {
                      description: response.descricao,
                      price: response.preco,
                      localization: response.localizacao,
-                     number: '' })
+                     number: response.userTelefone })
       })
     }
 
@@ -53,8 +53,8 @@ export default function DetailsScreen(props) {
           flex={false}
           row
         >
-          {details.avatar === "" && <Photo avatar image={profile} />}
-          {details.avatar !== "" && <Photo avatar image={details.avatar} />}
+          {details.avatar === null && <Photo avatar image={profile} />}
+          {details.avatar !== null && <Photo avatar image={details.avatar} />}
           <Block padding={[10, 10, 10, 20]}>
             <Text bold size={theme.sizes.header} color={theme.colors.gray}>
               {details.name}

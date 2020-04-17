@@ -73,6 +73,7 @@ export default function Input(props) {
         autoCapitalize="none"
         autoCorrect={false}
         keyboardType={inputType}
+        defaultValue={props.defaultValue}
       />
       {renderToggle()}
       {renderRight()}
