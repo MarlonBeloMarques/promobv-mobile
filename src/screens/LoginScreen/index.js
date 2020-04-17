@@ -9,13 +9,15 @@ import logo from '../../../assets/images/promobv.png'
 import { signIn, successfulLogin } from '../../services/auth'
 
 export default function LoginScreen(props) {
-  const [email, setEmail] = useState('marlonmarqsbr@gmail.com')
-  const [password, setPassword] = useState('123')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  console.log(email + " " + password);
 
   async function handleSubmit() {
     try {
       const { headers : { authorization }, status } = await signIn(email, password)
-      
+
       switch (status) {
         case 200:
           Alert.alert(
@@ -52,14 +54,18 @@ export default function LoginScreen(props) {
           
           <Block middle flex={0.7}>
             <Input 
+              //value={email}
               label="E-mail"  
               style={[styles.input]} 
-              defaultValue={email} />
+              defaultValue={email} 
+              onChangeText={setEmail}/>
             <Input
               secure
+             // value={password}
               label="Senha"
               style={[styles.input]}
               defaultValue={password}
+              onChangeText={setPassword}
             />
             <Button onPress={onPasswordClicked} style={styles.forgotPassword}>
               <Text

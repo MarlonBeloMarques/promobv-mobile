@@ -3,7 +3,7 @@ import { Alert } from 'react-native'
 import * as SecureStore from "expo-secure-store";
 
 const api = axios.create({
-  baseURL: 'http://192.168.4.9:8086',
+  baseURL: 'http://192.168.4.6:8086',
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
@@ -44,7 +44,7 @@ api.interceptors.response.use(function (response) {
   // Faça algo com erro de resposta
   // console.log ('resposta interceptada:', error.response.data)
 
-  let errorObj = error.response
+  let errorObj = error.response.data
 
   if(errorObj.error) {
     errorObj = errorObj.error

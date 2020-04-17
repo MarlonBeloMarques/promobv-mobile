@@ -3,25 +3,23 @@ import { Block, Input, Button, Text, Photo } from "../../elements";
 import { theme } from "../../constants";
 import * as SecureStore from "expo-secure-store";
 
-import profile from '../../../assets/images/profile-image.png'
+import profileImage from '../../../assets/images/profile-image.png'
 import styles from './styles'
 
 import { ScrollView } from "react-native-gesture-handler";
 
-import { getUser } from "../../services/user";
+import { getUser, updateUser } from "../../services/user";
 
 export default function ProfileScreen(props) {
 
-  const [profile, setProfile] = useState({
-    id: 0,
-    name: '',
-    nickname: '',
-    cpf: '',
-    avatar: '',
-    dateOfBirth: '',
-    number: '',
-    email: ''
-  })
+  const [id, setId] = useState(0)
+  const [name, setName] = useState('')
+  const [nickname, setNickname] = useState('')
+  const [cpf, setCpf] = useState('')
+  const [avatar, setAvatar] = useState('')
+  const [dateOfBirth, setDateOfBirth] = useState('')
+  const [number, setNumber] = useState('')
+  const [email, setEmail] = useState('')
 
   useEffect(() => {
     async function loadProfile() {
@@ -30,23 +28,26 @@ export default function ProfileScreen(props) {
 
       getUser(JSON.parse(email)).then((res) => {
         const response = res.data;
-        setProfile({
-          id : response.id,
-          name: response.nome,
-          nickname : response.nickname,
-          cpf: response.cpf,
-          avatar: response.urlProfile,
-          dateOfBirth: response.dataDeNascimento,
-          number: response.telefone,
-          email: response.email
-        })
+
+        console.log(response)
+
+        setId(response.id)
+        setName(response.nome)
+        setNickname(response.apelido)
+        setCpf(response.cpf)
+        setAvatar(response.urlProfile)
+        setDateOfBirth(response.dataDeNascimento)
+        setNumber(response.telefone)
+        setEmail(response.email)
       });
     }
 
     loadProfile();
   }, []);
 
-  console.log(profile)
+  async function handleSubmit() {
+    updateUser(id, name, cpf, number, dateOfBirth)
+  }
 
   return (
     <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
@@ -57,8 +58,8 @@ export default function ProfileScreen(props) {
       >
         <Block padding={[theme.sizes.padding, 0, 0, 0]} center row>
           <Button style>
-            {profile.avatar === null && <Photo avatar image={profile} />}
-            {profile.avatar !== null && <Photo avatar image={profile.avatar} />}          
+            {avatar === null && <Photo avatar image={profileImage} />}
+            {avatar !== null && <Photo avatar image={avatar} />}          
           </Button>
           <Block margin={[0, 0, 0, theme.sizes.header]}>
             <Text gray>Inserir imagem</Text>
@@ -68,13 +69,20 @@ export default function ProfileScreen(props) {
           <Input
             label="Nome completo"
             style={[styles.input]}
-            defaultValue={profile.name}
+            defaultValue={name}
+            onChangeText={setName}
           />
-          <Input label="CPF" style={[styles.input]} defaultValue={profile.cpf} />
+          <Input 
+            label="CPF" 
+            style={[styles.input]} 
+            defaultValue={cpf} 
+            onChangeText={setCpf}/>
+            
           <Input
             label="Telefone"
             style={[styles.input]}
-            defaultValue={profile.telefone}
+            defaultValue={number}
+            onChangeText={setNumber}
           />
         </Block>
 
@@ -83,13 +91,14 @@ export default function ProfileScreen(props) {
             <Input
               label="Data de nascimento"
               style={[styles.input]}
-              defaultValue={profile.dateOfBirth}
+              defaultValue={dateOfBirth}
+              onChangeText={setDateOfBirth}
             />
           </Block>
         </Block>
 
         <Block padding={[theme.sizes.padding, 0]}>
-          <Button onPress={props.onRequestClose} color={theme.colors.primary}>
+          <Button onPress={handleSubmit} color={theme.colors.primary}>
             <Text bold center white>
               Alterar
             </Text>

@@ -74,6 +74,7 @@ export default function Input(props) {
         autoCorrect={false}
         keyboardType={inputType}
         defaultValue={props.defaultValue}
+        onChangeText={props.onChangeText}
       />
       {renderToggle()}
       {renderRight()}
