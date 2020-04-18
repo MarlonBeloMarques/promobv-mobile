@@ -5,8 +5,10 @@ import { theme } from "../../constants";
 import { ScrollView } from "react-native-gesture-handler";
 
 import { getPromotion, updatePromotion } from "../../services/promotion";
+import { getCategories } from "../../services/category";
 
 import { DrawerActions } from "react-navigation-drawer";
+import { Categories } from "../../components";
 
 export default function Edit(props) {
   const id = props.navigation.getParam("id");
@@ -19,6 +21,9 @@ export default function Edit(props) {
 
   const [categoryId, setCategoryId] = useState('');
   const [categoryName, setCategoryName] = useState('')
+  const [categories, setCategories] = useState([]);
+
+  const [showCategories, setShowCategories] = useState(false);
 
   useEffect(() => {
     async function loadPromotion() {
@@ -38,7 +43,14 @@ export default function Edit(props) {
       })
     }
 
+    async function loadCategories() {
+      getCategories().then((res) => {
+        setCategories(res.data);
+      });
+    }
+
     loadPromotion()
+    loadCategories()
   }, []);
 
   function handleSubmit() {
@@ -49,76 +61,108 @@ export default function Edit(props) {
     props.navigation.dispatch(DrawerActions.openDrawer());
   }
 
-  return (
-    <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
-      <Block
-        padding={[0, theme.sizes.padding]}
-        space="between"
-        color={theme.colors.white}
-      >
-        <Block margin={[theme.sizes.header, 0]} flex={false}>
-          <Input label="Titulo" style={[styles.input]} defaultValue={title} />
-          <Input
-            label="Descrição"
-            style={[styles.input]}
-            defaultValue={description}
-          />
-          <Input label="Local" style={[styles.input]} defaultValue={place} />
-          <Input
-            label="Endereço"
-            style={[styles.input]}
-            defaultValue={address}
-          />
+  function onClickCategory() {
+    setShowCategories(true);
+  }
 
-          <Block row>
-            <Block padding={[0, theme.sizes.padding, 0, 0]}>
-              <Input
-                label="Valor"
-                style={[styles.input]}
-                defaultValue={value}
-              />
-            </Block>
+  function onHideCategory() {
+    setShowCategories(false);
+  }
 
-            <Block>
-              <Input
-                label="Categoria"
-                style={[styles.input]}
-                defaultValue={categoryName}
-              />
+  function renderCategories() {
+    return (
+      <Categories
+        categories={categories}
+        visible={showCategories}
+        onRequestClose={onHideCategory}
+      ></Categories>
+    );
+  }
+
+  function renderEdit() { 
+
+    return (
+      <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
+        <Block
+          padding={[0, theme.sizes.padding]}
+          space="between"
+          color={theme.colors.white}
+        >
+          <Block margin={[theme.sizes.header, 0]} flex={false}>
+            <Input label="Titulo" style={[styles.input]} defaultValue={title} />
+            <Input
+              label="Descrição"
+              style={[styles.input]}
+              defaultValue={description}
+            />
+            <Input label="Local" style={[styles.input]} defaultValue={place} />
+            <Input
+              label="Endereço"
+              style={[styles.input]}
+              defaultValue={address}
+            />
+
+            <Block row>
+              <Block padding={[0, theme.sizes.padding, 0, 0]}>
+                <Input
+                  label="Valor"
+                  style={[styles.input]}
+                  defaultValue={value}
+                />
+              </Block>
+
+              <Block margin={[theme.sizes.base / 1.5, 0]}>
+                <Block padding={[0,0, theme.sizes.base - 10, 4]} flex={false}>
+                  <Text gray>
+                    Categoria
+                  </Text>
+                </Block>
+                <Button onPress={onClickCategory} style={styles.button}>
+                  <Text gray>
+                    Auto peças
+                  </Text>
+                </Button>
+              </Block>
             </Block>
           </Block>
-        </Block>
 
-        <Block row>
-          <Block flex={false}>
-            <Text bold gray>
-              Galeria
-            </Text>
-            <Button style={styles.plus}>
-              <Text h3 gray>
-                +5
+          <Block row>
+            <Block flex={false}>
+              <Text bold gray>
+                Galeria
+              </Text>
+              <Button style={styles.plus}>
+                <Text h3 gray>
+                  +5
+                </Text>
+              </Button>
+            </Block>
+          </Block>
+
+          <Block middle padding={[theme.sizes.padding / 2, 0]}>
+            <Button onPress={props.onRequestClose} color={theme.colors.primary}>
+              <Text bold center white>
+                Atualizar
               </Text>
             </Button>
           </Block>
         </Block>
+      </ScrollView>
+    );
+  }
 
-        <Block middle padding={[theme.sizes.padding / 2, 0]}>
-          <Button onPress={props.onRequestClose} color={theme.colors.primary}>
-            <Text bold center white>
-              Atualizar
-            </Text>
-          </Button>
-        </Block>
-      </Block>
-    </ScrollView>
-  );
+  if (showCategories) {
+    return renderCategories()
+  }
+  return renderEdit()
+  
 }
 
 const styles = StyleSheet.create({
   input: {
     borderColor: "transparent",
     borderWidth: 1,
-    borderColor: theme.colors.gray3
+    borderColor: theme.colors.gray3,
   },
 
   plus: {
@@ -126,6 +170,15 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: theme.sizes.radius,
     marginHorizontal: 10,
-    marginTop: 10
-  }
+    marginTop: 10,
+  },
+
+  button: {
+    justifyContent: 'center',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: theme.colors.black,
+    borderRadius: theme.sizes.radius,
+    height: theme.sizes.base * 3,
+    paddingLeft: theme.sizes.base -6
+  },
 });
