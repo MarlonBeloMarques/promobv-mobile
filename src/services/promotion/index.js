@@ -11,3 +11,7 @@ export function getPromotion(id) {
 export function getMyPromotions() {
   return api.get('/promocoes/user')
 }
+
+export function updatePromotion(id, descricao, preco, localizacao, endereco, titulo, idCategoria) {
+  return api.put(`/promocoes/${id}`, {descricao, preco, localizacao, endereco, titulo, idCategoria})
+}

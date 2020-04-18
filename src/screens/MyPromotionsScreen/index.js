@@ -29,8 +29,12 @@ export default function MyPromotionsScreen(props) {
     props.navigation.navigate("Detalhes", { id });
   }
 
-  function onClickEdit() {
-    props.navigation.navigate("Editar")
+  async function onClickEdit(id) {
+    const _id = id;
+
+    await AsyncStorage.setItem("promotion", JSON.stringify(_id));
+    
+    props.navigation.navigate("Editar", { id })
   }
 
   return (
@@ -80,7 +84,7 @@ export default function MyPromotionsScreen(props) {
                 />
               </Button>
               <Block bottom>
-                <Button style onPress={onClickEdit}>
+                <Button style onPress={() => onClickEdit(item.id)}>
                   <AntDesign
                     name={"edit"}
                     size={18}

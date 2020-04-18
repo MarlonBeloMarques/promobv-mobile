@@ -1,19 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet } from "react-native";
 import { Block, Text, Button, Input, Header } from "../../elements";
 import { theme } from "../../constants";
 import { ScrollView } from "react-native-gesture-handler";
 
+import { getPromotion } from "../../services/promotion";
+
 import { DrawerActions } from "react-navigation-drawer";
 
 export default function Edit(props) {
-  const [titulo, setTitulo] = useState("");
-  const [descricao, setDescricao] = useState("");
-  const [local, setLocal] = useState("");
-  const [endereco, setEndereco] = useState("");
-  const [telefone, setTelefone] = useState("");
-  const [valor, setValor] = useState("");
-  const [categoria, setCategoria] = useState("");
+  const id = props.navigation.getParam("id");
+
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [place, setPlace] = useState("");
+  const [address, setAddress] = useState("");
+  const [telephone, setTelephone] = useState("");
+  const [value, setValue] = useState('');
+  const [category, setCategory] = useState("");
+
+  useEffect(() => {
+    async function loadPromotion() {
+      getPromotion(id).then(res => {
+        const response = res.data
+
+        console.log(response);
+        
+        setTitle(response.titulo)
+        setDescription(response.descricao)
+        setPlace(response.localizacao)
+        setAddress(response.endereco)
+        setTelephone(response.userTelefone)
+        setValue(response.preco.toString())
+        setCategory('')
+      })
+    }
+
+    loadPromotion()
+  }, []);
 
   function onClickMenu() {
     props.navigation.dispatch(DrawerActions.openDrawer());
@@ -27,22 +51,22 @@ export default function Edit(props) {
         color={theme.colors.white}
       >
         <Block margin={[theme.sizes.header, 0]} flex={false}>
-          <Input label="Titulo" style={[styles.input]} defaultValue={titulo} />
+          <Input label="Titulo" style={[styles.input]} defaultValue={title} />
           <Input
             label="Descrição"
             style={[styles.input]}
-            defaultValue={descricao}
+            defaultValue={description}
           />
-          <Input label="Local" style={[styles.input]} defaultValue={local} />
+          <Input label="Local" style={[styles.input]} defaultValue={place} />
           <Input
             label="Endereço"
             style={[styles.input]}
-            defaultValue={endereco}
+            defaultValue={address}
           />
           <Input
             label="Telefone"
             style={[styles.input]}
-            defaultValue={telefone}
+            defaultValue={telephone}
           />
 
           <Block row>
@@ -50,7 +74,7 @@ export default function Edit(props) {
               <Input
                 label="Valor"
                 style={[styles.input]}
-                defaultValue={valor}
+                defaultValue={value}
               />
             </Block>
 
@@ -58,7 +82,7 @@ export default function Edit(props) {
               <Input
                 label="Categoria"
                 style={[styles.input]}
-                defaultValue={categoria}
+                defaultValue={category}
               />
             </Block>
           </Block>
