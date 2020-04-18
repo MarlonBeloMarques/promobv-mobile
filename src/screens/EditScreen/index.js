@@ -4,7 +4,7 @@ import { Block, Text, Button, Input, Header } from "../../elements";
 import { theme } from "../../constants";
 import { ScrollView } from "react-native-gesture-handler";
 
-import { getPromotion } from "../../services/promotion";
+import { getPromotion, updatePromotion } from "../../services/promotion";
 
 import { DrawerActions } from "react-navigation-drawer";
 
@@ -15,9 +15,10 @@ export default function Edit(props) {
   const [description, setDescription] = useState("");
   const [place, setPlace] = useState("");
   const [address, setAddress] = useState("");
-  const [telephone, setTelephone] = useState("");
   const [value, setValue] = useState('');
-  const [category, setCategory] = useState("");
+
+  const [categoryId, setCategoryId] = useState('');
+  const [categoryName, setCategoryName] = useState('')
 
   useEffect(() => {
     async function loadPromotion() {
@@ -30,14 +31,19 @@ export default function Edit(props) {
         setDescription(response.descricao)
         setPlace(response.localizacao)
         setAddress(response.endereco)
-        setTelephone(response.userTelefone)
         setValue(response.preco.toString())
-        setCategory('')
+
+        setCategoryId(response.categoria.id)
+        setCategoryName(response.categoria.nome)
       })
     }
 
     loadPromotion()
   }, []);
+
+  function handleSubmit() {
+    updatePromotion(id, description, value, place, address, title, idCategoria)
+  }
 
   function onClickMenu() {
     props.navigation.dispatch(DrawerActions.openDrawer());
@@ -63,11 +69,6 @@ export default function Edit(props) {
             style={[styles.input]}
             defaultValue={address}
           />
-          <Input
-            label="Telefone"
-            style={[styles.input]}
-            defaultValue={telephone}
-          />
 
           <Block row>
             <Block padding={[0, theme.sizes.padding, 0, 0]}>
@@ -82,7 +83,7 @@ export default function Edit(props) {
               <Input
                 label="Categoria"
                 style={[styles.input]}
-                defaultValue={category}
+                defaultValue={categoryName}
               />
             </Block>
           </Block>
