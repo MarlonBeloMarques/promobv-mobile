@@ -68,19 +68,16 @@ export default function ProfileScreen(props) {
         <Block margin={[theme.sizes.header, 0]} flex={false}>
           <Input
             label="Nome completo"
-            style={[styles.input]}
             defaultValue={name}
             onChangeText={setName}
           />
           <Input 
             label="CPF" 
-            style={[styles.input]} 
             defaultValue={cpf} 
             onChangeText={setCpf}/>
             
           <Input
             label="Telefone"
-            style={[styles.input]}
             defaultValue={number}
             onChangeText={setNumber}
           />
@@ -90,7 +87,6 @@ export default function ProfileScreen(props) {
           <Block padding={[0, theme.sizes.padding * 6, 0, 0]}>
             <Input
               label="Data de nascimento"
-              style={[styles.input]}
               defaultValue={dateOfBirth}
               onChangeText={setDateOfBirth}
             />

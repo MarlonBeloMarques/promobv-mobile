@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     fontSize: theme.sizes.font,
     color: theme.colors.gray,
     height: theme.sizes.base * 3,
-    paddingLeft: theme.sizes.base - 6
+    paddingLeft: theme.sizes.base - 6,
   },
   toggle: {
     position: "absolute",
@@ -99,6 +99,6 @@ const styles = StyleSheet.create({
     height: theme.sizes.base * 2,
     top: theme.sizes.base * 2.4,
     paddingRight: theme.sizes.base - 6,
-    right: 0
-  }
+    right: 0,
+  },
 });

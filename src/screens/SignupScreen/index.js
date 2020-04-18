@@ -40,19 +40,17 @@ export default function SignupScreen(props) {
             <Input
               label={
                 <Text style={{ color: theme.colors.gray }}>
-                  E-mail {""}
+                  E-mail
                   <Text style={[styles.message, { color: theme.colors.gray }]}>
                     (Encaminharemos um e-mail de confirmação)
                   </Text>
                 </Text>
               }
-              style={[styles.input]}
               defaultValue={email}
             />
             <Input
               secure
               label="Senha"
-              style={[styles.input]}
               defaultValue={password}
             />
 

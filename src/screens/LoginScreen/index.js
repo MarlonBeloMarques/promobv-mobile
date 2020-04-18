@@ -56,16 +56,12 @@ export default function LoginScreen(props) {
           
           <Block middle flex={0.7}>
             <Input 
-              //value={email}
               label="E-mail"  
-              style={[styles.input]} 
               defaultValue={email} 
               onChangeText={setEmail}/>
             <Input
               secure
-             // value={password}
               label="Senha"
-              style={[styles.input]}
               defaultValue={password}
               onChangeText={setPassword}
             />

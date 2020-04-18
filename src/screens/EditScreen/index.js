@@ -89,16 +89,14 @@ export default function Edit(props) {
           color={theme.colors.white}
         >
           <Block margin={[theme.sizes.header, 0]} flex={false}>
-            <Input label="Titulo" style={[styles.input]} defaultValue={title} />
+            <Input label="Titulo" defaultValue={title} />
             <Input
               label="Descrição"
-              style={[styles.input]}
               defaultValue={description}
             />
             <Input label="Local" style={[styles.input]} defaultValue={place} />
             <Input
               label="Endereço"
-              style={[styles.input]}
               defaultValue={address}
             />
 
@@ -106,7 +104,6 @@ export default function Edit(props) {
               <Block padding={[0, theme.sizes.padding, 0, 0]}>
                 <Input
                   label="Valor"
-                  style={[styles.input]}
                   defaultValue={value}
                 />
               </Block>
@@ -159,12 +156,6 @@ export default function Edit(props) {
 }
 
 const styles = StyleSheet.create({
-  input: {
-    borderColor: "transparent",
-    borderWidth: 1,
-    borderColor: theme.colors.gray3,
-  },
-
   plus: {
     backgroundColor: theme.colors.gray2,
     padding: 20,
