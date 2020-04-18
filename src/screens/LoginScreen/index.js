@@ -7,6 +7,7 @@ import styles from './styles'
 import logo from '../../../assets/images/promobv.png'
 
 import { signIn, successfulLogin } from '../../services/auth'
+import { StatusBar } from "react-native";
 
 export default function LoginScreen(props) {
   const [email, setEmail] = useState('')
@@ -46,6 +47,7 @@ export default function LoginScreen(props) {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
+        <StatusBar barStyle='dark-content'/>
         <Block padding={[theme.sizes.base, theme.sizes.base * 2, 0, theme.sizes.base * 2]}>
           
           <Block middle flex={0.3} center>

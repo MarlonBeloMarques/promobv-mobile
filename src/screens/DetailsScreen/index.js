@@ -46,6 +46,7 @@ export default function DetailsScreen(props) {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
+      <StatusBar barStyle={'light-content'}/>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Block
           padding={theme.sizes.header}

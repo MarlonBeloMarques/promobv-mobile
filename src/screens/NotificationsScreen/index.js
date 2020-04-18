@@ -28,7 +28,7 @@ export default function NotificationsScreen(props) {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <Header onPress={onClickMenu} color={theme.colors.white}>
+      <Header barStyle='dark-content' onPress={onClickMenu} color={theme.colors.white}>
         <Text gray>Notificações</Text>
       </Header>
 

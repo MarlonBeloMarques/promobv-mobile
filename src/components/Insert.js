@@ -60,14 +60,6 @@ export default function Insert(props) {
           space="between"
           color={theme.colors.white}
         >
-          <Block padding={[theme.sizes.padding, 0, 0, 0]} center row>
-            <Button style>
-              <Image source={profile} style={styles.profile} />
-            </Button>
-            <Block margin={[0, 0, 0, theme.sizes.header]}>
-              <Text gray>Inserir imagem</Text>
-            </Block>
-          </Block>
           <Block margin={[theme.sizes.header, 0]} flex={false}>
             <Input
               label="Titulo"

@@ -88,7 +88,6 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.black,
     borderRadius: theme.sizes.radius,
     fontSize: theme.sizes.font,
-    fontWeight: "500",
     color: theme.colors.gray,
     height: theme.sizes.base * 3,
     paddingLeft: theme.sizes.base - 6
