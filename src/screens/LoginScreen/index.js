@@ -47,68 +47,66 @@ export default function LoginScreen(props) {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-        <StatusBar barStyle='dark-content'/>
-        <Block padding={[theme.sizes.base, theme.sizes.base * 2, 0, theme.sizes.base * 2]}>
-          
-          <Block middle flex={0.3} center>
-            <Image resizeMode='contain' source={logo} style={styles.logo} />
-          </Block>
-          
-          <Block middle flex={0.7}>
-            <Input 
-              label="E-mail"  
-              defaultValue={email} 
-              onChangeText={setEmail}/>
-            <Input
-              secure
-              label="Senha"
-              defaultValue={password}
-              onChangeText={setPassword}
-            />
-            <Button onPress={onPasswordClicked} style={styles.forgotPassword}>
-              <Text
-                caption
-                primary
-                right
-                style={{ textDecorationLine: "underline" }}
-              >
-                Recuperar senha?
-              </Text>
-            </Button>
-
-            <Button onPress={handleSubmit} color={theme.colors.primary}>
-              <Text bold white center>
-                Entrar
-              </Text>
-            </Button>
-          </Block>
+      <StatusBar barStyle="dark-content" />
+      <Block
+        padding={[
+          theme.sizes.base,
+          theme.sizes.base * 2,
+          0,
+          theme.sizes.base * 2,
+        ]}
+      >
+        <Block flex={0.3} middle center>
+          <Image resizeMode="contain" source={logo} style={styles.logo} />
         </Block>
-
-        <Block
-          padding={[theme.sizes.base, theme.sizes.base * 2]}
-          style={styles.end}
-        >
-          <Button color={theme.colors.google}>
-            <Text bold white center>
-              Entrar com o Google
-            </Text>
-          </Button>
-          <Button color={theme.colors.facebook}>
-            <Text bold white center>
-              Entrar com o Facebook
-            </Text>
-          </Button>
-          <Button onPress={onSignupClicked} style={styles.signup}>
+        <Block>
+          <Input label="E-mail" defaultValue={email} onChangeText={setEmail} />
+          <Input
+            secure
+            label="Senha"
+            defaultValue={password}
+            onChangeText={setPassword}
+          />
+          <Button onPress={onPasswordClicked} style={styles.forgotPassword}>
             <Text
               caption
               primary
-              center
+              right
               style={{ textDecorationLine: "underline" }}
             >
-              Crie uma conta
+              Recuperar senha?
             </Text>
           </Button>
+
+          <Button onPress={handleSubmit} color={theme.colors.primary}>
+            <Text bold white center>
+              Entrar
+            </Text>
+          </Button>
+          <Block padding={[theme.sizes.base, 0]}>
+            <Button color={theme.colors.google}>
+              <Text bold white center>
+                Entrar com o Google
+              </Text>
+            </Button>
+            <Button color={theme.colors.facebook}>
+              <Text bold white center>
+                Entrar com o Facebook
+              </Text>
+            </Button>
+            <Button onPress={onSignupClicked} style={styles.signup}>
+              <Text
+                caption
+                primary
+                center
+                style={{ textDecorationLine: "underline" }}
+              >
+                Crie uma conta
+              </Text>
+            </Button>
+          </Block>
         </Block>
+      </Block>
     </KeyboardAvoidingView>
   );
 }

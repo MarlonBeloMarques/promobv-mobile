@@ -19,11 +19,6 @@ export default StyleSheet.create({
     marginTop: theme.sizes.base / 2
   },
 
-  end: {
-    flex: 0.3,
-    justifyContent: "flex-end"
-  },
-
   logo: {
     width: 150,
     height: 150
