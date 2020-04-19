@@ -1,32 +1,16 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, View, StatusBar } from 'react-native';
-import * as SecureStore from "expo-secure-store";
+import React from 'react';
+import { Provider } from "react-redux";
 
-import AppContainer from './src/routes'
-import { useState } from 'react';
+import { store } from './src/store'
 
-console.disableYellowBox = true
+import App from './src'
 
-export default function App() {
-  const [Routes, setRoutes] = useState(() => AppContainer(false))
-
-  useEffect(() => {
-    function getToken() {
-      try {
-            
-        setRoutes(() => AppContainer(true))
-     
-      } catch (error) {
-      }
-    }
-    getToken()
-  }, [])
+export default function Index() {
 
   return (
-    <View style={{ flex: 1 }}>
-      <StatusBar translucent backgroundColor="transparent" />
-      <Routes />
-    </View>
+    <Provider store={store}>
+      <App/>
+    </Provider>
   );
 }
 

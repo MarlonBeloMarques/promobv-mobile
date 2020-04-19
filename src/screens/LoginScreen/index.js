@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, KeyboardAvoidingView, Image, Alert } from "react-native";
+import { KeyboardAvoidingView, Image, Alert } from "react-native";
 import { Block, Input, Button, Text} from '../../elements'
 import { theme } from "../../constants";
 
@@ -9,11 +9,15 @@ import logo from '../../../assets/images/promobv.png'
 import { signIn, successfulLogin } from '../../services/auth'
 import { StatusBar } from "react-native";
 
+import { useDispatch } from "react-redux";
+import { signInSuccess } from "../../store/modules/auth/actions";
+
 export default function LoginScreen(props) {
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  console.log(email + " " + password);
+  const dispatch = useDispatch()
 
   async function handleSubmit() {
     try {
@@ -26,6 +30,8 @@ export default function LoginScreen(props) {
           )
 
           successfulLogin(authorization)
+
+          dispatch(signInSuccess(authorization))
 
           props.navigation.navigate('Promoções')
         
