@@ -1,46 +1,69 @@
 import React, { useEffect, useState } from "react";
-import { KeyboardAvoidingView, FlatList, StyleSheet, View, AsyncStorage } from "react-native";
+import { KeyboardAvoidingView, FlatList, StyleSheet } from "react-native";
 import { Block, Text, Button, Header, Photo } from "../../elements";
 import { Insert, Categories } from "../../components";
 import { theme } from "../../constants";
 import { AntDesign } from "@expo/vector-icons";
-import { YOUR_IP } from "../../../config";
 import { DrawerActions } from "react-navigation-drawer";
 
 import { } from "./styles";
 import { getCategories } from "../../services/category";
-import { getPromotions } from "../../services/promotion";
-
+import { getPromotions, getPromotionsByCategory } from "../../services/promotion";
+import { AsyncStorage } from "react-native";
 
 export default function PasswordScreen(props) {
+
+  const [value, setValue] = useState({
+    id: 0,
+    nome: "Geral",
+  });
+
   const [promotions, setPromotions] = useState([]);
   const [showInsert, setShowInsert] = useState(false);
   const [categories, setCategories] = useState([]);
   const [showCategories, setShowCategories] = useState(false);
 
   useEffect(() => {
-    async function loadPromotions() {
-      getPromotions().then(res => {
-        setPromotions(res.data['content'])
-      })
-    }
-
     async function loadCategories() {
-      getCategories().then(res => {
-        setCategories(res.data)
-      })
-      
+      getCategories().then((res) => {
+        setCategories(res.data);
+      });
     }
 
-    loadPromotions()
+    loadCategoriesGeneral()
     loadCategories()
   }, []);
 
+  async function loadCategoriesGeneral() {
+    getPromotions().then((res) => {
+      setPromotions(res.data["content"]);
+    });
+
+    AsyncStorage.setItem("category", JSON.stringify(value));
+  }
+
+  async function onClickGetPromotionsByCategory() {
+
+    await AsyncStorage.getItem('category').then(res => {
+      let obj = JSON.parse(res)
+      setValue({ id: obj.id, nome: obj.nome })
+
+      
+    })
+    console.log(value.id);
+    
+    if(value.id != 0) {
+      console.log('entrou')
+      getPromotionsByCategory(value.id).then(res => {
+          setPromotions(res.data['content'])
+      })
+    }
+    else {
+      //loadCategoriesGeneral()
+    }
+  }
+
   async function onDetailsClicked(id) {
-
-    const _id = id;
-
-    await AsyncStorage.setItem('promotion', JSON.stringify(_id))
     
     props.navigation.navigate("Detalhes", { id });
   }
@@ -63,6 +86,7 @@ export default function PasswordScreen(props) {
 
   function onHideCategory() {
     setShowCategories(false);
+    onClickGetPromotionsByCategory()
   }
 
   function renderInsert() {
@@ -92,7 +116,7 @@ export default function PasswordScreen(props) {
         <Block border center flex={false} padding={[15, 0, 15]}>
           <Button onPress={onClickCategory} style>
             <Text bold color={theme.colors.primary}>
-              Categoria
+              {value.nome}
             </Text>
           </Button>
         </Block>

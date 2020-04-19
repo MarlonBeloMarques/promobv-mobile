@@ -8,6 +8,10 @@ export function getPromotion(id) {
   return api.get(`/promocoes/${id}`)
 }
 
+export function getPromotionsByCategory(id) {
+  return api.get(`/promocoes/categoria/${id}`)
+}
+
 export function getMyPromotions() {
   return api.get('/promocoes/user')
 }

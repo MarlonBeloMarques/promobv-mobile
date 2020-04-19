@@ -1,10 +1,17 @@
-import React from "react";
-import { Modal, ScrollView, FlatList } from "react-native";
+import React, { useState } from "react";
+import { Modal, FlatList, AsyncStorage } from "react-native";
 import { Block, Text, Button, Header } from "../elements";
-import PropTypes from "prop-types";
 import { theme } from "../constants";
 
-const Categories = (props) => {
+export function Categories(props) {
+
+  const [categories, setCategories] = useState(props.categories)
+
+  async function sendCategory(_id, _nome) {
+    await AsyncStorage.setItem('category', JSON.stringify({ id: _id, nome: _nome }))
+    props.onRequestClose()
+  }
+
   return (
     <Modal
       visible={props.visible}
@@ -15,13 +22,15 @@ const Categories = (props) => {
         <Text gray>Categoria</Text>
       </Header>
       <Block flex={false} border padding={[theme.sizes.base]}>
-        <Text>Geral</Text>
+        <Button onPress={() => sendCategory(0, "Geral")} style>
+          <Text>Geral</Text>
+        </Button>
       </Block>
       <FlatList
-        data={props.categories}
+        data={categories}
         keyExtractor={(post) => String(post.id)}
         renderItem={({ item }) => (
-          <Button style>
+          <Button onPress={() => sendCategory(item.id, item.nome)} style>
             <Block border padding={[theme.sizes.base]}>
               <Text>{item.nome}</Text>
             </Block>
