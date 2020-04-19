@@ -1,14 +1,29 @@
-import React, { useState } from "react";
-import { Modal, FlatList, AsyncStorage } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Modal, FlatList } from "react-native";
 import { Block, Text, Button, Header } from "../elements";
 import { theme } from "../constants";
 
-export function Categories(props) {
+import { useDispatch } from 'react-redux'
+import { setCategory } from '../store/modules/category/actions'
 
+import { getCategories } from "../services/category";
+
+export function Categories(props) {
   const [categories, setCategories] = useState(props.categories)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    async function loadCategories() {
+      getCategories().then((res) => {
+        setCategories(res.data);
+      });
+    }
+
+    loadCategories();
+  }, []);
 
   async function sendCategory(_id, _nome) {
-    await AsyncStorage.setItem('category', JSON.stringify({ id: _id, nome: _nome }))
+    dispatch(setCategory(_id, _nome))
     props.onRequestClose()
   }
 

@@ -7,62 +7,47 @@ import { AntDesign } from "@expo/vector-icons";
 import { DrawerActions } from "react-navigation-drawer";
 
 import { } from "./styles";
-import { getCategories } from "../../services/category";
 import { getPromotions, getPromotionsByCategory } from "../../services/promotion";
-import { AsyncStorage } from "react-native";
+
+import { useSelector, useDispatch } from "react-redux";
+import { setCategory } from "../../store/modules/category/actions";
 
 export default function PasswordScreen(props) {
 
-  const [value, setValue] = useState({
-    id: 0,
-    nome: "Geral",
-  });
-
+  const dispatch = useDispatch();
+  const { id, name } = useSelector((state) => state.category, () => true);
   const [promotions, setPromotions] = useState([]);
   const [showInsert, setShowInsert] = useState(false);
-  const [categories, setCategories] = useState([]);
   const [showCategories, setShowCategories] = useState(false);
 
   useEffect(() => {
-    async function loadCategories() {
-      getCategories().then((res) => {
-        setCategories(res.data);
-      });
-    }
 
-    loadCategoriesGeneral()
-    loadCategories()
+    loadPromotionsGeneral()
   }, []);
 
-  async function loadCategoriesGeneral() {
+  useEffect(() => {
+    async function loadPromotionsByCategory() {
+      getPromotionsByCategory(id).then((res) => {
+        setPromotions(res.data['content'])
+      })
+    }
+
+    if(id != 0) {
+      loadPromotionsByCategory()
+    }
+    else {
+      loadPromotionsGeneral()
+    }
+  }, [id])
+
+  async function loadPromotionsGeneral() {
     getPromotions().then((res) => {
       setPromotions(res.data["content"]);
     });
 
-    AsyncStorage.setItem("category", JSON.stringify(value));
+    dispatch(setCategory(0, 'Geral'));
   }
-
-  async function onClickGetPromotionsByCategory() {
-
-    await AsyncStorage.getItem('category').then(res => {
-      let obj = JSON.parse(res)
-      setValue({ id: obj.id, nome: obj.nome })
-
-      
-    })
-    console.log(value.id);
-    
-    if(value.id != 0) {
-      console.log('entrou')
-      getPromotionsByCategory(value.id).then(res => {
-          setPromotions(res.data['content'])
-      })
-    }
-    else {
-      //loadCategoriesGeneral()
-    }
-  }
-
+   
   async function onDetailsClicked(id) {
     
     props.navigation.navigate("Detalhes", { id });
@@ -86,7 +71,6 @@ export default function PasswordScreen(props) {
 
   function onHideCategory() {
     setShowCategories(false);
-    onClickGetPromotionsByCategory()
   }
 
   function renderInsert() {
@@ -102,7 +86,6 @@ export default function PasswordScreen(props) {
   function renderCategories() {
     return (
       <Categories
-        categories={categories}
         visible={showCategories}
         onRequestClose={onHideCategory}>
       </Categories>
@@ -116,7 +99,7 @@ export default function PasswordScreen(props) {
         <Block border center flex={false} padding={[15, 0, 15]}>
           <Button onPress={onClickCategory} style>
             <Text bold color={theme.colors.primary}>
-              {value.nome}
+              {name}
             </Text>
           </Button>
         </Block>
