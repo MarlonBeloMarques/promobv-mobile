@@ -14,8 +14,6 @@ export async function successfulLogin(authorizationValue) {
 
   await SecureStore.setItemAsync("user_token", JSON.stringify(tok));
 
-  const token = await SecureStore.getItemAsync("user_token");
-
   await SecureStore.setItemAsync("user_email", JSON.stringify(decoded))
 }
 
