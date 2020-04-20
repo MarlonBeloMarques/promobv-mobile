@@ -9,7 +9,6 @@ import { getPromotion, updatePromotion } from "../../services/promotion";
 import { useSelector, useDispatch } from "react-redux";
 import { setCategory } from "../../store/modules/category/actions";
 
-import { DrawerActions } from "react-navigation-drawer";
 import { Categories } from "../../components";
 
 export default function Edit(props) {
@@ -59,7 +58,6 @@ export default function Edit(props) {
 
   function handleSubmit() {
     updatePromotion(idNavigation, description, value, place, address, title, categoryId)
-    console.log('submit')
   }
 
   function onClickCategory() {
@@ -89,15 +87,23 @@ export default function Edit(props) {
           color={theme.colors.white}
         >
           <Block margin={[theme.sizes.header, 0]} flex={false}>
-            <Input label="Titulo" defaultValue={title} />
+            <Input 
+              label="Titulo" 
+              defaultValue={title} 
+              onChangeText={setTitle}/>
             <Input
               label="Descrição"
               defaultValue={description}
+              onChangeText={setDescription}
             />
-            <Input label="Local" style={[styles.input]} defaultValue={place} />
+            <Input 
+              label="Local" 
+              defaultValue={place}
+              onChangeText={setPlace}/>
             <Input
               label="Endereço"
               defaultValue={address}
+              onChangeText={setAddress}
             />
 
             <Block row>
@@ -105,6 +111,7 @@ export default function Edit(props) {
                 <Input
                   label="Valor"
                   defaultValue={value}
+                  onChangeText={setValue}
                 />
               </Block>
 

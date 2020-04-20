@@ -21,6 +21,7 @@ export default function DetailsScreen(props) {
     description: '',
     price: '',
     localization: '',
+    address: '',
     number: ''
   })
 
@@ -35,6 +36,7 @@ export default function DetailsScreen(props) {
                      description: response.descricao,
                      price: response.preco,
                      localization: response.localizacao,
+                     address: response.endereco,
                      number: response.userTelefone })
       })
     }
@@ -119,7 +121,7 @@ export default function DetailsScreen(props) {
                 </Block>
                 <Block>
                   <Block margin={5} padding={[2, 0]}>
-                    <Text>{details.localization}</Text>
+                    <Text>{details.localization}{', '}{details.address}</Text>
                   </Block>
                   <Block margin={5} padding={[2, 0]}>
                     <Text>{details.number}</Text>
