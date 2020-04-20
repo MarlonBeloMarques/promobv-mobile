@@ -9,7 +9,7 @@ import { setCategory } from '../store/modules/category/actions'
 import { getCategories } from "../services/category";
 
 export function Categories(props) {
-  const [categories, setCategories] = useState(props.categories)
+  const [categories, setCategories] = useState([])
   const dispatch = useDispatch()
 
   useEffect(() => {

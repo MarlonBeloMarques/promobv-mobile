@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { Modal, StyleSheet } from "react-native";
-import { Block, Text, Button, Input, Header } from "../../elements";
+import { StyleSheet } from "react-native";
+import { Block, Text, Button, Input } from "../../elements";
 import { theme } from "../../constants";
 import { ScrollView } from "react-native-gesture-handler";
 
 import { getPromotion, updatePromotion } from "../../services/promotion";
-import { getCategories } from "../../services/category";
+
+import { useSelector, useDispatch } from "react-redux";
+import { setCategory } from "../../store/modules/category/actions";
 
 import { DrawerActions } from "react-navigation-drawer";
 import { Categories } from "../../components";
 
 export default function Edit(props) {
-  const id = props.navigation.getParam("id");
+  const idNavigation = props.navigation.getParam("id");
+
+  const dispatch = useDispatch();
+  const { id, name } = useSelector((state) => state.category, () => true);
+ 
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -21,17 +27,20 @@ export default function Edit(props) {
 
   const [categoryId, setCategoryId] = useState('');
   const [categoryName, setCategoryName] = useState('')
-  const [categories, setCategories] = useState([]);
 
   const [showCategories, setShowCategories] = useState(false);
 
   useEffect(() => {
+    return () => {
+        dispatch(setCategory(0, 'Geral'));
+    }
+  })
+
+  useEffect(() => {
     async function loadPromotion() {
-      getPromotion(id).then(res => {
+      getPromotion(idNavigation).then(res => {
         const response = res.data
 
-        console.log(response);
-        
         setTitle(response.titulo)
         setDescription(response.descricao)
         setPlace(response.localizacao)
@@ -43,18 +52,11 @@ export default function Edit(props) {
       })
     }
 
-    async function loadCategories() {
-      getCategories().then((res) => {
-        setCategories(res.data);
-      });
-    }
-
     loadPromotion()
-    loadCategories()
   }, []);
 
   function handleSubmit() {
-    updatePromotion(id, description, value, place, address, title, idCategoria)
+    updatePromotion(idNavigation, description, value, place, address, title, idCategoria)
   }
 
   function onClickMenu() {
@@ -72,7 +74,6 @@ export default function Edit(props) {
   function renderCategories() {
     return (
       <Categories
-        categories={categories}
         visible={showCategories}
         onRequestClose={onHideCategory}
       ></Categories>
@@ -116,7 +117,7 @@ export default function Edit(props) {
                 </Block>
                 <Button onPress={onClickCategory} style={styles.button}>
                   <Text gray>
-                    Auto peças
+                    {name}
                   </Text>
                 </Button>
               </Block>

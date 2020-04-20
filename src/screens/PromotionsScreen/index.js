@@ -21,11 +21,6 @@ export default function PasswordScreen(props) {
   const [showCategories, setShowCategories] = useState(false);
 
   useEffect(() => {
-
-    loadPromotionsGeneral()
-  }, []);
-
-  useEffect(() => {
     async function loadPromotionsByCategory() {
       getPromotionsByCategory(id).then((res) => {
         setPromotions(res.data['content'])
@@ -45,7 +40,7 @@ export default function PasswordScreen(props) {
       setPromotions(res.data["content"]);
     });
 
-    dispatch(setCategory(0, 'Geral'));
+    //dispatch(setCategory(0, 'Geral'));
   }
    
   async function onDetailsClicked(id) {

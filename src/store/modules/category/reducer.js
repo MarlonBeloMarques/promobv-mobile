@@ -2,7 +2,7 @@ import types from './types'
 
 const INITIAL_STATE = {
   id: 0,
-  name: ''
+  name: 'Geral'
 }
 
 export default function category(state = INITIAL_STATE, action) {
