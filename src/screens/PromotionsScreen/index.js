@@ -9,12 +9,10 @@ import { DrawerActions } from "react-navigation-drawer";
 import { } from "./styles";
 import { getPromotions, getPromotionsByCategory } from "../../services/promotion";
 
-import { useSelector, useDispatch } from "react-redux";
-import { setCategory } from "../../store/modules/category/actions";
+import { useSelector } from "react-redux";
 
 export default function PasswordScreen(props) {
 
-  const dispatch = useDispatch();
   const { id, name } = useSelector((state) => state.category, () => true);
   const [promotions, setPromotions] = useState([]);
   const [showInsert, setShowInsert] = useState(false);
@@ -39,8 +37,6 @@ export default function PasswordScreen(props) {
     getPromotions().then((res) => {
       setPromotions(res.data["content"]);
     });
-
-    //dispatch(setCategory(0, 'Geral'));
   }
    
   async function onDetailsClicked(id) {

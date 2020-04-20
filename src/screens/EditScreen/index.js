@@ -24,21 +24,18 @@ export default function Edit(props) {
   const [place, setPlace] = useState("");
   const [address, setAddress] = useState("");
   const [value, setValue] = useState('');
-
-  const [categoryId, setCategoryId] = useState('');
-  const [categoryName, setCategoryName] = useState('')
+  const [categoryId, setCategoryId] = useState();
+  const [categoryName, setCategoryName] = useState('');
 
   const [showCategories, setShowCategories] = useState(false);
 
-  useEffect(() => {
-    return () => {
-        dispatch(setCategory(0, 'Geral'));
-    }
-  })
+  props.navigation.addListener("willBlur", () => {
+    dispatch(setCategory(0, "Geral"));
+  });
 
   useEffect(() => {
     async function loadPromotion() {
-      getPromotion(idNavigation).then(res => {
+      await getPromotion(idNavigation).then(res => {
         const response = res.data
 
         setTitle(response.titulo)
@@ -55,12 +52,14 @@ export default function Edit(props) {
     loadPromotion()
   }, []);
 
-  function handleSubmit() {
-    updatePromotion(idNavigation, description, value, place, address, title, idCategoria)
-  }
+  useEffect(() => {
+      setCategoryId(id)
+      setCategoryName(name)
+  }, [id])
 
-  function onClickMenu() {
-    props.navigation.dispatch(DrawerActions.openDrawer());
+  function handleSubmit() {
+    updatePromotion(idNavigation, description, value, place, address, title, categoryId)
+    console.log('submit')
   }
 
   function onClickCategory() {
@@ -117,7 +116,7 @@ export default function Edit(props) {
                 </Block>
                 <Button onPress={onClickCategory} style={styles.button}>
                   <Text gray>
-                    {name}
+                    {categoryName}
                   </Text>
                 </Button>
               </Block>
@@ -138,7 +137,7 @@ export default function Edit(props) {
           </Block>
 
           <Block middle padding={[theme.sizes.padding / 2, 0]}>
-            <Button onPress={props.onRequestClose} color={theme.colors.primary}>
+            <Button onPress={handleSubmit} color={theme.colors.primary}>
               <Text bold center white>
                 Atualizar
               </Text>
