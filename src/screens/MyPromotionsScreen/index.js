@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { KeyboardAvoidingView, AsyncStorage, FlatList, StyleSheet, Platform } from "react-native";
-import { Block, Input, Button, Text, Photo, Header } from "../../elements";
+import { Block, Button, Text, Photo } from "../../elements";
 import { theme } from "../../constants";
 import { AntDesign } from "@expo/vector-icons";
 import { getMyPromotions } from "../../services/promotion";
+
+import no_photo from "../../../assets/images/no-photo.png";
 
 export default function MyPromotionsScreen(props) {
 
@@ -54,12 +56,22 @@ export default function MyPromotionsScreen(props) {
             shadow
             color={theme.colors.white}
           >
-            <Photo
-              style={Platform.OS === "ios" && styles.radius}
-              height={100}
-              size={20}
-              image={item.imagem}
-            />
+            {item.imagem === null && 
+              <Photo
+                style={Platform.OS === "ios" && styles.radius}
+                height={100}
+                size={20}
+                image={no_photo}
+              />
+            }
+            {item.imagem !== null && 
+              <Photo
+                style={Platform.OS === "ios" && styles.radius}
+                height={100}
+                size={20}
+                image={item.imagem}
+              />
+            }
             <Block padding={[15, 10, 0]}>
               <Text gray bold size={14}>
                 {item.titulo}
