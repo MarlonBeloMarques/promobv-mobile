@@ -19,3 +19,7 @@ export function getMyPromotions() {
 export function updatePromotion(id, descricao, preco, localizacao, endereco, titulo, idCategoria) {
   return api.put(`/promocoes/${id}`, {descricao, preco, localizacao, endereco, titulo, idCategoria})
 }
+
+export function setPromotion(descricao, preco, localizacao, endereco, titulo, idCategoria) {
+  return api.post(`/promocoes`, {descricao, preco, localizacao, endereco, titulo, idCategoria})
+}

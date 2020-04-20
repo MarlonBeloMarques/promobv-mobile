@@ -4,9 +4,10 @@ import { Block, Text, Button, Header } from "../elements";
 import { theme } from "../constants";
 
 import { useDispatch } from 'react-redux'
-import { setCategory } from '../store/modules/category/actions'
+import { setCategoryPromotions } from '../store/modules/category/promotions/actions'
 
 import { getCategories } from "../services/category";
+import { setCategoryUpdateAndInsert } from "../store/modules/category/updateAndInsert/actions";
 
 export function Categories(props) {
   const [categories, setCategories] = useState([])
@@ -23,9 +24,14 @@ export function Categories(props) {
   }, []);
 
   async function sendCategory(_id, _nome) {
-    dispatch(setCategory(_id, _nome))
+    if(props.screenPromotions === true) 
+      dispatch(setCategoryPromotions(_id, _nome))
+    else 
+      dispatch(setCategoryUpdateAndInsert(_id, _nome)) 
+
     props.onRequestClose()
   }
+  
 
   return (
     <Modal
@@ -36,11 +42,13 @@ export function Categories(props) {
       <Header barStyle='dark-content' colorIcon={theme.colors.white} color={theme.colors.white}>
         <Text gray>Categoria</Text>
       </Header>
-      <Block flex={false} border padding={[theme.sizes.base]}>
-        <Button onPress={() => sendCategory(0, "Geral")} style>
-          <Text>Geral</Text>
-        </Button>
-      </Block>
+      {props.screenPromotions === true && 
+        <Block flex={false} border padding={[theme.sizes.base]}>
+          <Button onPress={() => sendCategory(0, "Geral")} style>
+            <Text>Geral</Text>
+          </Button>
+        </Block>
+      }
       <FlatList
         data={categories}
         keyExtractor={(post) => String(post.id)}
@@ -64,6 +72,7 @@ export function Categories(props) {
 };
 
 Categories.propTypes = {
+  screenPromotions: false,
   visible: false,
   onRequestClose: () => {},
 };

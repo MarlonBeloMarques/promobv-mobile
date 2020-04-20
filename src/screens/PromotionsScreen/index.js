@@ -11,9 +11,11 @@ import { getPromotions, getPromotionsByCategory } from "../../services/promotion
 
 import { useSelector } from "react-redux";
 
-export default function PasswordScreen(props) {
+import no_photo from "../../../assets/images/no-photo.png";
 
-  const { id, name } = useSelector((state) => state.category, () => true);
+export default function PromotionScreen(props) {
+
+  const { id, name } = useSelector((state) => state.category_promotions, () => true);
   const [promotions, setPromotions] = useState([]);
   const [showInsert, setShowInsert] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
@@ -77,6 +79,7 @@ export default function PasswordScreen(props) {
   function renderCategories() {
     return (
       <Categories
+        screenPromotions={true}
         visible={showCategories}
         onRequestClose={onHideCategory}>
       </Categories>
@@ -128,7 +131,8 @@ export default function PasswordScreen(props) {
               row
               border
             >
-              <Photo height={100} size={40} image={item.imagem} />
+              {item.imagem !== null && <Photo height={100} size={40} image={item.imagem} />}
+              {item.imagem === null && <Photo height={100} size={40} image={no_photo} />}
               <Block padding={[15, 10, 0]}>
                 <Text gray bold size={18}>
                   {item.titulo}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { KeyboardAvoidingView, AsyncStorage, StatusBar } from "react-native";
-import { Block, Input, Button, Text, Photo } from "../../elements";
+import { KeyboardAvoidingView, StatusBar } from "react-native";
+import { Block, Button, Text, Photo } from "../../elements";
 import { Ionicons } from "@expo/vector-icons";
 import { theme } from "../../constants";
 
@@ -9,6 +9,8 @@ import { ScrollView } from "react-native-gesture-handler";
 import { getPromotion } from '../../services/promotion'
 
 import profile from "../../../assets/images/profile-image.png";
+
+import no_photo from "../../../assets/images/no-photo.png";
 
 export default function DetailsScreen(props) {
   const id = props.navigation.getParam('id')
@@ -48,7 +50,7 @@ export default function DetailsScreen(props) {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <StatusBar barStyle={'light-content'}/>
+      <StatusBar barStyle={"light-content"} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <Block
           padding={theme.sizes.header}
@@ -65,7 +67,8 @@ export default function DetailsScreen(props) {
           </Block>
         </Block>
         <Block size={300} flex={false}>
-          <Photo height={100} size={100} image={details.image} />
+          {details.image === null && <Photo height={100} size={100} image={no_photo} />}
+          {details.image !== null && <Photo height={100} size={100} image={details.image} />}
         </Block>
         <Block>
           <Block border padding={[10, 50]} flex={false} row>
@@ -121,7 +124,11 @@ export default function DetailsScreen(props) {
                 </Block>
                 <Block>
                   <Block margin={5} padding={[2, 0]}>
-                    <Text>{details.localization}{', '}{details.address}</Text>
+                    <Text>
+                      {details.localization}
+                      {", "}
+                      {details.address}
+                    </Text>
                   </Block>
                   <Block margin={5} padding={[2, 0]}>
                     <Text>{details.number}</Text>
@@ -135,22 +142,40 @@ export default function DetailsScreen(props) {
               </Text>
               <Block padding={[15]} row flex={false}>
                 <Block padding={[0, 10, 0, 0]} flex={false}>
+                  {details.image === null &&
+                  <Photo
+                    content={true}
+                    size={80}
+                    height={80}
+                    card
+                    image={no_photo}
+                  />}
+                  {details.image !== null &&
                   <Photo
                     content={true}
                     size={80}
                     height={80}
                     card
                     image={details.image}
-                  />
+                  />}
                 </Block>
                 <Block flex={false}>
+                  {details.image === null &&
+                  <Photo
+                    content={true}
+                    size={80}
+                    height={80}
+                    card
+                    image={no_photo}
+                  />}
+                  {details.image !== null &&
                   <Photo
                     content={true}
                     size={80}
                     height={80}
                     card
                     image={details.image}
-                  />
+                  />}
                 </Block>
                 <Block flex={false}>
                   <Button style={styles.plus}>

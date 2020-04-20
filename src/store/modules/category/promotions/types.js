@@ -1,0 +1,3 @@
+export default {
+  GET_CATEGORY_PROMOTIONS: '@category/GET_CATEGORY_PROMOTIONS'
+}

@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
     color: theme.colors.gray,
     height: theme.sizes.base * 3,
     paddingLeft: theme.sizes.base - 6,
+    paddingRight: theme.sizes.base - 6,
   },
   toggle: {
     position: "absolute",

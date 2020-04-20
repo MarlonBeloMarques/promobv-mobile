@@ -1,9 +1,11 @@
 import { combineReducers } from "redux";
 
 import auth from "./auth/reducer";
-import category from "./category/reducer";
+import category_promotions from "./category/promotions/reducer";
+import category_updateAndInsert from "./category/updateAndInsert/reducer";
 
 export default combineReducers({
   auth,
-  category
+  category_promotions,
+  category_updateAndInsert
 });

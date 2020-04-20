@@ -7,7 +7,7 @@ const INITIAL_STATE = {
 
 export default function category(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case types.GET_CATEGORY:
+    case types.GET_CATEGORY_PROMOTIONS:
       return {
         id: action.payload.id,
         name: action.payload.name

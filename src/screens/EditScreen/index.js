@@ -7,7 +7,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { getPromotion, updatePromotion } from "../../services/promotion";
 
 import { useSelector, useDispatch } from "react-redux";
-import { setCategory } from "../../store/modules/category/actions";
+import { setCategoryUpdateAndInsert } from "../../store/modules/category/updateAndInsert/actions";
 
 import { Categories } from "../../components";
 
@@ -15,8 +15,7 @@ export default function Edit(props) {
   const idNavigation = props.navigation.getParam("id");
 
   const dispatch = useDispatch();
-  const { id, name } = useSelector((state) => state.category, () => true);
- 
+  const { id, name } = useSelector((state) => state.category_updateAndInsert, () => true); 
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -29,7 +28,7 @@ export default function Edit(props) {
   const [showCategories, setShowCategories] = useState(false);
 
   props.navigation.addListener("willBlur", () => {
-    dispatch(setCategory(0, "Geral"));
+    dispatch(setCategoryUpdateAndInsert(1, "Auto e Peças"));
   });
 
   useEffect(() => {

@@ -4,43 +4,80 @@ import { Block, Text, Button, Input, Header } from "../elements";
 import { theme } from "../constants";
 import { ScrollView } from "react-native-gesture-handler";
 
+import { setPromotion } from "../services/promotion/index";
+
 import { useSelector, useDispatch } from "react-redux";
-import { setCategory } from "../store/modules/category/actions";
+import { setCategoryUpdateAndInsert } from "../store/modules/category/updateAndInsert/actions";
 
 import { DrawerActions } from "react-navigation-drawer";
 
 import Categories from './Categories'
 
+import AlertMessage from './Alert'
+
 export default function Insert(props) {
   const dispatch = useDispatch();
-  const { id, name } = useSelector((state) => state.category, () => true);
+  const { id, name } = useSelector((state) => state.category_updateAndInsert, () => true);
 
-  const[titulo, setTitulo] = useState('')
-  const[descricao, setDescricao] = useState('')
-  const[local, setLocal] = useState('')
-  const[endereco, setEndereco] = useState('')
-  const[telefone, setTelefone] = useState('')
-  const[valor, setValor] = useState('')
-  const[categoria, setCategoria] = useState('')
+  const[title, setTitle] = useState('')
+  const[description, setDescription] = useState('')
+  const[localization, setLocalization] = useState('')
+  const[address, setAddress] = useState('')
+  const[price, setPrice] = useState('')
 
   const [showCategories, setShowCategories] = useState(false);
 
+  const [titleButtonModal, setTitleButtonModal] = useState('Cancelar')
+
+  useEffect(() => {
+    function checkFields() {
+      if(props.modal) {
+        if(title !== '' && description !== '' && localization !== '' && address !== '' && price !== '') {
+          setTitleButtonModal('Inserir')
+        } else {
+          setTitleButtonModal('Cancelar');
+        }
+      }
+    }
+
+    checkFields()
+  })
+
+
   useEffect(() => {
     return () => {
-      dispatch(setCategory(0, "Geral"));
+      dispatch(setCategoryUpdateAndInsert(1, "Auto e Peças"));
     };
-  });
+  })
 
   function onClickMenu() {
     props.navigation.dispatch(DrawerActions.openDrawer());
   }
 
-  function buttonAction(title) {
+  function buttonAction(titleModal) {
+
+    function handleSubmit() { 
+      if(props.modal) {
+        if(titleButtonModal === 'Inserir')
+          setPromotion(description, price, localization, address, title, id)  
+        props.onRequestClose();             
+      } else {
+        if(title !== '' && description !== '' && localization !== '' && address !== '' && price !== '') {
+          setPromotion(description, price, localization, address, title, id);
+        } else {
+          AlertMessage({
+            title: 'Atenção',
+            message: 'O formulário contém campos não preenchidos.'
+          })
+        }
+      }
+    }
+
     return (
       <Block padding={[theme.sizes.padding, 0]}>
-        <Button onPress={props.onRequestClose} color={theme.colors.primary}>
+        <Button onPress={handleSubmit} color={theme.colors.primary}>
           <Text bold center white>
-            {title}
+            {titleModal}
           </Text>
         </Button>
       </Block>
@@ -64,7 +101,7 @@ export default function Insert(props) {
       
   }
 
-  function contentPattern(title, activeIcon) {
+  function contentPattern(titleModal, activeIcon) {
 
     function onClickCategory() {
     setShowCategories(true);
@@ -83,7 +120,7 @@ export default function Insert(props) {
       );
     }
     
-    function renderContentPattern(title, activeIcon) {
+    function renderContentPattern(titleModal, activeIcon) {
 
       return (
         <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
@@ -96,32 +133,30 @@ export default function Insert(props) {
             <Block margin={[theme.sizes.header, 0]} flex={false}>
               <Input
                 label="Titulo"
-                style={[styles.input]}
-                defaultValue={titulo}
+                defaultValue={title}
+                onChangeText={setTitle}
               />
               <Input
                 label="Descrição"
-                style={[styles.input]}
-                defaultValue={descricao}
+                defaultValue={description}
+                onChangeText={setDescription}
               />
-              <Input label="Local" style={[styles.input]} defaultValue={local} />
+              <Input 
+                label="Local" 
+                defaultValue={localization} 
+                onChangeText={setLocalization}/>
               <Input
                 label="Endereço"
-                style={[styles.input]}
-                defaultValue={endereco}
-              />
-              <Input
-                label="Telefone"
-                style={[styles.input]}
-                defaultValue={telefone}
+                defaultValue={address}
+                onChangeText={setAddress}
               />
 
               <Block row>
                 <Block padding={[0, theme.sizes.padding, 0, 0]}>
                   <Input
                     label="Valor"
-                    style={[styles.input]}
-                    defaultValue={valor}
+                    defaultValue={price}
+                    onChangeText={setPrice}
                   />
                 </Block>
 
@@ -153,7 +188,7 @@ export default function Insert(props) {
               </Block>
             </Block>
 
-            {buttonAction(title)}
+            {buttonAction(titleModal)}
           </Block>
         </ScrollView>
       );
@@ -162,23 +197,23 @@ export default function Insert(props) {
     if (showCategories) {
       return renderCategories();
     }
-    return renderContentPattern(title, activeIcon);
+    return renderContentPattern(titleModal, activeIcon);
     
   }
 
-  function onModal(title) {
+  function onModal(titleModal) {
     return (
       <Modal
         visible={props.visible}
         animationType="slide"
         onRequestClose={props.onRequestClose}>
-        {contentPattern(title)}
+        {contentPattern(titleModal)}
       </Modal>
     )
   }
 
   if (props.modal) {
-    return onModal('Cancelar')
+    return onModal(titleButtonModal);
   } 
   else {
     return (
