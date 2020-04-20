@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { KeyboardAvoidingView, Dimensions } from "react-native";
+import { KeyboardAvoidingView } from "react-native";
 import { Block, Input, Button, Text } from "../../elements";
 import { theme } from "../../constants";
 
@@ -8,15 +8,35 @@ import { ScrollView } from "react-native-gesture-handler";
 
 import { CheckBox } from 'react-native-elements'
 
-const { width } = Dimensions.get('window')
+import { setUser } from "../../services/user";
+import AlertMessage from "../../components/Alert";
+
 
 export default function SignupScreen(props) {
-  const [email, setEmail] = useState("promobv@react.com");
-  const [password, setPassword] = useState("promobv");
+  const [userNickname, setUserNickname] = useState('')
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const [ checked, setChecked ] = useState(false)
 
   const mockData = "Concordo com os TERMOS DE CONDIÇÕES DE USO e POLÍTICA DE PRIVACIDADE."
+
+  async function handleSubmit() {
+    try {
+      if(checked) {
+        setUser(userNickname, email, password)
+      }
+      else {
+        AlertMessage({
+          title: 'Atenção',
+          message: 'Concorde com os Termos de Condições de Uso e Política de Privacidade.'
+        })
+      }
+      
+    } catch ({ response }) {
+
+    }
+  }
 
   return (
     <KeyboardAvoidingView style={styles.container}>
@@ -36,7 +56,11 @@ export default function SignupScreen(props) {
           </Block>
 
           <Block flex={0.7} padding={[theme.sizes.base, 0]}>
-            <Input label="Usuário" style={[styles.input]} />
+            <Input 
+              label="Usuário"
+              defaultValue={userNickname}
+              onChangeText={setUserNickname}
+              />
             <Input
               label={
                 <Text style={{ color: theme.colors.gray }}>
@@ -47,11 +71,13 @@ export default function SignupScreen(props) {
                 </Text>
               }
               defaultValue={email}
+              onChangeText={setEmail}
             />
             <Input
               secure
               label="Senha"
               defaultValue={password}
+              onChangeText={setPassword}
             />
 
             <CheckBox
@@ -66,7 +92,7 @@ export default function SignupScreen(props) {
               }}
             />
 
-            <Button color={theme.colors.primary}>
+            <Button onPress={handleSubmit} color={theme.colors.primary}>
               <Text bold white center>
                 Cadastra-se
               </Text>
