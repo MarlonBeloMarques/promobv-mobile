@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { KeyboardAvoidingView, Image, Alert } from "react-native";
+import React, { useState, useRef } from "react";
+import { KeyboardAvoidingView, Image, Keyboard } from "react-native";
 import { Block, Input, Button, Text} from '../../elements'
 import { theme } from "../../constants";
 
@@ -11,6 +11,7 @@ import { StatusBar } from "react-native";
 
 import { useDispatch } from "react-redux";
 import { signInSuccess } from "../../store/modules/auth/actions";
+import AlertMessage from "../../components/Alert";
 
 export default function LoginScreen(props) {
 
@@ -19,19 +20,24 @@ export default function LoginScreen(props) {
 
   const dispatch = useDispatch()
 
+  const passwordRef = useRef();
+
   async function handleSubmit() {
     try {
       const { headers : { authorization }, status } = await signIn(email, password)
 
       switch (status) {
         case 200:
-          Alert.alert(
-            'Sucesso'
-          )
+          AlertMessage({
+            title: 'Sucesso',
+            message: 'Acesso realizado com sucesso.'
+          })
 
           successfulLogin(authorization)
 
           dispatch(signInSuccess(authorization))
+
+          Keyboard.dismiss()
 
           props.navigation.navigate('Promoções')
         
@@ -66,12 +72,21 @@ export default function LoginScreen(props) {
           <Image resizeMode="contain" source={logo} style={styles.logo} />
         </Block>
         <Block>
-          <Input label="E-mail" defaultValue={email} onChangeText={setEmail} />
+          <Input 
+            label="E-mail" 
+            defaultValue={email} 
+            onChangeText={setEmail} 
+            next
+            submitEditing = {() => passwordRef.current.focus()}
+          />
           <Input
             secure
             label="Senha"
             defaultValue={password}
             onChangeText={setPassword}
+            reference={passwordRef}
+            done
+            submitEditing={handleSubmit}
           />
           <Button onPress={onPasswordClicked} style={styles.forgotPassword}>
             <Text
@@ -89,7 +104,7 @@ export default function LoginScreen(props) {
               Entrar
             </Text>
           </Button>
-          <Block padding={[theme.sizes.base, 0]}>
+          <Block padding={[theme.sizes.base * 2, 0, theme.sizes.base, 0]}>
             <Button color={theme.colors.google}>
               <Text bold white center>
                 Entrar com o Google

@@ -53,10 +53,17 @@ export default function Input(props) {
     );
   }
 
-  const { email, phone, number, secure, error, style } = props;
+  const { next, done, email, phone, number, secure, error, style, reference } = props;
   const { toggleSecure } = isToggleSecure;
   const isSecure = toggleSecure ? false : secure;
   const inputStyles = [ styles.input, error && { borderColor: theme.colors.accent }, style ]
+  
+   const keyType = next
+                  ? 'next'
+                  : done
+                  ? 'done'
+                  : 'done'
+  
   const inputType = email ? "email-address"
                   : number ? "numeric"
                   : phone ? "phone-pad"
@@ -75,6 +82,9 @@ export default function Input(props) {
         keyboardType={inputType}
         defaultValue={props.defaultValue}
         onChangeText={props.onChangeText}
+        returnKeyType={keyType}
+        onSubmitEditing={props.submitEditing}
+        ref={reference}
       />
       {renderToggle()}
       {renderRight()}
@@ -103,3 +113,7 @@ const styles = StyleSheet.create({
     right: 0,
   },
 });
+
+Input.propTypes = {
+  submitEditing: () => {},
+};

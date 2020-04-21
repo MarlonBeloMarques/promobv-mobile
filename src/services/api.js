@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { Alert } from 'react-native'
 import * as SecureStore from "expo-secure-store";
+import { logout } from './auth';
+import AlertMessage from '../components/Alert';
 
 const api = axios.create({
   baseURL: 'http://192.168.4.5:8086',
@@ -27,6 +29,7 @@ api.interceptors.request.use(async function (config) {
   }
 
   return config
+
 }, function (error) {
   // Faça algo com erro de solicitação
   return Promise.reject(error)
@@ -45,16 +48,6 @@ api.interceptors.response.use(function (response) {
   // console.log ('resposta interceptada:', error.response.data)
 
   let errorObj = error.response.data
-
-  if(errorObj.error) {
-    errorObj = errorObj.error
-  }
-
-  if(!errorObj.status) {
-    errorObj = JSON.parse(errorObj)
-  }
-
-  console.log(`API RESPONSE: ${errorObj.status}`);
 
   switch (errorObj.status) {
     case 401:
@@ -88,11 +81,14 @@ api.interceptors.response.use(function (response) {
   }
 
   function handle401() {
-      Alert.alert("Atenção", "Email ou senha incorretos");
+    AlertMessage({
+      title: 'Atenção',
+      message: 'Email ou senha incorretos.'
+    })
   }
 
   function handle403() {
-
+    logout()
   }
 
   function listErrors(messages) {

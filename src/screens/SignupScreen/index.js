@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { KeyboardAvoidingView } from "react-native";
+import React, { useState, useRef } from "react";
+import { KeyboardAvoidingView, Keyboard } from "react-native";
 import { Block, Input, Button, Text } from "../../elements";
 import { theme } from "../../constants";
 
@@ -11,7 +11,6 @@ import { CheckBox } from 'react-native-elements'
 import { setUser } from "../../services/user";
 import AlertMessage from "../../components/Alert";
 
-
 export default function SignupScreen(props) {
   const [userNickname, setUserNickname] = useState('')
   const [email, setEmail] = useState('');
@@ -21,16 +20,36 @@ export default function SignupScreen(props) {
 
   const mockData = "Concordo com os TERMOS DE CONDIÇÕES DE USO e POLÍTICA DE PRIVACIDADE."
 
+  const emailRef = useRef();
+  const passwordRef = useRef();
+
   async function handleSubmit() {
     try {
-      if(checked) {
-        setUser(userNickname, email, password)
-      }
-      else {
+
+      if(userNickname !== '' && email !== '' && password !== '') {
+        if(checked) {
+          setUser(userNickname, email, password)
+
+          AlertMessage({
+            title: 'Sucesso',
+            message: 'Cadastro realizado com sucesso.'
+          })
+
+          Keyboard.dismiss()
+
+          props.navigation.navigate('login')
+        }
+        else {
+          AlertMessage({
+            title: 'Atenção',
+            message: 'Concorde com os Termos de Condições de Uso e Política de Privacidade.'
+          })
+        }
+      } else {
         AlertMessage({
-          title: 'Atenção',
-          message: 'Concorde com os Termos de Condições de Uso e Política de Privacidade.'
-        })
+          title: "Atenção",
+          message: "O Cadastro possui campos não preenchidos.",
+        });
       }
       
     } catch ({ response }) {
@@ -60,6 +79,8 @@ export default function SignupScreen(props) {
               label="Usuário"
               defaultValue={userNickname}
               onChangeText={setUserNickname}
+              next
+              submitEditing = {() => emailRef.current.focus()}
               />
             <Input
               label={
@@ -72,12 +93,17 @@ export default function SignupScreen(props) {
               }
               defaultValue={email}
               onChangeText={setEmail}
+              reference={emailRef}
+              next
+              submitEditing = {() => passwordRef.current.focus()}
             />
             <Input
               secure
               label="Senha"
               defaultValue={password}
               onChangeText={setPassword}
+              reference={passwordRef}
+              done
             />
 
             <CheckBox

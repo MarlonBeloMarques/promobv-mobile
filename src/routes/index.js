@@ -27,14 +27,18 @@ import { theme } from '../constants'
 import { Text, Block, Button } from '../elements'
 import { Transition } from 'react-native-reanimated'
 import { logout } from '../services/auth'
+import { useDispatch } from "react-redux";
+import { signOutRequest } from "../store/modules/auth/actions";
 
 const Header = (props) => {
+  const dispatch = useDispatch();
 
   function onClickMenu() {
     props.navigation.dispatch(DrawerActions.closeDrawer());
   }
 
   function onClickExit() {
+    dispatch(signOutRequest());
     logout()
     props.navigation.navigate("login");
   }
