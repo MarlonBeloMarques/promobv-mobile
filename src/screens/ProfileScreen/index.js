@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Block, Input, Button, Text, Photo } from "../../elements";
 import { theme } from "../../constants";
 import * as SecureStore from "expo-secure-store";
 
 import profileImage from '../../../assets/images/profile-image.png'
-import styles from './styles'
 
 import { ScrollView } from "react-native-gesture-handler";
 
 import { getUser, updateUser } from "../../services/user";
+import AlertMessage from "../../components/Alert";
 
 export default function ProfileScreen(props) {
 
@@ -21,6 +21,10 @@ export default function ProfileScreen(props) {
   const [number, setNumber] = useState('')
   const [email, setEmail] = useState('')
 
+  const cpfRef = useRef()
+  const numberRef = useRef()
+  const dateOfBirthRef = useRef()
+
   useEffect(() => {
     async function loadProfile() {
 
@@ -28,8 +32,6 @@ export default function ProfileScreen(props) {
 
       getUser(JSON.parse(email)).then((res) => {
         const response = res.data;
-
-        console.log(response)
 
         setId(response.id)
         setName(response.nome)
@@ -46,7 +48,16 @@ export default function ProfileScreen(props) {
   }, []);
 
   async function handleSubmit() {
-    updateUser(id, name, cpf, number, dateOfBirth)
+    try {
+      await updateUser(id, name, cpf, number, dateOfBirth)
+
+      AlertMessage({
+        title: 'Sucesso',
+        message: 'Seus dados foram atualizados com sucesso.'
+      })
+    } catch ({ response }) {
+
+    }
   }
 
   return (
@@ -70,16 +81,25 @@ export default function ProfileScreen(props) {
             label="Nome completo"
             defaultValue={name}
             onChangeText={setName}
+            next
+            submitEditing = {() => cpfRef.current.focus()}
           />
           <Input 
             label="CPF" 
             defaultValue={cpf} 
-            onChangeText={setCpf}/>
+            onChangeText={setCpf}
+            reference={cpfRef}
+            next
+            submitEditing = {() => numberRef.current.focus()}
+          />
             
           <Input
             label="Telefone"
             defaultValue={number}
             onChangeText={setNumber}
+            reference={numberRef}
+            next
+            submitEditing = {() => dateOfBirthRef.current.focus()}
           />
         </Block>
 
@@ -89,6 +109,8 @@ export default function ProfileScreen(props) {
               label="Data de nascimento"
               defaultValue={dateOfBirth}
               onChangeText={setDateOfBirth}
+              reference={dateOfBirthRef}
+              done
             />
           </Block>
         </Block>

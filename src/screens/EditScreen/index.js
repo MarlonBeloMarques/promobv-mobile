@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setCategoryUpdateAndInsert } from "../../store/modules/category/updateAndInsert/actions";
 
 import { Categories } from "../../components";
+import AlertMessage from "../../components/Alert";
 
 export default function Edit(props) {
   const idNavigation = props.navigation.getParam("id");
@@ -55,8 +56,20 @@ export default function Edit(props) {
       setCategoryName(name)
   }, [id])
 
-  function handleSubmit() {
-    updatePromotion(idNavigation, description, value, place, address, title, categoryId)
+  async function handleSubmit() {
+    try {
+      await updatePromotion(idNavigation, description, value, place, address, title, categoryId)
+
+      AlertMessage({
+        title: 'Sucesso',
+        message: 'Sua promoção foi atualizada com sucesso.'
+      })
+
+      props.navigation.navigate("MinhasPromocoes");
+
+    } catch ({ response }) {
+
+    }
   }
 
   function onClickCategory() {

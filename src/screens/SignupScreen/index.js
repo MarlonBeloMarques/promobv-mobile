@@ -28,7 +28,7 @@ export default function SignupScreen(props) {
 
       if(userNickname !== '' && email !== '' && password !== '') {
         if(checked) {
-          setUser(userNickname, email, password)
+          await setUser(userNickname, email, password)
 
           AlertMessage({
             title: 'Sucesso',
