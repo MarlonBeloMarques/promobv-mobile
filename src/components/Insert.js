@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Modal, StyleSheet } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { Modal, StyleSheet, Keyboard } from "react-native";
 import { Block, Text, Button, Input, Header } from "../elements";
 import { theme } from "../constants";
 import { ScrollView } from "react-native-gesture-handler";
@@ -26,6 +26,11 @@ export default function Insert(props) {
   const[price, setPrice] = useState('')
 
   const [showCategories, setShowCategories] = useState(false);
+
+  const descriptionRef = useRef();
+  const localizationRef = useRef();
+  const addressRef = useRef();
+  const priceRef = useRef();
 
   const [titleButtonModal, setTitleButtonModal] = useState('Cancelar')
 
@@ -56,14 +61,24 @@ export default function Insert(props) {
 
   function buttonAction(titleModal) {
 
-    function handleSubmit() { 
+    async function handleSubmit() { 
       if(props.modal) {
         if(titleButtonModal === 'Inserir')
-          setPromotion(description, price, localization, address, title, id)  
-        props.onRequestClose();             
+          await setPromotion(description, price, localization, address, title, id)  
+
+          Keyboard.dismiss()
+          props.onRequestClose();             
       } else {
         if(title !== '' && description !== '' && localization !== '' && address !== '' && price !== '') {
-          setPromotion(description, price, localization, address, title, id);
+          await setPromotion(description, price, localization, address, title, id);
+
+          setTitle('')
+          setDescription('')
+          setLocalization('')
+          setAddress('')
+          setPrice('')
+
+          Keyboard.dismiss();
         } else {
           AlertMessage({
             title: 'Atenção',
@@ -135,20 +150,32 @@ export default function Insert(props) {
                 label="Titulo"
                 defaultValue={title}
                 onChangeText={setTitle}
+                next
+                submitEditing = {() => descriptionRef.current.focus()} 
               />
               <Input
                 label="Descrição"
                 defaultValue={description}
                 onChangeText={setDescription}
+                reference={descriptionRef}
+                next
+                submitEditing = {() => localizationRef.current.focus()}
               />
               <Input 
                 label="Local" 
                 defaultValue={localization} 
-                onChangeText={setLocalization}/>
+                onChangeText={setLocalization}
+                reference={localizationRef}
+                next
+                submitEditing = {() => addressRef.current.focus()}
+              />
               <Input
                 label="Endereço"
                 defaultValue={address}
                 onChangeText={setAddress}
+                reference={addressRef}
+                next
+                submitEditing = {() => priceRef.current.focus()}
               />
 
               <Block row>
@@ -157,6 +184,8 @@ export default function Insert(props) {
                     label="Valor"
                     defaultValue={price}
                     onChangeText={setPrice}
+                    reference={priceRef}
+                    done
                   />
                 </Block>
 
