@@ -14,6 +14,7 @@ import { DrawerActions } from "react-navigation-drawer";
 import Categories from './Categories'
 
 import AlertMessage from './Alert'
+import Gallery from "./Gallery";
 
 export default function Insert(props) {
   const dispatch = useDispatch();
@@ -26,6 +27,7 @@ export default function Insert(props) {
   const[price, setPrice] = useState('')
 
   const [showCategories, setShowCategories] = useState(false);
+  const [showGallery, setShowGallery] = useState(false);
 
   const descriptionRef = useRef();
   const localizationRef = useRef();
@@ -134,92 +136,114 @@ export default function Insert(props) {
         ></Categories>
       );
     }
+
+    function onClickGallery() {
+    setShowGallery(true);
+    }
+
+    function onHideGallery() {
+      setShowGallery(false);
+    }
+
+    function renderGallery() {
+
+      if(onClickGallery)
+        return (
+          <Gallery
+            visible={showGallery}
+            onRequestClose={onHideGallery}
+          ></Gallery>
+        )
+    }
     
     function renderContentPattern(titleModal, activeIcon) {
 
       return (
-        <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
-          {header(activeIcon)}
-          <Block
-            padding={[0, theme.sizes.padding]}
-            space="between"
-            color={theme.colors.white}
-          >
-            <Block margin={[theme.sizes.header, 0]} flex={false}>
-              <Input
-                label="Titulo"
-                defaultValue={title}
-                onChangeText={setTitle}
-                next
-                submitEditing = {() => descriptionRef.current.focus()} 
-              />
-              <Input
-                label="Descrição"
-                defaultValue={description}
-                onChangeText={setDescription}
-                reference={descriptionRef}
-                next
-                submitEditing = {() => localizationRef.current.focus()}
-              />
-              <Input 
-                label="Local" 
-                defaultValue={localization} 
-                onChangeText={setLocalization}
-                reference={localizationRef}
-                next
-                submitEditing = {() => addressRef.current.focus()}
-              />
-              <Input
-                label="Endereço"
-                defaultValue={address}
-                onChangeText={setAddress}
-                reference={addressRef}
-                next
-                submitEditing = {() => priceRef.current.focus()}
-              />
+        <>
+          {renderGallery()}
+          <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
+            {header(activeIcon)}
+            <Block
+              padding={[0, theme.sizes.padding]}
+              space="between"
+              color={theme.colors.white}
+            >
+              <Block margin={[theme.sizes.header, 0]} flex={false}>
+                <Input
+                  label="Titulo"
+                  defaultValue={title}
+                  onChangeText={setTitle}
+                  next
+                  submitEditing = {() => descriptionRef.current.focus()} 
+                />
+                <Input
+                  label="Descrição"
+                  defaultValue={description}
+                  onChangeText={setDescription}
+                  reference={descriptionRef}
+                  next
+                  submitEditing = {() => localizationRef.current.focus()}
+                />
+                <Input 
+                  label="Local" 
+                  defaultValue={localization} 
+                  onChangeText={setLocalization}
+                  reference={localizationRef}
+                  next
+                  submitEditing = {() => addressRef.current.focus()}
+                />
+                <Input
+                  label="Endereço"
+                  defaultValue={address}
+                  onChangeText={setAddress}
+                  reference={addressRef}
+                  next
+                  submitEditing = {() => priceRef.current.focus()}
+                />
+
+                <Block row>
+                  <Block padding={[0, theme.sizes.padding, 0, 0]}>
+                    <Input
+                      label="Valor"
+                      defaultValue={price}
+                      onChangeText={setPrice}
+                      reference={priceRef}
+                      done
+                    />
+                  </Block>
+
+                  <Block margin={[theme.sizes.base / 1.5, 0]}>
+                    <Block padding={[0,0, theme.sizes.base - 10, 4]} flex={false}>
+                      <Text gray>
+                        Categoria
+                      </Text>
+                    </Block>
+                    <Button onPress={onClickCategory} style={styles.button}>
+                      <Text gray>
+                        {name}
+                      </Text>
+                    </Button>
+                  </Block>
+                </Block>
+              </Block>
 
               <Block row>
-                <Block padding={[0, theme.sizes.padding, 0, 0]}>
-                  <Input
-                    label="Valor"
-                    defaultValue={price}
-                    onChangeText={setPrice}
-                    reference={priceRef}
-                    done
-                  />
-                </Block>
-
-                <Block margin={[theme.sizes.base / 1.5, 0]}>
-                  <Block padding={[0,0, theme.sizes.base - 10, 4]} flex={false}>
-                    <Text gray>
-                      Categoria
-                    </Text>
-                  </Block>
-                  <Button onPress={onClickCategory} style={styles.button}>
-                    <Text gray>
-                      {name}
+                <Block flex={false}>
+                  <Text bold gray>
+                    Galeria
+                  </Text>
+                  <Button onPress={onClickGallery} style={styles.plus}>
+                    <Text h3 gray>
+                      +5
                     </Text>
                   </Button>
                 </Block>
               </Block>
-            </Block>
 
-            <Block row>
-              <Block flex={false}>
-                <Text bold gray>
-                  Galeria
-                </Text>
-                <Button style={styles.plus}>
-                  <Text h3 gray>
-                    +5
-                  </Text>
-                </Button>
-              </Block>
+              {buttonAction(titleModal)}
             </Block>
-
-            {buttonAction(titleModal)}
-          </Block>
-        </ScrollView>
+          </ScrollView>
+        </>
       );
     }
 
