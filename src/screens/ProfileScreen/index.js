@@ -2,12 +2,15 @@ import React, { useState, useEffect, useRef } from "react";
 import { Block, Input, Button, Text, Photo } from "../../elements";
 import { theme } from "../../constants";
 import * as SecureStore from "expo-secure-store";
+import * as ImagePicker from 'expo-image-picker';
+import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions';
 
 import profileImage from '../../../assets/images/profile-image.png'
 
 import { ScrollView } from "react-native-gesture-handler";
 
-import { getUser, updateUser } from "../../services/user";
+import { getUser, updateUser, setUserPicture } from "../../services/user";
 import AlertMessage from "../../components/Alert";
 
 export default function ProfileScreen(props) {
@@ -16,7 +19,7 @@ export default function ProfileScreen(props) {
   const [name, setName] = useState('')
   const [nickname, setNickname] = useState('')
   const [cpf, setCpf] = useState('')
-  const [avatar, setAvatar] = useState('')
+  const [avatar, setAvatar] = useState()
   const [dateOfBirth, setDateOfBirth] = useState('')
   const [number, setNumber] = useState('')
   const [email, setEmail] = useState('')
@@ -44,8 +47,52 @@ export default function ProfileScreen(props) {
       });
     }
 
+    getPermissionAsync();
     loadProfile();
   }, []);
+
+  async function getPermissionAsync() {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        alert('Desculpe, precisamos de permissões de rolagem da câmera para fazer isso funcionar!');
+      }
+    }
+  }
+
+  async function submitPicture(photo) {
+
+    let localUri = photo.uri;
+    let filename = localUri.split("/").pop();
+
+    let match = /\.(\w+)$/.exec(filename);
+    let type = match ? `image/${match[1]}` : `image`;
+
+    let formData = new FormData();
+    formData.append("file", { uri: localUri, name: filename, type });
+
+    await setUserPicture(formData).then(res => {
+      console.log(res)
+    })
+
+  }
+
+  async function pickImage () {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      if (!result.cancelled) {
+        setAvatar(result.uri)
+        submitPicture(result)
+      }
+
+    } catch (E) {
+    }
+  };
 
   async function handleSubmit() {
     try {
@@ -68,7 +115,7 @@ export default function ProfileScreen(props) {
         color={theme.colors.white}
       >
         <Block padding={[theme.sizes.padding, 0, 0, 0]} center row>
-          <Button style>
+          <Button onPress={pickImage} style>
             {avatar === null && <Photo avatar image={profileImage} />}
             {avatar !== null && <Photo avatar image={avatar} />}          
           </Button>
