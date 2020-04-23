@@ -32,3 +32,7 @@ export function setPromotionPicture(id, data) {
     }
   })
 }
+
+export function deletePromotion(id) {
+  return api.delete(`/promocoes/${id}`)
+}

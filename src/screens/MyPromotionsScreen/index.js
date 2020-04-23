@@ -3,9 +3,10 @@ import { KeyboardAvoidingView, AsyncStorage, FlatList, StyleSheet, Platform } fr
 import { Block, Button, Text, Photo } from "../../elements";
 import { theme } from "../../constants";
 import { AntDesign } from "@expo/vector-icons";
-import { getMyPromotions } from "../../services/promotion";
+import { getMyPromotions, deletePromotion } from "../../services/promotion";
 
 import no_photo from "../../../assets/images/no-photo.png";
+import { Alert } from "react-native";
 
 export default function MyPromotionsScreen(props) {
 
@@ -22,6 +23,23 @@ export default function MyPromotionsScreen(props) {
   }, []);
 
   console.log(promotions)
+
+  async function deletePromotionClicked(id) {
+    Alert.alert(
+      'Atenção',
+      'Tem certeza que deseja excluir essa promoção?',
+      [
+        {
+          text: 'Não',
+          style: 'cancel'
+        },
+        {
+          text: 'Sim',
+          onPress: () => deletePromotion(id)
+        }
+      ]
+    )
+  }
 
   async function onDetailsClicked(id) {
     const _id = id;
@@ -88,7 +106,7 @@ export default function MyPromotionsScreen(props) {
               </Block>
             </Block>
             <Block column flex={false} padding={theme.sizes.base / 2}>
-              <Button style>
+              <Button onPress={() => deletePromotionClicked(item.id)} style>
                 <AntDesign
                   name={"close"}
                   size={18}
