@@ -4,7 +4,7 @@ import { Block, Text, Button, Input, Header } from "../elements";
 import { theme } from "../constants";
 import { ScrollView } from "react-native-gesture-handler";
 
-import { setPromotion } from "../services/promotion/index";
+import { setPromotion, setPromotionPicture } from "../services/promotion/index";
 
 import { useSelector, useDispatch } from "react-redux";
 import { setCategoryUpdateAndInsert } from "../store/modules/category/updateAndInsert/actions";
@@ -64,6 +64,23 @@ export default function Insert(props) {
     };
   })
 
+  async function submitPicture(photo, promoId) {
+
+    let localUri = photo.uri;
+    let filename = localUri.split("/").pop();
+
+    let match = /\.(\w+)$/.exec(filename);
+    let type = match ? `image/${match[1]}` : `image`;
+
+    let formData = new FormData();
+    formData.append("file", { uri: localUri, name: filename, type });
+
+    await setPromotionPicture(promoId, formData).then(res => {
+      console.log(res)
+    })
+
+  }
+
   function onClickMenu() {
     props.navigation.dispatch(DrawerActions.openDrawer());
   }
@@ -72,13 +89,29 @@ export default function Insert(props) {
 
     async function handleSubmit() { 
       if(props.modal) {
-        if(titleButtonModal === 'Inserir')
-          await setPromotion(description, price, localization, address, title, id)  
+        if(titleButtonModal === 'Inserir') {
+          let promoId = 0
 
+          await setPromotion(description, price, localization, address, title, id).then(res => {
+            let promo = res.headers.location
+            promoId = JSON.parse(promo.substring(34, promo.length))
+          })
+
+          for (const img of images) {
+            await submitPicture(img, promoId)
+          }
+          
           dispatch(setImagesPromotion([]));
 
-          Keyboard.dismiss()
-          props.onRequestClose();             
+          AlertMessage({
+            title: "Sucesso",
+            message: "Sua promoção foi publicada.",
+          });
+        }
+
+        Keyboard.dismiss();
+        props.onRequestClose();  
+
       } else {
         if(title !== '' && description !== '' && localization !== '' && address !== '' && price !== '' && images.length !== 0) {
           await setPromotion(description, price, localization, address, title, id);
@@ -92,6 +125,12 @@ export default function Insert(props) {
           dispatch(setImagesPromotion([]));
 
           Keyboard.dismiss();
+
+          AlertMessage({
+            title: "Sucesso",
+            message: "Sua promoção foi publicada.",
+          })
+
         } else {
           AlertMessage({
             title: 'Atenção',
@@ -241,6 +280,7 @@ export default function Insert(props) {
                 <Block row>
                   <Block padding={[0, theme.sizes.padding, 0, 0]}>
                     <Input
+                      number
                       label="Valor"
                       defaultValue={price}
                       onChangeText={setPrice}

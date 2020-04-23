@@ -23,3 +23,12 @@ export function updatePromotion(id, descricao, preco, localizacao, endereco, tit
 export function setPromotion(descricao, preco, localizacao, endereco, titulo, idCategoria) {
   return api.post(`/promocoes`, {descricao, preco, localizacao, endereco, titulo, idCategoria})
 }
+
+export function setPromotionPicture(id, data) {
+  return api.post(`/promocoes/${id}/picture`, data,
+  { 
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    }
+  })
+}
