@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Modal, StyleSheet, Keyboard } from "react-native";
+import { Modal, StyleSheet, Keyboard, Image } from "react-native";
 import { Block, Text, Button, Input, Header } from "../elements";
 import { theme } from "../constants";
 import { ScrollView } from "react-native-gesture-handler";
@@ -8,6 +8,7 @@ import { setPromotion } from "../services/promotion/index";
 
 import { useSelector, useDispatch } from "react-redux";
 import { setCategoryUpdateAndInsert } from "../store/modules/category/updateAndInsert/actions";
+import { setImagesPromotion } from "../store/modules/images/actions";
 
 import { DrawerActions } from "react-navigation-drawer";
 
@@ -19,6 +20,7 @@ import Gallery from "./Gallery";
 export default function Insert(props) {
   const dispatch = useDispatch();
   const { id, name } = useSelector((state) => state.category_updateAndInsert, () => true);
+  const { images } = useSelector((state) => state.images, () => true);
 
   const[title, setTitle] = useState('')
   const[description, setDescription] = useState('')
@@ -36,10 +38,16 @@ export default function Insert(props) {
 
   const [titleButtonModal, setTitleButtonModal] = useState('Cancelar')
 
+  if(!props.modal) {
+    props.navigation.addListener("willBlur", () => {
+      dispatch(setImagesPromotion([]));
+    });
+  }
+
   useEffect(() => {
     function checkFields() {
       if(props.modal) {
-        if(title !== '' && description !== '' && localization !== '' && address !== '' && price !== '') {
+        if(title !== '' && description !== '' && localization !== '' && address !== '' && price !== '' && images.length !== 0) {
           setTitleButtonModal('Inserir')
         } else {
           setTitleButtonModal('Cancelar');
@@ -49,7 +57,6 @@ export default function Insert(props) {
 
     checkFields()
   })
-
 
   useEffect(() => {
     return () => {
@@ -68,10 +75,12 @@ export default function Insert(props) {
         if(titleButtonModal === 'Inserir')
           await setPromotion(description, price, localization, address, title, id)  
 
+          dispatch(setImagesPromotion([]));
+
           Keyboard.dismiss()
           props.onRequestClose();             
       } else {
-        if(title !== '' && description !== '' && localization !== '' && address !== '' && price !== '') {
+        if(title !== '' && description !== '' && localization !== '' && address !== '' && price !== '' && images.length !== 0) {
           await setPromotion(description, price, localization, address, title, id);
 
           setTitle('')
@@ -79,6 +88,8 @@ export default function Insert(props) {
           setLocalization('')
           setAddress('')
           setPrice('')
+
+          dispatch(setImagesPromotion([]));
 
           Keyboard.dismiss();
         } else {
@@ -88,6 +99,7 @@ export default function Insert(props) {
           })
         }
       }
+
     }
 
     return (
@@ -157,6 +169,31 @@ export default function Insert(props) {
     }
     
     function renderContentPattern(titleModal, activeIcon) {
+
+      function renderButtonGallery() {
+        let imgs = [] 
+
+        images.forEach(element => {
+          imgs.push(element.uri)
+        });
+
+        if(imgs.length === 0) {
+          return (
+            <Button onPress={onClickGallery} style={styles.plus}>
+              <Text h3 gray>
+                +5
+              </Text>
+            </Button>         
+          )
+        }
+        else {
+          return (
+            <Button onPress={onClickGallery}>
+              <Image source={{uri: imgs[0]}} style={styles.imageGallery}/>
+            </Button>           
+          )
+        } 
+      }
 
       return (
         <>
@@ -232,11 +269,7 @@ export default function Insert(props) {
                   <Text bold gray>
                     Galeria
                   </Text>
-                  <Button onPress={onClickGallery} style={styles.plus}>
-                    <Text h3 gray>
-                      +5
-                    </Text>
-                  </Button>
+                  {renderButtonGallery()}
                 </Block>
               </Block>
 
@@ -301,5 +334,14 @@ const styles = StyleSheet.create({
   profile: {
     width: 50,
     height: 50,
+  },
+
+  imageGallery: {
+    width: 60,
+    height: 60,
+    borderRadius: theme.sizes.radius,
+    padding: 20,
+    marginTop: 10,
+    marginHorizontal: 10,
   },
 });
