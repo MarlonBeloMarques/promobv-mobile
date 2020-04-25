@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { Dimensions, Image, StyleSheet } from "react-native";
 import Modal from "react-native-modal";
 import { Block, Button, Text } from "../elements";
@@ -12,12 +12,27 @@ import { useDispatch } from "react-redux";
 
 import { setImagesPromotion } from '../store/modules/images/actions'
 import { ScrollView } from "react-native-gesture-handler";
+import { getPromotion } from "../services/promotion";
 
 const { height } = Dimensions.get("window");
 
 const Gallery = (props) => {
+  const { idGallery, showDetails } = props
+
   const [image, setImage] = useState([]);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    async function loadGallery() {
+      getPromotion(idGallery).then(res => {
+        const response = res.data
+
+        setImage(response.galeriaDeImagens.urlImagens)
+      })
+    }
+
+    loadGallery()
+  }, [])
 
   async function addImage() {
     if(image.length <= 4) {
@@ -40,23 +55,59 @@ const Gallery = (props) => {
     
     let images = [];
 
-    image.map((item, index) => {
-      images.push(
-        <Block key={index} flex={false} margin={5}>
-          <Lightbox >
-            <Image
-              resizeMode='cover'      
-              source={{uri: item.uri}}
-              style={{ minWidth: 160, height: 200, borderRadius: theme.sizes.radius }}
-            />
-          </Lightbox>
-        </Block>
-      )
-    })
+    if(showDetails === true) {
+      image.map((item, index) => {
+        images.push(
+          <Block key={index} flex={false} margin={5}>
+            <Lightbox >
+              <Image
+                resizeMode='cover'      
+                source={{uri: item}}
+                style={{ minWidth: 160, height: 200, borderRadius: theme.sizes.radius }}
+              />
+            </Lightbox>
+          </Block>
+        )
+      })
 
-    dispatch(setImagesPromotion(image));
+      dispatch(setImagesPromotion([]));
+
+    } else {
+        image.map((item, index) => {
+          images.push(
+            <Block key={index} flex={false} margin={5}>
+              <Lightbox >
+                <Image
+                  resizeMode='cover'      
+                  source={{uri: item.uri}}
+                  style={{ minWidth: 160, height: 200, borderRadius: theme.sizes.radius }}
+                />
+              </Lightbox>
+            </Block>
+          )
+        })
+
+        dispatch(setImagesPromotion(image));
+    }
 
     return images
+  }
+
+  function showAddIcon() {
+    
+      if(!showDetails) {
+        return (
+          <Button onPress={addImage} style>
+            <Block flex={false} margin={[0, theme.sizes.base, 0, 0]}>
+              <MaterialIcons
+                name={"add-a-photo"}
+                size={20}
+                color={theme.colors.gray}
+              />
+            </Block>
+          </Button>
+        );
+    }
   }
 
   return (
@@ -70,11 +121,7 @@ const Gallery = (props) => {
     >
       <Block card color={theme.colors.white} padding={[ Platform.OS === 'ios' ? 20 : 10]}>
         <Block flex={false} row padding={[theme.sizes.base, theme.sizes.base]}>
-          <Button onPress={addImage} style>
-            <Block flex={false} margin={[0, theme.sizes.base, 0, 0]}>
-              <MaterialIcons name={"add-a-photo"} size={20} color={theme.colors.gray} />
-            </Block>
-          </Button>
+          {showAddIcon()}
           <Text bold gray>
             Galeria
           </Text>
@@ -108,7 +155,7 @@ const Gallery = (props) => {
 };
 
 Gallery.propTypes = {
-  onRequestClose: () => {},
+  onRequestClose: () => {}
 };
 
 export default Gallery;

@@ -11,6 +11,7 @@ import { getPromotion } from '../../services/promotion'
 import profile from "../../../assets/images/profile-image.png";
 
 import no_photo from "../../../assets/images/no-photo.png";
+import { Gallery } from "../../components";
 
 export default function DetailsScreen(props) {
   const id = props.navigation.getParam('id')
@@ -27,6 +28,9 @@ export default function DetailsScreen(props) {
     number: ''
   })
 
+  const [imageGallery, setImageGallery] = useState([])
+  const [showGallery, setShowGallery] = useState(false);
+
   useEffect(() => {
     async function loadDetails() {
       getPromotion(id).then(res => {
@@ -40,15 +44,38 @@ export default function DetailsScreen(props) {
                      localization: response.localizacao,
                      address: response.endereco,
                      number: response.userTelefone })
+
+        setImageGallery(response.galeriaDeImagens.urlImagens)
       })
     }
 
     loadDetails()
   }, []);
 
-  console.log(details)
+  function onClickGallery() {
+    setShowGallery(true);
+    }
+
+    function onHideGallery() {
+      setShowGallery(false);
+    }
+
+    function renderGallery() {
+
+      if(onClickGallery)
+        return (
+          <Gallery
+            showDetails={true}
+            idGallery={id}
+            visible={showGallery}
+            onRequestClose={onHideGallery}
+          ></Gallery>
+        )
+  }
 
   return (
+    <>
+    {renderGallery()}
     <KeyboardAvoidingView style={styles.container}>
       <StatusBar barStyle={"light-content"} />
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -140,9 +167,10 @@ export default function DetailsScreen(props) {
               <Text bold h3 gray>
                 Galeria
               </Text>
+
               <Block padding={[15]} row flex={false}>
                 <Block padding={[0, 10, 0, 0]} flex={false}>
-                  {details.image === null &&
+                  {imageGallery[0] == null &&
                   <Photo
                     content={true}
                     size={80}
@@ -150,17 +178,17 @@ export default function DetailsScreen(props) {
                     card
                     image={no_photo}
                   />}
-                  {details.image !== null &&
+                  {imageGallery[0] !== null &&
                   <Photo
                     content={true}
                     size={80}
                     height={80}
                     card
-                    image={details.image}
+                    image={imageGallery[0]}
                   />}
                 </Block>
                 <Block flex={false}>
-                  {details.image === null &&
+                  {imageGallery[1] == null &&
                   <Photo
                     content={true}
                     size={80}
@@ -168,27 +196,29 @@ export default function DetailsScreen(props) {
                     card
                     image={no_photo}
                   />}
-                  {details.image !== null &&
+                  {imageGallery[1] !== null &&
                   <Photo
                     content={true}
                     size={80}
                     height={80}
                     card
-                    image={details.image}
+                    image={imageGallery[1]}
                   />}
                 </Block>
                 <Block flex={false}>
-                  <Button style={styles.plus}>
+                  <Button onPress={onClickGallery} style={styles.plus}>
                     <Text h3 gray>
                       +
                     </Text>
                   </Button>
                 </Block>
               </Block>
+
             </Block>
           </Block>
         </Block>
       </ScrollView>
     </KeyboardAvoidingView>
+    </>
   );
 }

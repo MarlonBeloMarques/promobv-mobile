@@ -103,10 +103,6 @@ export default function Insert(props) {
     props.navigation.dispatch(DrawerActions.openDrawer());
   }
 
-  function onClickUpdateUser() {
-    props.navigation.navigate('Perfil')
-  }
-
   function buttonAction(titleModal) {
 
     async function handleSubmit() { 
@@ -116,15 +112,15 @@ export default function Insert(props) {
 
           await setPromotion(description, price, localization, address, title, id).then(res => {
             let promo = res.headers.location
-            promoId = JSON.parse(promo.substring((res.defaults.baseURL.lenght + 11), promo.length))
+            let N = res.config.baseURL
+            
+            promoId = JSON.parse(promo.substring(N.length + 11, promo.length))
           })
 
           for (const img of images) {
             await submitPicture(img, promoId)
           }
           
-          dispatch(setImagesPromotion([]));
-
           AlertMessage({
             title: "Sucesso",
             message: "Sua promoção foi publicada.",
@@ -132,7 +128,7 @@ export default function Insert(props) {
         }
 
         Keyboard.dismiss();
-        props.onRequestClose();  
+        closeInsert() 
 
       } else {
         if(title !== '' && description !== '' && localization !== '' && address !== '' && price !== '' && images.length !== 0) {
@@ -226,7 +222,7 @@ export default function Insert(props) {
             visible={showGallery}
             onRequestClose={onHideGallery}
           ></Gallery>
-        )
+        ) 
     }
     
     function renderContentPattern(titleModal, activeIcon) {
@@ -350,7 +346,7 @@ export default function Insert(props) {
                     Seus dados cadastrais estão incompletos. Navegue até a barra de menu, em <Text bold gray3>Minha Conta</Text> e Atualize seu número telefônico.
                   </Text>
                   <Block margin={[theme.sizes.padding, 0]}>
-                    <Button onPress={props.onRequestClose} color={theme.colors.primary}>
+                    <Button onPress={closeInsert} color={theme.colors.primary}>
                       <Text center bold white>Voltar</Text>
                     </Button>
                   </Block>
@@ -368,12 +364,17 @@ export default function Insert(props) {
     
   }
 
+  function closeInsert() {
+    dispatch(setImagesPromotion([]));
+    props.onRequestClose()
+  }
+
   function onModal(titleModal) {
     return (
       <Modal
         visible={props.visible}
         animationType="slide"
-        onRequestClose={props.onRequestClose}>
+        onRequestClose={closeInsert}>
         {contentPattern(titleModal)}
       </Modal>
     )
