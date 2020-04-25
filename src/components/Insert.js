@@ -105,11 +105,12 @@ export default function Insert(props) {
 
   function buttonAction(titleModal) {
 
+    let promoId = 0;
+
     async function handleSubmit() { 
       if(props.modal) {
-        if(titleButtonModal === 'Inserir') {
-          let promoId = 0
 
+        if(titleButtonModal === 'Inserir') {
           await setPromotion(description, price, localization, address, title, id).then(res => {
             let promo = res.headers.location
             let N = res.config.baseURL
@@ -132,7 +133,16 @@ export default function Insert(props) {
 
       } else {
         if(title !== '' && description !== '' && localization !== '' && address !== '' && price !== '' && images.length !== 0) {
-          await setPromotion(description, price, localization, address, title, id);
+          await setPromotion(description, price, localization, address, title, id).then(res => {
+            let promo = res.headers.location;
+            let N = res.config.baseURL;
+
+            promoId = JSON.parse(promo.substring(N.length + 11, promo.length));
+          })
+
+          for (const img of images) {
+            await submitPicture(img, promoId)
+          }
 
           setTitle('')
           setDescription('')
@@ -140,14 +150,13 @@ export default function Insert(props) {
           setAddress('')
           setPrice('')
 
-          dispatch(setImagesPromotion([]));
-
-          Keyboard.dismiss();
-
           AlertMessage({
             title: "Sucesso",
             message: "Sua promoção foi publicada.",
           })
+
+          Keyboard.dismiss();
+          dispatch(setImagesPromotion([]));
 
         } else {
           AlertMessage({
