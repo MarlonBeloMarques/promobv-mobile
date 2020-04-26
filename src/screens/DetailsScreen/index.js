@@ -3,6 +3,7 @@ import { KeyboardAvoidingView, StatusBar } from "react-native";
 import { Block, Button, Text, Photo } from "../../elements";
 import { Ionicons } from "@expo/vector-icons";
 import { theme } from "../../constants";
+import * as SecureStore from "expo-secure-store";
 
 import styles from "./styles";
 import { ScrollView } from "react-native-gesture-handler";
@@ -28,6 +29,10 @@ export default function DetailsScreen(props) {
     number: ''
   })
 
+  const [notifications, setNotifications] = useState([])
+  const [userName, setUserName] = useState('')
+  const [amountNotifications, setAmountNotifications] = useState(0)
+
   const [imageGallery, setImageGallery] = useState([])
   const [showGallery, setShowGallery] = useState(false);
 
@@ -46,11 +51,16 @@ export default function DetailsScreen(props) {
                      number: response.userTelefone })
 
         setImageGallery(response.galeriaDeImagens.urlImagens)
+        setNotifications(response.notificacoes)
       })
     }
 
     loadDetails()
   }, []);
+
+  useEffect (() => {
+    getUserNotification();
+  })
 
   function onClickGallery() {
     setShowGallery(true);
@@ -71,6 +81,18 @@ export default function DetailsScreen(props) {
             onRequestClose={onHideGallery}
           ></Gallery>
         )
+  }
+
+  async function getUserNotification() {
+    let email = await SecureStore.getItemAsync("user_email");
+
+    setAmountNotifications(notifications.length)
+
+    notifications.forEach((notific) => {
+      if(JSON.stringify(notific.usuario.email) === email) {
+        setUserName(notific.usuario.apelido)
+      }
+    })
   }
 
   return (
@@ -99,13 +121,31 @@ export default function DetailsScreen(props) {
         </Block>
         <Block>
           <Block border padding={[10, 50]} flex={false} row>
-            <Button style>
-              <Ionicons
-                name={"ios-heart"}
-                size={30}
-                color={theme.colors.gray3}
-              />
-            </Button>
+            <Block row flex={false}>
+              <Button style>
+                {userName !== '' &&
+                  <Ionicons
+                    name={"ios-heart"}
+                    size={30}
+                    color={theme.colors.accent}
+                  />
+                }
+                {userName === '' &&
+                  <Ionicons
+                    name={"ios-heart"}
+                    size={30}
+                    color={theme.colors.gray3}
+                  />
+                }
+              </Button>
+              <Block padding={[0, theme.sizes.base]} middle flex={false}>
+                <Text gray3>
+                  {userName}
+                  {amountNotifications > 1 &&
+                  ` ...${amountNotifications}`}
+                </Text>
+              </Block>
+            </Block>
             <Block row right>
               <Button style>
                 <Ionicons
