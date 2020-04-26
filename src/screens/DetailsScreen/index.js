@@ -13,10 +13,14 @@ import profile from "../../../assets/images/profile-image.png";
 
 import no_photo from "../../../assets/images/no-photo.png";
 import { Gallery } from "../../components";
+import { interactNotification } from "../../services/notification";
+import { FormatCurrentDate } from "../../utils";
+import { getUser } from "../../services/user";
 
 export default function DetailsScreen(props) {
   const id = props.navigation.getParam('id')
-
+  
+  const [idUser, setIdUser] = useState(0)
   const [details, setDetails] = useState({
     name: '',
     avatar: '',
@@ -31,6 +35,7 @@ export default function DetailsScreen(props) {
 
   const [notifications, setNotifications] = useState([])
   const [userName, setUserName] = useState('')
+  const [userOtherName, setOtherUserName] = useState('')
   const [amountNotifications, setAmountNotifications] = useState(0)
 
   const [imageGallery, setImageGallery] = useState([])
@@ -56,11 +61,33 @@ export default function DetailsScreen(props) {
     }
 
     loadDetails()
+    loadProfile()
   }, []);
 
   useEffect (() => {
     getUserNotification();
   })
+
+  async function loadProfile() {
+    const email = await SecureStore.getItemAsync('user_email')
+
+    await getUser(JSON.parse(email)).then(res => {
+      const response = res.data;
+
+      setIdUser(JSON.parse(response.id))
+    })
+  }
+
+  async function onClickInteractNotification() {
+    await interactNotification(FormatCurrentDate(), new Date().toLocaleTimeString(), 1, idUser, id).then(res => {
+      console.log(res)
+    })
+
+    getPromotion(id).then(res => {
+      const response = res.data
+      setNotifications(response.notificacoes)
+    })
+  }
 
   function onClickGallery() {
     setShowGallery(true);
@@ -93,6 +120,45 @@ export default function DetailsScreen(props) {
         setUserName(notific.usuario.apelido)
       }
     })
+
+    if(userName === '' && notifications.length > 0) {
+      let notific = notifications[0]
+
+      setOtherUserName(notific.usuario.apelido)
+    }
+  }
+
+  function showIcon() {
+
+    if(userName !== '' && notifications.length > 0) {
+      return <Ionicons
+         name={"ios-heart"}
+         size={30}
+         color={theme.colors.accent}
+        />
+    } else {
+      return <Ionicons
+          name={"ios-heart"}
+          size={30}
+          color={theme.colors.gray3}
+        />
+    }
+  }
+
+  function showNotifications() {
+
+    if(userName === '' && amountNotifications > 1) {
+      return `${userOtherName} ...${amountNotifications - 1}`
+    }
+    else if(userName === '' && amountNotifications === 1) {
+      return userOtherName
+    }
+    else if(userName !== '' && amountNotifications > 1) {
+      return `${userName} ...${amountNotifications - 1}`;
+    }
+    else if(userName !== '' && amountNotifications === 1) {
+      return userName
+    }
   }
 
   return (
@@ -122,27 +188,12 @@ export default function DetailsScreen(props) {
         <Block>
           <Block border padding={[10, 50]} flex={false} row>
             <Block row flex={false}>
-              <Button style>
-                {userName !== '' &&
-                  <Ionicons
-                    name={"ios-heart"}
-                    size={30}
-                    color={theme.colors.accent}
-                  />
-                }
-                {userName === '' &&
-                  <Ionicons
-                    name={"ios-heart"}
-                    size={30}
-                    color={theme.colors.gray3}
-                  />
-                }
+              <Button onPress={onClickInteractNotification} style>
+                {showIcon()}
               </Button>
               <Block padding={[0, theme.sizes.base]} middle flex={false}>
                 <Text gray3>
-                  {userName}
-                  {amountNotifications > 1 &&
-                  ` ...${amountNotifications}`}
+                  {showNotifications()}
                 </Text>
               </Block>
             </Block>
