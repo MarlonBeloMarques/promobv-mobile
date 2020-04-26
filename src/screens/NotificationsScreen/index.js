@@ -46,24 +46,29 @@ export default function NotificationsScreen(props) {
             center
           >
             <Block flex={false} padding={[0, theme.sizes.base]}>
-              <Block style={styles.icon}>
                 {item.tipo === 1 && (
-                  <Ionicons
-                    name={"ios-heart"}
-                    size={16}
-                    color={theme.colors.accent}
-                  />
+                  <>
+                    <Block style={styles.icon}>
+                      <Ionicons
+                        name={"ios-heart"}
+                        size={16}
+                        color={theme.colors.accent}
+                      />
+                    </Block>
+                    {item.userUrlProfile === null && <Photo avatar image={profile} />}
+                    {item.userUrlProfile !== null && <Photo avatar image={item.userUrlProfile} />}
+                </>
                 )}
+                
                 {item.tipo === 2 && (
-                  <Ionicons
-                    name={"ios-information-circle"}
-                    size={16}
-                    color={theme.colors.secondary}
-                  />
+                  <Block flex={false} padding={[0, theme.sizes.caption/2]}>
+                    <Ionicons
+                      name={"ios-information-circle"}
+                      size={30}
+                      color={theme.colors.secondary}
+                    />
+                  </Block>
                 )}
-              </Block>
-              {item.userUrlProfile === null && <Photo avatar image={profile} />}
-              {item.userUrlProfile !== null && <Photo avatar image={item.userUrlProfile} />}
             </Block>
             <Block>
               <Text gray size={14}>
@@ -74,8 +79,8 @@ export default function NotificationsScreen(props) {
                 )}
                 {item.tipo === 2 && (
                   <>
-                    {item.userApelido} denunciou a sua promoção{" "}
-                    {item.promoTitulo}.
+                    Sua promoção{" "}
+                    {item.promoTitulo} foi denunciada.
                   </>
                 )}
               </Text>
