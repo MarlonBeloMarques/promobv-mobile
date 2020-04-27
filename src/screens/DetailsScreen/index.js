@@ -16,11 +16,13 @@ import { Gallery } from "../../components";
 import { interactNotification } from "../../services/notification";
 import { FormatCurrentDate } from "../../utils";
 import { getUser } from "../../services/user";
+import { useSelector } from "react-redux";
 
 export default function DetailsScreen(props) {
   const id = props.navigation.getParam('id')
+  const { idUser } = useSelector((state) => state.auth, () => true)
   
-  const [idUser, setIdUser] = useState(0)
+  const [idUserProfile, setidUserProfile] = useState(0)
   const [details, setDetails] = useState({
     name: '',
     avatar: '',
@@ -59,14 +61,21 @@ export default function DetailsScreen(props) {
         setNotifications(response.notificacoes)
       })
     }
-
     loadDetails()
     loadProfile()
+    
+    props.navigation.setParams({ onClickDenounce: onClickDenounce });
   }, []);
 
   useEffect (() => {
     getUserNotification();
   }, [notifications])
+
+  async function onClickDenounce() {
+    await interactNotification(FormatCurrentDate(), new Date().toLocaleTimeString(), 2, idUser, id).then(res => {
+      console.log(res)
+    })
+  }
 
   async function loadProfile() {
     const email = await SecureStore.getItemAsync('user_email')
@@ -74,12 +83,12 @@ export default function DetailsScreen(props) {
     await getUser(JSON.parse(email)).then(res => {
       const response = res.data;
 
-      setIdUser(JSON.parse(response.id))
+      setidUserProfile(JSON.parse(response.id))
     })
   }
 
   async function onClickInteractNotification() {
-    await interactNotification(FormatCurrentDate(), new Date().toLocaleTimeString(), 1, idUser, id).then(res => {
+    await interactNotification(FormatCurrentDate(), new Date().toLocaleTimeString(), 1, idUserProfile, id).then(res => {
 
       if(res.status === 202) {
         setUserName('')

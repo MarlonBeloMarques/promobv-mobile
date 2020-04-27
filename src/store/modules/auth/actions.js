@@ -1,9 +1,9 @@
 import types from './types'
 
-export function signInSuccess(token) {
+export function signInSuccess(token, idUser) {
   return {
     type: types.SIGN_IN_SUCCESS,
-    payload: { token },
+    payload: { token, idUser },
   };
 }
 

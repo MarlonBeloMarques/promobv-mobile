@@ -95,7 +95,7 @@ const childrens = createStackNavigator({
   },
   Detalhes: {
     screen: DetailsScreen,
-    navigationOptions: {
+    navigationOptions: ({navigation, screenProps}) => ({
       title: (
         <Text bold white>
           Detalhes
@@ -103,9 +103,15 @@ const childrens = createStackNavigator({
       ),
       headerTitleAlign: "left",
       headerStyle: {
-        height: Platform.OS === 'ios' ? theme.sizes.base * 6 : theme.sizes.base * 5,        shadowColor: "transparent",
+        height: Platform.OS === 'ios' ? theme.sizes.base * 6 : theme.sizes.base * 5, 
+        shadowColor: "transparent",
         backgroundColor: theme.colors.primary
       },
+      headerRight: (
+       <Button style onPress={navigation.getParam('onClickDenounce')}>
+         <Text white>Denunciar</Text>
+       </Button>
+      ),
       headerBackImage: (
         <Image source={require("../../assets/icons/back.png")} />
       ),
@@ -118,7 +124,7 @@ const childrens = createStackNavigator({
         alignItems: "center",
         padding: theme.sizes.base
       }
-    }
+    })
   },
   Perfil: {
     screen: ProfileScreen,

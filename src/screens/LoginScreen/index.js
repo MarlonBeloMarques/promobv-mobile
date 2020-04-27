@@ -12,6 +12,7 @@ import { StatusBar } from "react-native";
 import { useDispatch } from "react-redux";
 import { signInSuccess } from "../../store/modules/auth/actions";
 import AlertMessage from "../../components/Alert";
+import { getUser } from "../../services/user";
 
 export default function LoginScreen(props) {
 
@@ -33,9 +34,13 @@ export default function LoginScreen(props) {
             message: 'Acesso realizado com sucesso.'
           })
 
-          successfulLogin(authorization)
+          getUser(email).then(res => {
+            let response = res.data
 
-          dispatch(signInSuccess(authorization))
+            dispatch(signInSuccess(authorization, JSON.parse(response.id)))
+          })
+
+          successfulLogin(authorization)
 
           Keyboard.dismiss()
 
