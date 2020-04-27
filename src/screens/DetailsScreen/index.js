@@ -66,7 +66,7 @@ export default function DetailsScreen(props) {
 
   useEffect (() => {
     getUserNotification();
-  })
+  }, [notifications])
 
   async function loadProfile() {
     const email = await SecureStore.getItemAsync('user_email')
@@ -80,10 +80,13 @@ export default function DetailsScreen(props) {
 
   async function onClickInteractNotification() {
     await interactNotification(FormatCurrentDate(), new Date().toLocaleTimeString(), 1, idUser, id).then(res => {
-      console.log(res)
+
+      if(res.status === 202) {
+        setUserName('')
+      }
     })
 
-    getPromotion(id).then(res => {
+    await getPromotion(id).then(res => {
       const response = res.data
       setNotifications(response.notificacoes)
     })
@@ -123,14 +126,13 @@ export default function DetailsScreen(props) {
 
     if(userName === '' && notifications.length > 0) {
       let notific = notifications[0]
-
       setOtherUserName(notific.usuario.apelido)
     }
   }
 
   function showIcon() {
 
-    if(userName !== '' && notifications.length > 0) {
+    if(userName !== '') {
       return <Ionicons
          name={"ios-heart"}
          size={30}
