@@ -7,3 +7,7 @@ export function getNotifications() {
 export function interactNotification(data, hora, tipo, idUsuario, idPromocao) {
   return api.post('/notificacoes', { data, hora, tipo, idUsuario, idPromocao })
 }
+
+export function checkReports(id) {
+  return api.get(`/notificacoes/check-denuncias/user/${id}`)
+}

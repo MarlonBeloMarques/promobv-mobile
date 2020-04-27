@@ -4,15 +4,32 @@ import { Block, Button, Text, Photo } from "../../elements";
 import { theme } from "../../constants";
 import { AntDesign } from "@expo/vector-icons";
 import { getMyPromotions, deletePromotion } from "../../services/promotion";
+import * as SecureStore from "expo-secure-store";
 
 import no_photo from "../../../assets/images/no-photo.png";
 import { Alert } from "react-native";
+import { checkReports } from "../../services/notification";
+import { getUser } from "../../services/user";
 
 export default function MyPromotionsScreen(props) {
 
   const [promotions, setPromotions] = useState([]);
+  const [userId, setUserId] = useState(0)
 
   useEffect(() => {
+    async function checkReportsPromotions() {
+      let email = await SecureStore.getItemAsync('user_email')
+
+      await getUser(JSON.parse(email)).then((res) => {
+        const response = res.data;
+        setUserId(response.id)
+      })
+
+      await checkReports(userId).then(res => {
+        console.log(res.data)
+      })
+    }
+
     async function loadPromotions() {
       getMyPromotions().then(res => {
         setPromotions(res.data)
@@ -20,9 +37,8 @@ export default function MyPromotionsScreen(props) {
     }
     //executa uma unica vez
     loadPromotions()
+    checkReportsPromotions()
   }, []);
-
-  console.log(promotions)
 
   async function deletePromotionClicked(id) {
     Alert.alert(
