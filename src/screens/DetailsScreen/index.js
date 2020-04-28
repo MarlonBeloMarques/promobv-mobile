@@ -17,6 +17,7 @@ import { interactNotification } from "../../services/notification";
 import { FormatCurrentDate } from "../../utils";
 import { getUser } from "../../services/user";
 import { useSelector } from "react-redux";
+import AlertMessage from "../../components/Alert";
 
 export default function DetailsScreen(props) {
   const id = props.navigation.getParam('id')
@@ -73,7 +74,21 @@ export default function DetailsScreen(props) {
 
   async function onClickDenounce() {
     await interactNotification(FormatCurrentDate(), new Date().toLocaleTimeString(), 2, idUser, id).then(res => {
-      console.log(res)
+      let response = res.data
+
+      if(res.status === 202) {
+        AlertMessage({
+          title: 'Atenção',
+          message: `${response.message}`
+        })
+      }
+
+      if(res.status === 201) {
+        AlertMessage({
+          title: 'Atenção',
+          message: 'Você denunciou essa promoção.'
+        })
+      }
     })
   }
 

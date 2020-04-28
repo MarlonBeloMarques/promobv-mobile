@@ -5,6 +5,7 @@ import { Insert, Categories } from "../../components";
 import { theme } from "../../constants";
 import { AntDesign } from "@expo/vector-icons";
 import { DrawerActions } from "react-navigation-drawer";
+import * as SecureStore from "expo-secure-store";
 
 import { } from "./styles";
 import { getPromotions, getPromotionsByCategory } from "../../services/promotion";
@@ -12,6 +13,9 @@ import { getPromotions, getPromotionsByCategory } from "../../services/promotion
 import { useSelector } from "react-redux";
 
 import no_photo from "../../../assets/images/no-photo.png";
+import { getUser } from "../../services/user";
+import { checkReports } from "../../services/notification";
+import AlertMessage from "../../components/Alert";
 
 export default function PromotionScreen(props) {
 
@@ -19,6 +23,30 @@ export default function PromotionScreen(props) {
   const [promotions, setPromotions] = useState([]);
   const [showInsert, setShowInsert] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
+  const [userId, setUserId] = useState(0);
+
+  useEffect(() => {
+    async function checkReportsPromotions() {
+      let email = await SecureStore.getItemAsync("user_email");
+
+      await getUser(JSON.parse(email)).then((res) => {
+        const response = res.data;
+        setUserId(response.id);
+      });
+
+      await checkReports(userId).then((res) => {
+        const response = res.data;
+        if (res.status === 200) {
+          AlertMessage({
+            title: "Atenção",
+            message: `${response}`,
+          });
+        }
+      });
+    }
+
+    checkReportsPromotions()
+  }, [])
 
   useEffect(() => {
     async function loadPromotionsByCategory() {

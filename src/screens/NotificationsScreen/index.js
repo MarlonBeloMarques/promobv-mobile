@@ -2,21 +2,44 @@ import React, { useState, useEffect } from "react";
 import { KeyboardAvoidingView, AsyncStorage, FlatList, StyleSheet } from "react-native";
 import { Block, Text, Photo, Header } from "../../elements";
 import { theme } from "../../constants";
-import { getNotifications } from '../../services/notification'
+import { getNotifications, checkReports } from '../../services/notification'
+import * as SecureStore from "expo-secure-store";
 
 import profile from "../../../assets/images/profile-image.png";
 
 import { DrawerActions } from "react-navigation-drawer";
 import { Ionicons } from "@expo/vector-icons";
+import { getUser } from "../../services/user";
+import AlertMessage from "../../components/Alert";
 
 export default function NotificationsScreen(props) {
   const [notifications, setNotifications] = useState([]);
+  const [userId, setUserId] = useState(0)
 
   function onClickMenu() {
     props.navigation.dispatch(DrawerActions.openDrawer());
   }
 
   useEffect(() => {
+    async function checkReportsPromotions() {
+      let email = await SecureStore.getItemAsync("user_email");
+
+      await getUser(JSON.parse(email)).then((res) => {
+        const response = res.data;
+        setUserId(response.id);
+      });
+
+      await checkReports(userId).then((res) => {
+        const response = res.data;
+        if (res.status === 200) {
+          AlertMessage({
+            title: "Atenção",
+            message: `${response}`,
+          });
+        }
+      });
+    }
+
     async function loadNotifications() {
       getNotifications().then(res => {
         setNotifications(res.data['content'])
@@ -24,6 +47,7 @@ export default function NotificationsScreen(props) {
     }
     //executa uma unica vez
     loadNotifications();
+    checkReportsPromotions();
   }, []);
 
   return (

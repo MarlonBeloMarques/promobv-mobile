@@ -10,6 +10,7 @@ import no_photo from "../../../assets/images/no-photo.png";
 import { Alert } from "react-native";
 import { checkReports } from "../../services/notification";
 import { getUser } from "../../services/user";
+import AlertMessage from "../../components/Alert";
 
 export default function MyPromotionsScreen(props) {
 
@@ -26,7 +27,13 @@ export default function MyPromotionsScreen(props) {
       })
 
       await checkReports(userId).then(res => {
-        console.log(res.data)
+        const response = res.data
+        if(res.status === 200) {
+          AlertMessage({
+            title: 'Atenção',
+            message: `${response}`
+          })
+        }
       })
     }
 
