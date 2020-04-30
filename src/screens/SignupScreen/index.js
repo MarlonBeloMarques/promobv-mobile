@@ -30,12 +30,12 @@ export default function SignupScreen(props) {
         if(checked) {
           await setUser(userNickname, email, password)
 
+          Keyboard.dismiss();
+
           AlertMessage({
             title: 'Sucesso',
             message: 'Cadastro realizado com sucesso.'
           })
-
-          Keyboard.dismiss()
 
           props.navigation.navigate('login')
         }
