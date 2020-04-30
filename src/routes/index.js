@@ -69,11 +69,22 @@ const Header = (props) => {
 } 
 
 const menu = createDrawerNavigator({
-  Promoções: PromotionsScreen,
-  "Inserir promoção": Insert,
-  Notificações: NotificationsScreen,
-  'Termos de Uso': TermsOfServiceScreen,
-  'Minha conta': MyAccountScreen
+  Promoções: {
+    screen: PromotionsScreen,
+    path: 'promotions'
+  },
+  "Inserir promoção": {
+    screen: Insert,
+  },
+  Notificações: {
+    screen: NotificationsScreen,
+  },
+  'Termos de Uso': {
+    screen: TermsOfServiceScreen,
+  },
+  'Minha conta': {
+    screen: MyAccountScreen,
+  }
 },
 {
   drawerBackgroundColor: theme.colors.primary,
@@ -89,12 +100,14 @@ const menu = createDrawerNavigator({
 const childrens = createStackNavigator({
   menu: {
     screen: menu,
+    path: '',
     navigationOptions: {
       header: null
     }
   },
   Detalhes: {
     screen: DetailsScreen,
+    path: 'details/:promotionId',
     navigationOptions: ({navigation, screenProps}) => ({
       title: (
         <Text bold white>
@@ -281,8 +294,14 @@ function getInitialRoute(signed) {
 export default (signed) =>
   createAppContainer(
     createAnimatedSwitchNavigator({
-      auth: screens,
-      childrens : childrens
+      auth: {
+        screen: screens,
+        path: ''
+      },
+      childrens : {
+        screen: childrens,
+        path: ''
+      }
     },
     {
       initialRouteName: getInitialRoute(signed),

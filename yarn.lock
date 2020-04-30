@@ -5306,6 +5306,11 @@ react-native-screens@^2.2.0:
   dependencies:
     debounce "^1.2.0"
 
+react-native-simple-encryption@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/react-native-simple-encryption/-/react-native-simple-encryption-1.2.1.tgz#0e77435ec5cdb47a790c6e20d3f44908b0998745"
+  integrity sha1-DndDXsXNtHp5DG4g0/RJCLCZh0U=
+
 react-native-status-bar-height@^2.2.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/react-native-status-bar-height/-/react-native-status-bar-height-2.5.0.tgz#bc0fb85230603850aab9667ee8111a62954de90c"

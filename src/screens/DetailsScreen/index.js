@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { KeyboardAvoidingView, StatusBar } from "react-native";
+import { KeyboardAvoidingView, StatusBar, Share } from "react-native";
 import { Block, Button, Text, Photo } from "../../elements";
 import { Ionicons } from "@expo/vector-icons";
 import { theme } from "../../constants";
 import * as SecureStore from "expo-secure-store";
+import { Linking } from "expo";
 
 import styles from "./styles";
 import { ScrollView } from "react-native-gesture-handler";
@@ -14,13 +15,14 @@ import profile from "../../../assets/images/profile-image.png";
 import no_photo from "../../../assets/images/no-photo.png";
 import { Gallery } from "../../components";
 import { interactNotification } from "../../services/notification";
-import { FormatCurrentDate } from "../../utils";
+import { FormatCurrentDate, EncryptedLinking, DecryptedLinking } from "../../utils";
 import { getUser } from "../../services/user";
 import { useSelector } from "react-redux";
 import AlertMessage from "../../components/Alert";
 
 export default function DetailsScreen(props) {
   const id = props.navigation.getParam('id')
+  const [idLinking, setIdLinking] = useState(0)
   const { idUser } = useSelector((state) => state.auth, () => true)
   
   const [idUserProfile, setidUserProfile] = useState(0)
@@ -45,7 +47,7 @@ export default function DetailsScreen(props) {
   const [showGallery, setShowGallery] = useState(false);
 
   useEffect(() => {
-    async function loadDetails() {
+    async function loadDetails(id) {
       getPromotion(id).then(res => {
         const response = res.data
         setDetails({ name: response.apelidoUsuario,
@@ -62,9 +64,19 @@ export default function DetailsScreen(props) {
         setNotifications(response.notificacoes)
       })
     }
-    loadDetails()
-    loadProfile()
-    
+
+    async function loadLinking() {
+      if (id == null) {
+        const id = DecryptedLinking(props.navigation.getParam("promotionId"))
+        setIdLinking(id)
+        loadDetails(id)
+      }
+    }
+
+    loadDetails(id)
+    loadProfile();
+    loadLinking();
+  
     props.navigation.setParams({ onClickDenounce: onClickDenounce });
   }, []);
 
@@ -90,6 +102,22 @@ export default function DetailsScreen(props) {
         })
       }
     })
+  }
+
+  function sharePromotion() {
+    let idLink = EncryptedLinking(id == null ? idLinking : id)
+    Share.share({
+      message: "Clique no link para visualizar a promoção, " + Linking.makeUrl(`/details/${idLink}`),
+      url: Linking.makeUrl(),
+      title: details.title,
+    })
+      .then((result) => {
+        console.log(result);
+        if (result === "dismissedAction") {
+          return;
+        }
+      })
+      .catch((error) => console.log(error));
   }
 
   async function loadProfile() {
@@ -224,7 +252,7 @@ export default function DetailsScreen(props) {
               </Block>
             </Block>
             <Block row right>
-              <Button style>
+              <Button onPress={sharePromotion} style>
                 <Ionicons
                   name={"ios-share"}
                   size={30}
