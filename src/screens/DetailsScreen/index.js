@@ -62,6 +62,8 @@ export default function DetailsScreen(props) {
 
         setImageGallery(response.galeriaDeImagens.urlImagens)
         setNotifications(response.notificacoes)
+      }, function({response}) {
+        
       })
     }
 

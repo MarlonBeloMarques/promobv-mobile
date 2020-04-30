@@ -28,16 +28,24 @@ export default function SignupScreen(props) {
 
       if(userNickname !== '' && email !== '' && password !== '') {
         if(checked) {
-          await setUser(userNickname, email, password)
+          await setUser(userNickname, email, password).then(res => {
 
-          Keyboard.dismiss();
+            switch (res.status) {
+              case 201:
+                Keyboard.dismiss();
 
-          AlertMessage({
-            title: 'Sucesso',
-            message: 'Cadastro realizado com sucesso.'
+                AlertMessage({
+                  title: "Sucesso",
+                  message: "Cadastro realizado com sucesso.",
+                });
+
+                props.navigation.navigate("login");
+                break;
+            
+              default:
+                break;
+            }
           })
-
-          props.navigation.navigate('login')
         }
         else {
           AlertMessage({

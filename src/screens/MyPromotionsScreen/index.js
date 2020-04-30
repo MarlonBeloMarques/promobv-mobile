@@ -19,33 +19,43 @@ export default function MyPromotionsScreen(props) {
 
   useEffect(() => {
     async function checkReportsPromotions() {
-      let email = await SecureStore.getItemAsync('user_email')
 
-      await getUser(JSON.parse(email)).then((res) => {
-        const response = res.data;
-        setUserId(response.id)
-      })
+      try {
+        let email = await SecureStore.getItemAsync('user_email')
+  
+        await getUser(JSON.parse(email)).then((res) => {
+          const response = res.data;
+          setUserId(response.id)
+        })
+  
+        await checkReports(userId).then(res => {
+          const response = res.data
+          if(res.status === 200) {
+            AlertMessage({
+              title: 'Atenção',
+              message: `${response}`
+            })
+          }
+        })
 
-      await checkReports(userId).then(res => {
-        const response = res.data
-        if(res.status === 200) {
-          AlertMessage({
-            title: 'Atenção',
-            message: `${response}`
-          })
-        }
-      })
+      } catch ({response}) {
+        
+      }
     }
 
-    async function loadPromotions() {
-      getMyPromotions().then(res => {
-        setPromotions(res.data)
-      })
-    }
     //executa uma unica vez
     loadPromotions()
     checkReportsPromotions()
   }, []);
+
+  async function loadPromotions() {
+    getMyPromotions().then(
+      (res) => {
+        setPromotions(res.data);
+      },
+      function ({ response }) {}
+    );
+  }
 
   async function deletePromotionClicked(id) {
     Alert.alert(
@@ -58,7 +68,10 @@ export default function MyPromotionsScreen(props) {
         },
         {
           text: 'Sim',
-          onPress: () => deletePromotion(id)
+          onPress: () => {
+            deletePromotion(id).then(res => {}, function({response}) {   })
+            loadPromotions()
+          }
         }
       ]
     )

@@ -44,6 +44,8 @@ export default function ProfileScreen(props) {
         setDateOfBirth(response.dataDeNascimento)
         setNumber(response.telefone)
         setEmail(response.email)
+      }, function({response}) {
+
       });
     }
 
@@ -96,12 +98,22 @@ export default function ProfileScreen(props) {
 
   async function handleSubmit() {
     try {
-      await updateUser(id, name, cpf, number, dateOfBirth)
-
-      AlertMessage({
-        title: 'Sucesso',
-        message: 'Seus dados foram atualizados com sucesso.'
+      await updateUser(id, name, cpf, number, dateOfBirth).then(res => {
+        
+        switch (res.status) {
+          case 204:
+            AlertMessage({
+              title: 'Sucesso',
+              message: 'Seus dados foram atualizados com sucesso.'
+            })
+            
+            break;
+        
+          default:
+            break;
+        }
       })
+
     } catch ({ response }) {
 
     }
@@ -133,6 +145,7 @@ export default function ProfileScreen(props) {
           />
           <Input 
             label="CPF" 
+            number
             defaultValue={cpf} 
             onChangeText={setCpf}
             reference={cpfRef}
@@ -142,6 +155,7 @@ export default function ProfileScreen(props) {
             
           <Input
             label="Telefone"
+            number
             defaultValue={number}
             onChangeText={setNumber}
             reference={numberRef}

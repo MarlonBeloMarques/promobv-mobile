@@ -56,6 +56,8 @@ export default function Insert(props) {
       getUser(JSON.parse(email)).then((res) => {
         const response = res.data   
         setNumberUser(response.telefone)
+      }, function({response}) {
+
       })
     }
 
@@ -78,7 +80,7 @@ export default function Insert(props) {
 
   useEffect(() => {
     return () => {
-      dispatch(setCategoryUpdateAndInsert(1, "Auto e Peças"));
+    // 
     };
   })
 
@@ -94,7 +96,9 @@ export default function Insert(props) {
     formData.append("file", { uri: localUri, name: filename, type });
 
     await setPromotionPicture(promoId, formData).then(res => {
-      console.log(res)
+
+    }, function({response}) {
+
     })
 
   }
@@ -108,62 +112,68 @@ export default function Insert(props) {
     let promoId = 0;
 
     async function handleSubmit() { 
-      if(props.modal) {
 
-        if(titleButtonModal === 'Inserir') {
-          await setPromotion(description, price, localization, address, title, id).then(res => {
-            let promo = res.headers.location
-            let N = res.config.baseURL
+      try {      
+        if(props.modal) {
+  
+          if(titleButtonModal === 'Inserir') {
+            await setPromotion(description, price, localization, address, title, id).then(res => {
+              let promo = res.headers.location
+              let N = res.config.baseURL
+              
+              promoId = JSON.parse(promo.substring(N.length + 11, promo.length))
+            })
+  
+            for (const img of images) {
+              await submitPicture(img, promoId)
+            }
             
-            promoId = JSON.parse(promo.substring(N.length + 11, promo.length))
-          })
-
-          for (const img of images) {
-            await submitPicture(img, promoId)
+            AlertMessage({
+              title: "Sucesso",
+              message: "Sua promoção foi publicada.",
+            });
           }
-          
-          AlertMessage({
-            title: "Sucesso",
-            message: "Sua promoção foi publicada.",
-          });
-        }
-
-        Keyboard.dismiss();
-        closeInsert() 
-
-      } else {
-        if(title !== '' && description !== '' && localization !== '' && address !== '' && price !== '' && images.length !== 0) {
-          await setPromotion(description, price, localization, address, title, id).then(res => {
-            let promo = res.headers.location;
-            let N = res.config.baseURL;
-
-            promoId = JSON.parse(promo.substring(N.length + 11, promo.length));
-          })
-
-          for (const img of images) {
-            await submitPicture(img, promoId)
-          }
-
-          setTitle('')
-          setDescription('')
-          setLocalization('')
-          setAddress('')
-          setPrice('')
-
-          AlertMessage({
-            title: "Sucesso",
-            message: "Sua promoção foi publicada.",
-          })
-
+  
           Keyboard.dismiss();
-          dispatch(setImagesPromotion([]));
-
+          closeInsert() 
+  
         } else {
-          AlertMessage({
-            title: 'Atenção',
-            message: 'O formulário contém campos não preenchidos.'
-          })
+          if(title !== '' && description !== '' && localization !== '' && address !== '' && price !== '' && images.length !== 0) {
+            await setPromotion(description, price, localization, address, title, id).then(res => {
+              let promo = res.headers.location;
+              let N = res.config.baseURL;
+  
+              promoId = JSON.parse(promo.substring(N.length + 11, promo.length));
+            })
+  
+            for (const img of images) {
+              await submitPicture(img, promoId)
+            }
+  
+            setTitle('')
+            setDescription('')
+            setLocalization('')
+            setAddress('')
+            setPrice('')
+            
+  
+            AlertMessage({
+              title: "Sucesso",
+              message: "Sua promoção foi publicada.",
+            })
+  
+            Keyboard.dismiss();
+            dispatch(setImagesPromotion([]));
+  
+          } else {
+            AlertMessage({
+              title: 'Atenção',
+              message: 'O formulário contém campos não preenchidos.'
+            })
+          }
         }
+      } catch ({response}) {
+        
       }
 
     }
@@ -266,7 +276,7 @@ export default function Insert(props) {
             {renderGallery()}
             <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
               {header(activeIcon)}
-              {numberUser === '' && 
+              {numberUser != '' && 
                 <>
                   <Block
                     padding={[0, theme.sizes.padding]}
@@ -346,7 +356,7 @@ export default function Insert(props) {
                   </Block>
                 </>
               }
-              {numberUser !== '' && 
+              {numberUser === '' && 
                 <Block margin={[theme.sizes.padding * 4, theme.sizes.padding, 0, theme.sizes.padding]}>
                   <Block padding={theme.sizes.padding} center>
                     <Ionicons name={'ios-rocket'} color={theme.colors.gray3} size={40}/>
@@ -355,9 +365,11 @@ export default function Insert(props) {
                     Seus dados cadastrais estão incompletos. Navegue até a barra de menu, em <Text bold gray3>Minha Conta</Text> e Atualize seu número telefônico.
                   </Text>
                   <Block margin={[theme.sizes.padding, 0]}>
-                    <Button onPress={closeInsert} color={theme.colors.primary}>
-                      <Text center bold white>Voltar</Text>
-                    </Button>
+                    {props.modal && 
+                      <Button onPress={closeInsert} color={theme.colors.primary}>
+                        <Text center bold white>Voltar</Text>
+                      </Button>
+                    }
                   </Block>
                 </Block>
               }
@@ -374,6 +386,7 @@ export default function Insert(props) {
   }
 
   function closeInsert() {
+    dispatch(setCategoryUpdateAndInsert(1, "Auto e Peças"));
     dispatch(setImagesPromotion([]));
     props.onRequestClose()
   }

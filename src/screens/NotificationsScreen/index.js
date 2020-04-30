@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { KeyboardAvoidingView, AsyncStorage, FlatList, StyleSheet } from "react-native";
+import { KeyboardAvoidingView, FlatList, StyleSheet } from "react-native";
 import { Block, Text, Photo, Header } from "../../elements";
 import { theme } from "../../constants";
 import { getNotifications, checkReports } from '../../services/notification'
@@ -22,27 +22,35 @@ export default function NotificationsScreen(props) {
 
   useEffect(() => {
     async function checkReportsPromotions() {
-      let email = await SecureStore.getItemAsync("user_email");
 
-      await getUser(JSON.parse(email)).then((res) => {
-        const response = res.data;
-        setUserId(response.id);
-      });
+      try {
+        let email = await SecureStore.getItemAsync("user_email");
+  
+        await getUser(JSON.parse(email)).then((res) => {
+          const response = res.data;
+          setUserId(response.id);
+        });
+  
+        await checkReports(userId).then((res) => {
+          const response = res.data;
 
-      await checkReports(userId).then((res) => {
-        const response = res.data;
-        if (res.status === 200) {
-          AlertMessage({
-            title: "Atenção",
-            message: `${response}`,
-          });
-        }
-      });
+          if (res.status === 200) {
+            AlertMessage({
+              title: "Atenção",
+              message: `${response}`,
+            });
+          }
+        });
+      } catch ({response}) {
+        
+      }
     }
 
     async function loadNotifications() {
       getNotifications().then(res => {
         setNotifications(res.data['content'])
+      }, function({response}) {
+
       })
     }
     //executa uma unica vez

@@ -28,6 +28,8 @@ const Gallery = (props) => {
         const response = res.data
 
         setImage(response.galeriaDeImagens.urlImagens)
+      }, function({response}) {
+        
       })
     }
 

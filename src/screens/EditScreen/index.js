@@ -37,29 +37,32 @@ export default function Edit(props) {
 
   useEffect(() => {
     async function loadPromotion() {
-      await getPromotion(idNavigation).then(res => {
-        const response = res.data
+      await getPromotion(idNavigation).then(
+        (res) => {
+          const response = res.data;
 
-        setTitle(response.titulo)
-        setDescription(response.descricao)
-        setPlace(response.localizacao)
-        setAddress(response.endereco)
-        setValue(response.preco.toString())
+          setTitle(response.titulo);
+          setDescription(response.descricao);
+          setPlace(response.localizacao);
+          setAddress(response.endereco);
+          setValue(response.preco.toString());
 
-        setCategoryId(response.categoria.id)
-        setCategoryName(response.categoria.nome)
+          setCategoryId(response.categoria.id);
+          setCategoryName(response.categoria.nome);
 
-        setImageGallery(response.galeriaDeImagens.urlImagens);
-      })
+          setImageGallery(response.galeriaDeImagens.urlImagens);
+        },
+        function ({ response }) {}
+      );
     }
 
     loadPromotion()
   }, []);
 
   useEffect(() => {
-      setCategoryId(id)
-      setCategoryName(name)
-  }, [id])
+    setCategoryId(id)
+    setCategoryName(name)
+  }, [name])
 
   async function handleSubmit() {
     try {
@@ -98,7 +101,7 @@ export default function Edit(props) {
       return (
         <Gallery
           showDetails={true}
-          idGallery={id}
+          idGallery={idNavigation}
           visible={showGallery}
           onRequestClose={onHideGallery}
         ></Gallery>
@@ -149,6 +152,7 @@ export default function Edit(props) {
                 <Block padding={[0, theme.sizes.padding, 0, 0]}>
                   <Input
                     label="Valor"
+                    number
                     defaultValue={value}
                     onChangeText={setValue}
                   />

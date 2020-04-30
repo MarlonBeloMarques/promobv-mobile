@@ -27,22 +27,33 @@ export default function PromotionScreen(props) {
 
   useEffect(() => {
     async function checkReportsPromotions() {
-      let email = await SecureStore.getItemAsync("user_email");
+      try {
+        let email = await SecureStore.getItemAsync("user_email");
+  
+        await getUser(JSON.parse(email)).then((res) => {
+          const response = res.data;
+          setUserId(response.id);
+        });
+  
+        await checkReports(userId).then((res) => {
+          const response = res.data;
 
-      await getUser(JSON.parse(email)).then((res) => {
-        const response = res.data;
-        setUserId(response.id);
-      });
-
-      await checkReports(userId).then((res) => {
-        const response = res.data;
-        if (res.status === 200) {
-          AlertMessage({
-            title: "Atenção",
-            message: `${response}`,
-          });
-        }
-      });
+          switch (res.status) {
+            case 200:
+              AlertMessage({
+                title: "Atenção",
+                message: `${response}`,
+              });
+              
+              break;
+          
+            default:
+              break;
+          }
+        });
+      } catch ({response}) {
+        
+      }
     }
 
     checkReportsPromotions()
@@ -52,6 +63,8 @@ export default function PromotionScreen(props) {
     async function loadPromotionsByCategory() {
       getPromotionsByCategory(id).then((res) => {
         setPromotions(res.data['content'])
+      }, function({response}) {
+
       })
     }
 
@@ -65,7 +78,9 @@ export default function PromotionScreen(props) {
 
   async function loadPromotionsGeneral() {
     getPromotions().then((res) => {
-      setPromotions(res.data["content"]);
+      setPromotions(res.data["content"])
+    }, function({response}) {
+      
     });
   }
    

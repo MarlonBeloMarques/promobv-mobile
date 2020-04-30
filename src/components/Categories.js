@@ -17,7 +17,9 @@ export function Categories(props) {
     async function loadCategories() {
       getCategories().then((res) => {
         setCategories(res.data);
-      });
+      }, function({response}) {
+
+      })
     }
 
     loadCategories();
