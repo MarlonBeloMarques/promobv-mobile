@@ -48,7 +48,7 @@ export default function NotificationsScreen(props) {
 
     async function loadNotifications() {
       getNotifications().then(res => {
-        setNotifications(res.data['content'])
+      setNotifications(res.data['content'])
       }, function({response}) {
 
       })
@@ -64,62 +64,74 @@ export default function NotificationsScreen(props) {
         <Text gray>Notificações</Text>
       </Header>
 
-      <FlatList
-        style={styles.flatlist}
-        data={notifications}
-        keyExtractor={(post) => String(post.id)}
-        renderItem={({ item }) => (
-          <Block
-            onPress={() => onDetailsClicked(item.id)}
-            size={60}
-            flex={false}
-            row
-            border
-            center
-          >
-            <Block flex={false} padding={[0, theme.sizes.base]}>
-                {item.tipo === 1 && (
-                  <>
-                    <Block style={styles.icon}>
+      {notifications.length === 0 && 
+        <Block center margin={[theme.sizes.padding * 4, 0]}>
+          <Block flex={false} padding={theme.sizes.padding}>
+            <Ionicons name={'ios-notifications'} color={theme.colors.gray3} size={40}/>
+          </Block>
+          <Text gray3>
+            Você não possui notificações no momento.
+          </Text>
+        </Block>
+      }
+      {notifications.length !== 0 && 
+        <FlatList
+          style={styles.flatlist}
+          data={notifications}
+          keyExtractor={(post) => String(post.id)}
+          renderItem={({ item }) => (
+            <Block
+              onPress={() => onDetailsClicked(item.id)}
+              size={60}
+              flex={false}
+              row
+              border
+              center
+            >
+              <Block flex={false} padding={[0, theme.sizes.base]}>
+                  {item.tipo === 1 && (
+                    <>
+                      <Block style={styles.icon}>
+                        <Ionicons
+                          name={"ios-heart"}
+                          size={16}
+                          color={theme.colors.accent}
+                        />
+                      </Block>
+                      {item.userUrlProfile === null && <Photo avatar image={profile} />}
+                      {item.userUrlProfile !== null && <Photo avatar image={item.userUrlProfile} />}
+                  </>
+                  )}
+                  
+                  {item.tipo === 2 && (
+                    <Block flex={false} padding={[0, theme.sizes.caption/2]}>
                       <Ionicons
-                        name={"ios-heart"}
-                        size={16}
-                        color={theme.colors.accent}
+                        name={"ios-information-circle"}
+                        size={30}
+                        color={theme.colors.secondary}
                       />
                     </Block>
-                    {item.userUrlProfile === null && <Photo avatar image={profile} />}
-                    {item.userUrlProfile !== null && <Photo avatar image={item.userUrlProfile} />}
-                </>
-                )}
-                
-                {item.tipo === 2 && (
-                  <Block flex={false} padding={[0, theme.sizes.caption/2]}>
-                    <Ionicons
-                      name={"ios-information-circle"}
-                      size={30}
-                      color={theme.colors.secondary}
-                    />
-                  </Block>
-                )}
+                  )}
+              </Block>
+              <Block>
+                <Text gray size={14}>
+                  {item.tipo === 1 && (
+                    <>
+                      {item.userApelido} curtiu a sua promoção {item.promoTitulo}.
+                    </>
+                  )}
+                  {item.tipo === 2 && (
+                    <>
+                      Sua promoção{" "}
+                      {item.promoTitulo} foi denunciada.
+                    </>
+                  )}
+                </Text>
+              </Block>
             </Block>
-            <Block>
-              <Text gray size={14}>
-                {item.tipo === 1 && (
-                  <>
-                    {item.userApelido} curtiu a sua promoção {item.promoTitulo}.
-                  </>
-                )}
-                {item.tipo === 2 && (
-                  <>
-                    Sua promoção{" "}
-                    {item.promoTitulo} foi denunciada.
-                  </>
-                )}
-              </Text>
-            </Block>
-          </Block>
-        )}
-      ></FlatList>
+          )}
+        ></FlatList>
+      }
     </KeyboardAvoidingView>
   );
 }
