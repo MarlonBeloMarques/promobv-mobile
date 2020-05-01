@@ -12,6 +12,7 @@ import { ScrollView } from "react-native-gesture-handler";
 
 import { getUser, updateUser, setUserPicture } from "../../services/user";
 import AlertMessage from "../../components/Alert";
+import { ModalLoader } from "../../components";
 
 export default function ProfileScreen(props) {
 
@@ -24,6 +25,8 @@ export default function ProfileScreen(props) {
   const [number, setNumber] = useState('')
   const [email, setEmail] = useState('')
 
+  const [loading, setloading] = useState(true)
+
   const cpfRef = useRef()
   const numberRef = useRef()
   const dateOfBirthRef = useRef()
@@ -33,7 +36,7 @@ export default function ProfileScreen(props) {
 
       const email = await SecureStore.getItemAsync('user_email')
 
-      getUser(JSON.parse(email)).then((res) => {
+      await getUser(JSON.parse(email)).then((res) => {
         const response = res.data;
 
         setId(response.id)
@@ -53,6 +56,8 @@ export default function ProfileScreen(props) {
             props.navigation.navigate("login");
           }
       });
+
+      setloading(false)
     }
 
     getPermissionAsync();
@@ -127,6 +132,7 @@ export default function ProfileScreen(props) {
 
   return (
     <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
+      {loading && <ModalLoader loading={loading} />}
       <Block
         padding={[0, theme.sizes.padding]}
         space="between"
@@ -135,7 +141,7 @@ export default function ProfileScreen(props) {
         <Block padding={[theme.sizes.padding, 0, 0, 0]} center row>
           <Button onPress={pickImage} style>
             {avatar === null && <Photo avatar image={profileImage} />}
-            {avatar !== null && <Photo avatar image={avatar} />}          
+            {avatar !== null && <Photo avatar image={avatar} />}
           </Button>
           <Block margin={[0, 0, 0, theme.sizes.header]}>
             <Text gray>Inserir imagem</Text>
@@ -147,18 +153,18 @@ export default function ProfileScreen(props) {
             defaultValue={name}
             onChangeText={setName}
             next
-            submitEditing = {() => cpfRef.current.focus()}
+            submitEditing={() => cpfRef.current.focus()}
           />
-          <Input 
-            label="CPF" 
+          <Input
+            label="CPF"
             number
-            defaultValue={cpf} 
+            defaultValue={cpf}
             onChangeText={setCpf}
             reference={cpfRef}
             next
-            submitEditing = {() => numberRef.current.focus()}
+            submitEditing={() => numberRef.current.focus()}
           />
-            
+
           <Input
             label="Telefone"
             number
@@ -166,7 +172,7 @@ export default function ProfileScreen(props) {
             onChangeText={setNumber}
             reference={numberRef}
             next
-            submitEditing = {() => dateOfBirthRef.current.focus()}
+            submitEditing={() => dateOfBirthRef.current.focus()}
           />
         </Block>
 

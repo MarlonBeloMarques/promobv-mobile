@@ -62,7 +62,10 @@ export default function Insert(props) {
               title: "Atenção",
               message: "Sua sessão expirou.",
             });
-            props.navigation.navigate("login");
+            if(props.modal)
+              props.onRequestClose()
+            else 
+              props.navigation.navigate('login')
           }
       })
     }
@@ -282,7 +285,7 @@ export default function Insert(props) {
             {renderGallery()}
             <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
               {header(activeIcon)}
-              {numberUser != '' && 
+              {numberUser !== '' || numberUser !== null && 
                 <>
                   <Block
                     padding={[0, theme.sizes.padding]}
@@ -362,7 +365,7 @@ export default function Insert(props) {
                   </Block>
                 </>
               }
-              {numberUser === '' && 
+              {numberUser === '' || numberUser === null && 
                 <Block margin={[theme.sizes.padding * 4, theme.sizes.padding, 0, theme.sizes.padding]}>
                   <Block padding={theme.sizes.padding} center>
                     <Ionicons name={'ios-rocket'} color={theme.colors.gray3} size={40}/>

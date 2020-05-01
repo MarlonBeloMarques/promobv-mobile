@@ -9,7 +9,7 @@ import { getPromotion, updatePromotion } from "../../services/promotion";
 import { useSelector, useDispatch } from "react-redux";
 import { setCategoryUpdateAndInsert } from "../../store/modules/category/updateAndInsert/actions";
 
-import { Categories, Gallery } from "../../components";
+import { Categories, Gallery, ModalLoader } from "../../components";
 import AlertMessage from "../../components/Alert";
 
 export default function Edit(props) {
@@ -30,6 +30,8 @@ export default function Edit(props) {
 
   const [imageGallery, setImageGallery] = useState([]);
   const [showGallery, setShowGallery] = useState(false);
+
+  const [loading, setLoading] = useState(true)
 
   props.navigation.addListener("willBlur", () => {
     dispatch(setCategoryUpdateAndInsert(1, "Auto e Peças"));
@@ -62,6 +64,8 @@ export default function Edit(props) {
           }
         }
       );
+
+      setLoading(false)
     }
 
     loadPromotion()
@@ -129,6 +133,7 @@ export default function Edit(props) {
 
     return (
       <>
+        {loading && <ModalLoader loading={loading} />}
         {renderGallery()}
         <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
           <Block

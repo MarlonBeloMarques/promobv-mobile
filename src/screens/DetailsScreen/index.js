@@ -13,7 +13,7 @@ import { getPromotion } from '../../services/promotion'
 import profile from "../../../assets/images/profile-image.png";
 
 import no_photo from "../../../assets/images/no-photo.png";
-import { Gallery } from "../../components";
+import { Gallery, ModalLoader } from "../../components";
 import { interactNotification } from "../../services/notification";
 import { FormatCurrentDate, EncryptedLinking, DecryptedLinking } from "../../utils";
 import { getUser } from "../../services/user";
@@ -46,9 +46,11 @@ export default function DetailsScreen(props) {
   const [imageGallery, setImageGallery] = useState([])
   const [showGallery, setShowGallery] = useState(false);
 
+  const [loading, setLoading] = useState(true)
+
   useEffect(() => {
     async function loadDetails(id) {
-      getPromotion(id).then(res => {
+      await getPromotion(id).then(res => {
         const response = res.data
         setDetails({ name: response.apelidoUsuario,
                      title: response.titulo,
@@ -65,6 +67,8 @@ export default function DetailsScreen(props) {
       }, function({response}) {
         
       })
+
+      setLoading(false)
     }
 
     async function loadLinking() {
@@ -219,6 +223,7 @@ export default function DetailsScreen(props) {
 
   return (
     <>
+    {loading && <ModalLoader loading={loading} />}
     {renderGallery()}
     <KeyboardAvoidingView style={styles.container}>
       <StatusBar barStyle={"light-content"} />

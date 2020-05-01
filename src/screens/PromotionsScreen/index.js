@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { KeyboardAvoidingView, FlatList, StyleSheet } from "react-native";
+import { KeyboardAvoidingView, FlatList, StyleSheet, ActivityIndicator } from "react-native";
 import { Block, Text, Button, Header, Photo } from "../../elements";
 import { Insert, Categories } from "../../components";
 import { theme } from "../../constants";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, SimpleLineIcons } from "@expo/vector-icons";
 import { DrawerActions } from "react-navigation-drawer";
 import * as SecureStore from "expo-secure-store";
 
@@ -27,6 +27,8 @@ export default function PromotionScreen(props) {
   const [showInsert, setShowInsert] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
   const [userId, setUserId] = useState(0);
+
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function checkReportsPromotions() {
@@ -64,7 +66,7 @@ export default function PromotionScreen(props) {
         dispatch(signInSuccess(res.headers.authorization, userId))
         successfulLogin(res.headers.authorization)
       }, function({response}) {
-        
+
       });
     }
 
@@ -74,7 +76,7 @@ export default function PromotionScreen(props) {
 
   useEffect(() => {
     async function loadPromotionsByCategory() {
-      getPromotionsByCategory(id).then((res) => {
+      await getPromotionsByCategory(id).then((res) => {
         setPromotions(res.data['content'])
       }, function({response}) {
 
@@ -90,11 +92,13 @@ export default function PromotionScreen(props) {
   }, [id])
 
   async function loadPromotionsGeneral() {
-    getPromotions().then((res) => {
+    await getPromotions().then((res) => {
       setPromotions(res.data["content"])
     }, function({response}) {
       
     });
+
+    setLoading(false)
   }
    
   async function onDetailsClicked(id) {
@@ -154,59 +158,83 @@ export default function PromotionScreen(props) {
           </Button>
         </Block>
 
-        <Block fixed>
-          <Button
-            onPress={onClickInsert}
-            disableRadiusDefault
-            radius={theme.sizes.radius * 4}
-            color={theme.colors.secondary}
-          >
-            <Block row padding={[0, theme.sizes.base * 2]} flex={false}>
-              <Block padding={[0, 10, 0, 0]} flex={false}>
-                <AntDesign
-                  name={"pluscircleo"}
-                  size={15}
-                  color={theme.colors.gray3}
-                />
-              </Block>
-              <Text white>Inserir promoção</Text>
-            </Block>
-          </Button>
-        </Block>
+        {loading === true &&
+          <Block middle>
+            <ActivityIndicator size="small" color='#00000'/>
+          </Block>
+        }
+        {loading === false && 
+          <>
 
-        <FlatList
-          style={styles.flatlist}
-          data={promotions}
-          keyExtractor={post => String(post.id)}
-          renderItem={({ item }) => (
-            <Block
-              onPress={() => onDetailsClicked(item.id)}
-              button
-              size={140}
-              flex={false}
-              row
-              border
-            >
-              {item.imagem !== null && <Photo height={100} size={40} image={item.imagem} />}
-              {item.imagem === null && <Photo height={100} size={40} image={no_photo} />}
-              <Block padding={[15, 10, 0]}>
-                <Text gray bold size={18}>
-                  {item.titulo}
-                </Text>
-                <Block style={styles.end}>
-                  <Text secondary size={15} bold>
-                    {"R$ "}{item.preco}
-                  </Text>
-                  <Block padding={[5, 0, 0]} flex={false}>
-                    <Text gray3 bold>
-                      {item.localizacao}
-                    </Text>
+            <Block fixed>
+              <Button
+                onPress={onClickInsert}
+                disableRadiusDefault
+                radius={theme.sizes.radius * 4}
+                color={theme.colors.secondary}
+              >
+                <Block row padding={[0, theme.sizes.base * 2]} flex={false}>
+                  <Block padding={[0, 10, 0, 0]} flex={false}>
+                    <AntDesign
+                      name={"pluscircleo"}
+                      size={15}
+                      color={theme.colors.gray3}
+                    />
                   </Block>
+                  <Text white>Inserir promoção</Text>
                 </Block>
-              </Block>
+              </Button>
             </Block>
-          )}
-        ></FlatList> 
+            {promotions.length === 0 && 
+              <Block center margin={[theme.sizes.padding * 4, 0]}>
+                <Block flex={false} padding={theme.sizes.padding}>
+                  <SimpleLineIcons
+                    name={"handbag"}
+                    color={theme.colors.gray3}
+                    size={40}
+                  />
+                </Block>
+                <Text gray3>Não há promoções no momento.</Text>
+              </Block>
+            }
+
+            {promotions.length !== 0 && 
+              <FlatList
+                style={styles.flatlist}
+                data={promotions}
+                keyExtractor={post => String(post.id)}
+                renderItem={({ item }) => (
+                  <Block
+                    onPress={() => onDetailsClicked(item.id)}
+                    button
+                    size={140}
+                    flex={false}
+                    row
+                    border
+                  >
+                    {item.imagem !== null && <Photo height={100} size={40} image={item.imagem} />}
+                    {item.imagem === null && <Photo height={100} size={40} image={no_photo} />}
+                    <Block padding={[15, 10, 0]}>
+                      <Text gray bold size={18}>
+                        {item.titulo}
+                      </Text>
+                      <Block style={styles.end}>
+                        <Text secondary size={15} bold>
+                          {"R$ "}{item.preco}
+                        </Text>
+                        <Block padding={[5, 0, 0]} flex={false}>
+                          <Text gray3 bold>
+                            {item.localizacao}
+                          </Text>
+                        </Block>
+                      </Block>
+                    </Block>
+                  </Block>
+                )}
+              ></FlatList>
+            } 
+          </>
+        }
       </KeyboardAvoidingView>
     );
   }
