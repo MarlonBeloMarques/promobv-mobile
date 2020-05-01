@@ -25,3 +25,7 @@ export async function logout() {
   await SecureStore.deleteItemAsync('user_email');
   dispatch(signOutRequest());
 }
+
+export function refreshToken() {
+  return api.post('/auth/refresh_token')
+}

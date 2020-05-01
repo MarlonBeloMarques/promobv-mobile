@@ -10,14 +10,17 @@ import * as SecureStore from "expo-secure-store";
 import { } from "./styles";
 import { getPromotions, getPromotionsByCategory } from "../../services/promotion";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import no_photo from "../../../assets/images/no-photo.png";
 import { getUser } from "../../services/user";
 import { checkReports } from "../../services/notification";
 import AlertMessage from "../../components/Alert";
+import { refreshToken, successfulLogin } from "../../services/auth";
+import { signInSuccess } from "../../store/modules/auth/actions";
 
 export default function PromotionScreen(props) {
+  const dispatch = useDispatch();
 
   const { id, name } = useSelector((state) => state.category_promotions, () => true);
   const [promotions, setPromotions] = useState([]);
@@ -56,7 +59,17 @@ export default function PromotionScreen(props) {
       }
     }
 
+    async function checkRefreshToken() {
+      refreshToken().then((res) => {
+        dispatch(signInSuccess(res.headers.authorization, userId))
+        successfulLogin(res.headers.authorization)
+      }, function({response}) {
+        
+      });
+    }
+
     checkReportsPromotions()
+    checkRefreshToken()
   }, [])
 
   useEffect(() => {
