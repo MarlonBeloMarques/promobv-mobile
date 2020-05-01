@@ -53,7 +53,15 @@ export default function MyPromotionsScreen(props) {
       (res) => {
         setPromotions(res.data);
       },
-      function ({ response }) {}
+      function ({ response }) {
+        if (response.status === 403) {
+          AlertMessage({
+            title: "Atenção",
+            message: "Sua sessão expirou.",
+          });
+          props.navigation.navigate("login");
+        }
+      }
     );
   }
 

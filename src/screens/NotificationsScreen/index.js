@@ -42,7 +42,7 @@ export default function NotificationsScreen(props) {
           }
         });
       } catch ({response}) {
-        
+
       }
     }
 
@@ -50,7 +50,13 @@ export default function NotificationsScreen(props) {
       getNotifications().then(res => {
       setNotifications(res.data['content'])
       }, function({response}) {
-
+        if(response.status === 403) {
+          AlertMessage({
+            title: 'Atenção',
+            message: 'Sua sessão expirou.'
+          })
+          props.navigation.navigate('login')
+        }
       })
     }
     //executa uma unica vez

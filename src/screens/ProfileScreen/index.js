@@ -45,7 +45,13 @@ export default function ProfileScreen(props) {
         setNumber(response.telefone)
         setEmail(response.email)
       }, function({response}) {
-
+          if (response.status === 403) {
+            AlertMessage({
+              title: "Atenção",
+              message: "Sua sessão expirou.",
+            });
+            props.navigation.navigate("login");
+          }
       });
     }
 

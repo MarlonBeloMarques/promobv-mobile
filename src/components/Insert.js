@@ -57,7 +57,13 @@ export default function Insert(props) {
         const response = res.data   
         setNumberUser(response.telefone)
       }, function({response}) {
-
+          if (response.status === 403) {
+            AlertMessage({
+              title: "Atenção",
+              message: "Sua sessão expirou.",
+            });
+            props.navigation.navigate("login");
+          }
       })
     }
 
@@ -155,7 +161,7 @@ export default function Insert(props) {
             setLocalization('')
             setAddress('')
             setPrice('')
-            
+
   
             AlertMessage({
               title: "Sucesso",

@@ -52,7 +52,15 @@ export default function Edit(props) {
 
           setImageGallery(response.galeriaDeImagens.urlImagens);
         },
-        function ({ response }) {}
+        function ({ response }) {
+          if (response.status === 403) {
+            AlertMessage({
+              title: "Atenção",
+              message: "Sua sessão expirou.",
+            });
+            props.navigation.navigate("login");
+          }
+        }
       );
     }
 
