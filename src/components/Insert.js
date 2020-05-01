@@ -12,6 +12,7 @@ import { setCategoryUpdateAndInsert } from "../store/modules/category/updateAndI
 import { setImagesPromotion } from "../store/modules/images/actions";
 
 import { DrawerActions } from "react-navigation-drawer";
+import { DotsLoader } from 'react-native-indicator'
 
 import Categories from './Categories'
 
@@ -35,6 +36,8 @@ export default function Insert(props) {
   const [showGallery, setShowGallery] = useState(false);
 
   const [numberUser, setNumberUser] = useState('')
+
+  const [loader, setLoader] = useState(false)
 
   const descriptionRef = useRef();
   const localizationRef = useRef();
@@ -122,6 +125,7 @@ export default function Insert(props) {
 
     async function handleSubmit() { 
 
+      setLoader(true)
       try {      
         if(props.modal) {
   
@@ -144,6 +148,8 @@ export default function Insert(props) {
           }
   
           Keyboard.dismiss();
+
+          setLoader(false)
           closeInsert() 
   
         } else {
@@ -172,6 +178,8 @@ export default function Insert(props) {
             })
   
             Keyboard.dismiss();
+
+            setLoader(false)
             dispatch(setImagesPromotion([]));
   
           } else {
@@ -179,10 +187,12 @@ export default function Insert(props) {
               title: 'Atenção',
               message: 'O formulário contém campos não preenchidos.'
             })
+
+            setLoader(false)
           }
         }
       } catch ({response}) {
-        
+        setLoader(false)
       }
 
     }
@@ -190,9 +200,16 @@ export default function Insert(props) {
     return (
       <Block padding={[theme.sizes.padding, 0]}>
         <Button onPress={handleSubmit} color={theme.colors.primary}>
-          <Text bold center white>
-            {titleModal}
-          </Text>
+          {loader && (
+            <Block flex={false} center>
+              <DotsLoader color={theme.colors.white} size={10} />
+            </Block>
+          )}
+          {!loader &&
+            <Text bold center white>
+              {titleModal}
+            </Text>
+          }
         </Button>
       </Block>
     );

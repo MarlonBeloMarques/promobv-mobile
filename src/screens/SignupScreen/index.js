@@ -10,6 +10,7 @@ import { CheckBox } from 'react-native-elements'
 
 import { setUser } from "../../services/user";
 import AlertMessage from "../../components/Alert";
+import { DotsLoader } from 'react-native-indicator'
 
 export default function SignupScreen(props) {
   const [userNickname, setUserNickname] = useState('')
@@ -17,6 +18,7 @@ export default function SignupScreen(props) {
   const [password, setPassword] = useState('');
 
   const [ checked, setChecked ] = useState(false)
+  const [loader, setLoader] = useState(false)
 
   const mockData = "Concordo com os TERMOS DE CONDIÇÕES DE USO e POLÍTICA DE PRIVACIDADE."
 
@@ -24,10 +26,10 @@ export default function SignupScreen(props) {
   const passwordRef = useRef();
 
   async function handleSubmit() {
-    try {
-
+    try {      
       if(userNickname !== '' && email !== '' && password !== '') {
         if(checked) {
+          setLoader(true);
           await setUser(userNickname, email, password).then(res => {
 
             switch (res.status) {
@@ -46,6 +48,8 @@ export default function SignupScreen(props) {
                 break;
             }
           })
+
+          setLoader(false)
         }
         else {
           AlertMessage({
@@ -61,7 +65,7 @@ export default function SignupScreen(props) {
       }
       
     } catch ({ response }) {
-
+      setLoader(false)
     }
   }
 
@@ -83,13 +87,13 @@ export default function SignupScreen(props) {
           </Block>
 
           <Block flex={0.7} padding={[theme.sizes.base, 0]}>
-            <Input 
+            <Input
               label="Usuário"
               defaultValue={userNickname}
               onChangeText={setUserNickname}
               next
-              submitEditing = {() => emailRef.current.focus()}
-              />
+              submitEditing={() => emailRef.current.focus()}
+            />
             <Input
               label={
                 <Text style={{ color: theme.colors.gray }}>
@@ -103,7 +107,7 @@ export default function SignupScreen(props) {
               onChangeText={setEmail}
               reference={emailRef}
               next
-              submitEditing = {() => passwordRef.current.focus()}
+              submitEditing={() => passwordRef.current.focus()}
             />
             <Input
               secure
@@ -122,14 +126,21 @@ export default function SignupScreen(props) {
               textStyle={{
                 fontSize: 10,
                 color: theme.colors.gray,
-                fontWeight: "normal"
+                fontWeight: "normal",
               }}
             />
 
             <Button onPress={handleSubmit} color={theme.colors.primary}>
-              <Text bold white center>
-                Cadastra-se
-              </Text>
+              {loader && (
+                <Block flex={false} center>
+                  <DotsLoader color={theme.colors.white} size={10} />
+                </Block>
+              )}
+              {!loader && (
+                <Text bold white center>
+                  Cadastra-se
+                </Text>
+              )}
             </Button>
           </Block>
         </Block>

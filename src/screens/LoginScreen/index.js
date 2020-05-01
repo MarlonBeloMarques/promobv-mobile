@@ -14,10 +14,14 @@ import { signInSuccess } from "../../store/modules/auth/actions";
 import AlertMessage from "../../components/Alert";
 import { getUser } from "../../services/user";
 
+import { DotsLoader } from 'react-native-indicator';
+
 export default function LoginScreen(props) {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
+  const [loader, setLoader] = useState(false)
 
   const dispatch = useDispatch()
 
@@ -25,14 +29,16 @@ export default function LoginScreen(props) {
 
   async function handleSubmit() {
     try {
+      setLoader(true)
+
       const { headers : { authorization }, status } = await signIn(email, password)
 
       switch (status) {
         case 200:
-          AlertMessage({
-            title: 'Sucesso',
-            message: 'Acesso realizado com sucesso.'
-          })
+          // AlertMessage({
+          //   title: 'Sucesso',
+          //   message: 'Acesso realizado com sucesso.'
+          // })
 
           getUser(email).then(res => {
             let response = res.data
@@ -44,13 +50,15 @@ export default function LoginScreen(props) {
 
           Keyboard.dismiss()
 
+          setLoader(false);
+
           props.navigation.navigate('Promoções')
         
           break
       }
 
     } catch ({ response }) {
-      
+      setLoader(false)
   }
 }
 
@@ -105,9 +113,16 @@ export default function LoginScreen(props) {
           </Button>
 
           <Button onPress={handleSubmit} color={theme.colors.primary}>
-            <Text bold white center>
-              Entrar
-            </Text>
+              {loader && 
+                <Block flex={false} center>
+                  <DotsLoader color={theme.colors.white} size={10}/>  
+                </Block>
+              }
+              {!loader &&
+                <Text bold white center>
+                 Entrar
+                </Text>
+              }
           </Button>
           <Block padding={[theme.sizes.base * 2, 0, theme.sizes.base, 0]}>
             <Button color={theme.colors.google}>

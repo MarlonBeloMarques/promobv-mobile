@@ -13,6 +13,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { getUser, updateUser, setUserPicture } from "../../services/user";
 import AlertMessage from "../../components/Alert";
 import { ModalLoader } from "../../components";
+import { DotsLoader } from 'react-native-indicator'
 
 export default function ProfileScreen(props) {
 
@@ -26,6 +27,7 @@ export default function ProfileScreen(props) {
   const [email, setEmail] = useState('')
 
   const [loading, setloading] = useState(true)
+  const [loader, setLoader] = useState(false)
 
   const cpfRef = useRef()
   const numberRef = useRef()
@@ -109,6 +111,8 @@ export default function ProfileScreen(props) {
 
   async function handleSubmit() {
     try {
+
+      setLoader(true)
       await updateUser(id, name, cpf, number, dateOfBirth).then(res => {
         
         switch (res.status) {
@@ -118,6 +122,7 @@ export default function ProfileScreen(props) {
               message: 'Seus dados foram atualizados com sucesso.'
             })
             
+            setLoader(false)
             break;
         
           default:
@@ -126,7 +131,7 @@ export default function ProfileScreen(props) {
       })
 
     } catch ({ response }) {
-
+      setLoader(false)
     }
   }
 
@@ -190,9 +195,16 @@ export default function ProfileScreen(props) {
 
         <Block padding={[theme.sizes.padding, 0]}>
           <Button onPress={handleSubmit} color={theme.colors.primary}>
-            <Text bold center white>
-              Alterar
-            </Text>
+            {loader && (
+              <Block flex={false} center>
+                <DotsLoader color={theme.colors.white} size={10} />
+              </Block>
+            )}
+            {!loader && (
+              <Text bold center white>
+                Alterar
+              </Text>
+            )}
           </Button>
         </Block>
       </Block>

@@ -11,6 +11,7 @@ import { setCategoryUpdateAndInsert } from "../../store/modules/category/updateA
 
 import { Categories, Gallery, ModalLoader } from "../../components";
 import AlertMessage from "../../components/Alert";
+import { DotsLoader } from 'react-native-indicator'
 
 export default function Edit(props) {
   const idNavigation = props.navigation.getParam("id");
@@ -32,6 +33,7 @@ export default function Edit(props) {
   const [showGallery, setShowGallery] = useState(false);
 
   const [loading, setLoading] = useState(true)
+  const [loader, setLoader] = useState(false)
 
   props.navigation.addListener("willBlur", () => {
     dispatch(setCategoryUpdateAndInsert(1, "Auto e Peças"));
@@ -78,6 +80,8 @@ export default function Edit(props) {
 
   async function handleSubmit() {
     try {
+      setLoader(true)
+
       await updatePromotion(idNavigation, description, value, place, address, title, categoryId)
 
       AlertMessage({
@@ -85,10 +89,12 @@ export default function Edit(props) {
         message: 'Sua promoção foi atualizada com sucesso.'
       })
 
+      setLoader(false)
+
       props.navigation.navigate("MinhasPromocoes");
 
     } catch ({ response }) {
-
+      setLoader(false)
     }
   }
 
@@ -201,9 +207,16 @@ export default function Edit(props) {
 
             <Block middle padding={[theme.sizes.padding / 2, 0]}>
               <Button onPress={handleSubmit} color={theme.colors.primary}>
-                <Text bold center white>
-                  Atualizar
-                </Text>
+                {loader && 
+                  <Block flex={false} center>
+                    <DotsLoader color={theme.colors.white} size={10}/>  
+                  </Block>
+                }
+                {!loader && 
+                  <Text bold center white>
+                    Atualizar
+                  </Text>
+                }
               </Button>
             </Block>
           </Block>
