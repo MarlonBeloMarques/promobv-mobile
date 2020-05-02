@@ -297,12 +297,14 @@ export default function Insert(props) {
         } 
       }
 
+      const [height, setHeight] = useState(theme.sizes.base * 3);
+
       return (
         <>
             {renderGallery()}
             <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
               {header(activeIcon)}
-              {numberUser !== '' || numberUser !== null && 
+              {numberUser !== '' && 
                 <>
                   <Block
                     padding={[0, theme.sizes.padding]}
@@ -318,10 +320,12 @@ export default function Insert(props) {
                         submitEditing = {() => descriptionRef.current.focus()} 
                       />
                       <Input
+                        box={height}
+                        onContentSizeChange={e => setHeight(e.nativeEvent.contentSize.height)}
+                        multiline   
                         label="Descrição"
                         defaultValue={description}
                         onChangeText={setDescription}
-                        reference={descriptionRef}
                         next
                         submitEditing = {() => localizationRef.current.focus()}
                       />

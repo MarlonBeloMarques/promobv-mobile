@@ -53,10 +53,15 @@ export default function Input(props) {
     );
   }
 
-  const { next, done, email, phone, number, secure, error, style, reference } = props;
+  const { next, done, email, phone, number, secure, error, style, reference, box } = props;
   const { toggleSecure } = isToggleSecure;
   const isSecure = toggleSecure ? false : secure;
-  const inputStyles = [ styles.input, error && { borderColor: theme.colors.accent }, style ]
+  const inputStyles = [ 
+    box ? { height: height, paddingTop: 12, paddingBottom: 12} : { height: theme.sizes.base * 3 },
+    styles.input, 
+    error && { borderColor: theme.colors.accent }, 
+    style
+   ]
   
    const keyType = next
                   ? 'next'
@@ -68,6 +73,8 @@ export default function Input(props) {
                   : number ? "numeric"
                   : phone ? "phone-pad"
                   : "default";
+
+  const [height, setHeight] = useState(theme.sizes.base * 3);
 
   return (
     <Block flex={false} margin={[theme.sizes.base / 1.5, 0]}>
@@ -85,6 +92,7 @@ export default function Input(props) {
         returnKeyType={keyType}
         onSubmitEditing={props.submitEditing}
         ref={reference}
+        {...props}
       />
       {renderToggle()}
       {renderRight()}
@@ -99,7 +107,6 @@ const styles = StyleSheet.create({
     borderRadius: theme.sizes.radius,
     fontSize: theme.sizes.font,
     color: theme.colors.gray,
-    height: theme.sizes.base * 3,
     paddingLeft: theme.sizes.base - 6,
     paddingRight: theme.sizes.base - 6,
   },
