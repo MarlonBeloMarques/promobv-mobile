@@ -1,7 +1,7 @@
 import api from "../api";
 
-export function getNotifications() {
-  return api.get('/notificacoes')
+export function getNotifications(page = 0, linesPerPage = 24) {
+  return api.get(`/notificacoes?&page=${page}&linesPerPage=${linesPerPage}`)
 }
 
 export function interactNotification(data, hora, tipo, idUsuario, idPromocao) {

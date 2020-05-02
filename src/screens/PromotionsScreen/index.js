@@ -5,7 +5,6 @@ import { Insert, Categories } from "../../components";
 import { theme } from "../../constants";
 import { AntDesign, SimpleLineIcons } from "@expo/vector-icons";
 import { DrawerActions } from "react-navigation-drawer";
-import * as SecureStore from "expo-secure-store";
 
 import { } from "./styles";
 import { getPromotions, getPromotionsByCategory } from "../../services/promotion";
@@ -13,9 +12,6 @@ import { getPromotions, getPromotionsByCategory } from "../../services/promotion
 import { useSelector, useDispatch } from "react-redux";
 
 import no_photo from "../../../assets/images/no-photo.png";
-import { getUser } from "../../services/user";
-import { checkReports } from "../../services/notification";
-import AlertMessage from "../../components/Alert";
 import { refreshToken, successfulLogin } from "../../services/auth";
 import { signInSuccess } from "../../store/modules/auth/actions";
 
@@ -29,38 +25,12 @@ export default function PromotionScreen(props) {
   const [userId, setUserId] = useState(0);
 
   const [loading, setLoading] = useState(true)
+  const [refresh, setRefresh] = useState(false)
+
+  const [page, setPage] = useState(0)
+  const [total, setTotal] = useState(0)
 
   useEffect(() => {
-    async function checkReportsPromotions() {
-      try {
-        let email = await SecureStore.getItemAsync("user_email");
-  
-        await getUser(JSON.parse(email)).then((res) => {
-          const response = res.data;
-          setUserId(response.id);
-        });
-  
-        await checkReports(userId).then((res) => {
-          const response = res.data;
-
-          switch (res.status) {
-            case 200:
-              AlertMessage({
-                title: "Atenção",
-                message: `${response}`,
-              });
-              
-              break;
-          
-            default:
-              break;
-          }
-        });
-      } catch ({response}) {
-        
-      }
-    }
-
     async function checkRefreshToken() {
       refreshToken().then((res) => {
         dispatch(signInSuccess(res.headers.authorization, userId))
@@ -70,39 +40,90 @@ export default function PromotionScreen(props) {
       });
     }
 
-    checkReportsPromotions()
     checkRefreshToken()
   }, [])
 
   useEffect(() => {
-    async function loadPromotionsByCategory() {
-      await getPromotionsByCategory(id).then((res) => {
-        setPromotions(res.data['content'])
-      }, function({response}) {
-
-      })
-    }
-
     if(id != 0) {
       loadPromotionsByCategory()
     }
     else {
       loadPromotionsGeneral()
     }
-  }, [id])
+  }, [showCategories])
 
-  async function loadPromotionsGeneral() {
-    await getPromotions().then((res) => {
-      setPromotions(res.data["content"])
+  async function loadPromotionsByCategory(pageNumber = page) {
+    if(total && pageNumber >= total)
+      return;
+
+    await getPromotionsByCategory(id, pageNumber, 10).then((res) => {
+      const data = res.data['content'];
+      const totalPages = res.data.totalPages
+
+      setTotal(JSON.parse(totalPages))
+      setPromotions([...promotions, ...data])
+      setPage(pageNumber + 1)
+      },
+      function ({ response }) {}
+    );
+  }
+
+  async function loadPromotionsGeneral(pageNumber = page) {
+    if(total && pageNumber >= total) 
+      return;
+
+    await getPromotions(pageNumber, 10).then((res) => {
+      const data = res.data["content"];
+      const totalPages = res.data.totalPages;
+
+      setTotal(JSON.parse(totalPages))
+      setPromotions([...promotions, ...data])
+      setPage(pageNumber + 1)
     }, function({response}) {
       
     });
 
     setLoading(false)
   }
-   
+
+  function clearDate() {
+    setTotal(0);
+    setPage(0);
+    setPromotions([]);
+  }
+
+  async function onRefresh() {
+    setRefresh(true)
+    clearDate()
+
+    if(id == 0) {
+      getPromotions(0, 10).then((res) => {
+        const data = res.data["content"];
+        const totalPages = res.data.totalPages;
+      
+        setTotal(JSON.parse(totalPages))
+        setPromotions(data)
+        setPage(1)
+        setRefresh(false);
+      }, function({response}) {
+          setRefresh(false); 
+      });
+    } else {
+      getPromotionsByCategory(id, 0, 10).then((res) => {
+        const data = res.data["content"];
+        const totalPages = res.data.totalPages;
+      
+        setTotal(JSON.parse(totalPages))
+        setPromotions(data)
+        setPage(1)
+        setRefresh(false);
+      }, function({response}) {
+          setRefresh(false); 
+      });
+    }
+  }
+
   async function onDetailsClicked(id) {
-    
     props.navigation.navigate("Detalhes", { id });
   }
 
@@ -118,11 +139,13 @@ export default function PromotionScreen(props) {
     setShowInsert(false)
   }
 
+
   function onClickCategory() {
     setShowCategories(true);
   }
 
   function onHideCategory() {
+    clearDate();
     setShowCategories(false);
   }
 
@@ -202,7 +225,11 @@ export default function PromotionScreen(props) {
               <FlatList
                 style={styles.flatlist}
                 data={promotions}
+                onRefresh={onRefresh}
+                refreshing={refresh}
                 keyExtractor={post => String(post.id)}
+                onEndReached={() => { id != 0 ? loadPromotionsByCategory() : loadPromotionsGeneral() }}
+                onEndReachedThreshold={0.1}
                 renderItem={({ item }) => (
                   <Block
                     onPress={() => onDetailsClicked(item.id)}

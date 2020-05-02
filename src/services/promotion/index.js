@@ -1,15 +1,15 @@
 import api from "../api";
 
-export function getPromotions() {
-  return api.get("/promocoes")
+export function getPromotions(page = 0, linesPerPage = 24) {
+  return api.get(`/promocoes?&page=${page}&linesPerPage=${linesPerPage}`)
 }
 
 export function getPromotion(id) {
   return api.get(`/promocoes/${id}`)
 }
 
-export function getPromotionsByCategory(id) {
-  return api.get(`/promocoes/categoria/${id}`)
+export function getPromotionsByCategory(id, page = 0, linesPerPage = 24) {
+  return api.get(`/promocoes/categoria/${id}?&page=${page}&linesPerPage=${linesPerPage}`)
 }
 
 export function getMyPromotions() {

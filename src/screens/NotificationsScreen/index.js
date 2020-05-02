@@ -16,7 +16,10 @@ export default function NotificationsScreen(props) {
   const [notifications, setNotifications] = useState([]);
   const [userId, setUserId] = useState(0)
 
+  const [refresh, setRefresh] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [total, setTotal] = useState(0)
+  const [page, setPage] = useState(0)
 
   function onClickMenu() {
     props.navigation.dispatch(DrawerActions.openDrawer());
@@ -48,25 +51,71 @@ export default function NotificationsScreen(props) {
       }
     }
 
-    async function loadNotifications() {
-      await getNotifications().then(res => {
-        setNotifications(res.data['content'])
-      }, function({response}) {
-        if(response.status === 403) {
-          AlertMessage({
-            title: 'Atenção',
-            message: 'Sua sessão expirou.'
-          })
-          props.navigation.navigate('login')
-        }
-      })
-
-      setLoading(false)
-    }
     //executa uma unica vez
     loadNotifications();
     checkReportsPromotions();
   }, []);
+
+  async function loadNotifications(pageNumber = page) {
+    if(total && pageNumber >= total)
+      return;
+
+    await getNotifications(pageNumber, 10).then(
+      (res) => {
+        const data = res.data["content"];
+        const totalPages = res.data.totalPages;
+
+        setTotal(JSON.parse(totalPages));
+        setNotifications([...notifications, ...data]);
+        setPage(pageNumber + 1);
+      },
+      function ({ response }) {
+        setRefresh(false);
+        if (response.status === 403) {
+          AlertMessage({
+            title: "Atenção",
+            message: "Sua sessão expirou.",
+          });
+          props.navigation.navigate("login");
+        }
+      }
+    );
+
+    setLoading(false);
+    setRefresh(false);
+  }
+
+  function onRefresh() {
+    setRefresh(true)
+    clearDate()
+    getNotifications(0, 10).then(
+      (res) => {
+        const data = res.data["content"];
+        const totalPages = res.data.totalPages;
+
+        setTotal(JSON.parse(totalPages));
+        setNotifications(data);
+        setPage(1)
+        setRefresh(false);
+      },
+      function ({ response }) {
+        setRefresh(false);
+        if (response.status === 403) {
+          AlertMessage({
+            title: "Atenção",
+            message: "Sua sessão expirou.",
+          });
+          props.navigation.navigate("login");
+        }
+      }
+    )
+  }
+
+  function clearDate() {
+    setTotal(0)
+    setPage(0)
+    setNotifications([])
+  }
 
   return (
     <KeyboardAvoidingView style={styles.container}>
@@ -93,6 +142,8 @@ export default function NotificationsScreen(props) {
           }
           {notifications.length !== 0 && 
             <FlatList
+              onRefresh={onRefresh}
+              refreshing={refresh}
               style={styles.flatlist}
               data={notifications}
               keyExtractor={(post) => String(post.id)}

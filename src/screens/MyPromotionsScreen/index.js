@@ -18,6 +18,7 @@ export default function MyPromotionsScreen(props) {
   const [userId, setUserId] = useState(0)
 
   const [loading, setLoading] = useState(true)
+  const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
     async function checkReportsPromotions() {
@@ -56,6 +57,7 @@ export default function MyPromotionsScreen(props) {
         setPromotions(res.data);
       },
       function ({ response }) {
+        setRefresh(false)
         if (response.status === 403) {
           AlertMessage({
             title: "Atenção",
@@ -67,6 +69,7 @@ export default function MyPromotionsScreen(props) {
     );
 
     setLoading(false)
+    setRefresh(false)
   }
 
   async function deletePromotionClicked(id) {
@@ -87,6 +90,12 @@ export default function MyPromotionsScreen(props) {
         }
       ]
     )
+  }
+
+  function onRefresh() {
+    setRefresh(true)
+    loadPromotions()
+
   }
 
   async function onDetailsClicked(id) {
@@ -128,6 +137,8 @@ export default function MyPromotionsScreen(props) {
           )}
           {promotions.length !== 0 && (
             <FlatList
+              onRefresh={onRefresh}
+              refreshing={refresh}
               data={promotions}
               keyExtractor={(post) => String(post.id)}
               renderItem={({ item }) => (
