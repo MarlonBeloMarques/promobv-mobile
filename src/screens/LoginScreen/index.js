@@ -81,49 +81,51 @@ export default function LoginScreen(props) {
           theme.sizes.base * 2,
         ]}
       >
-        <Block flex={0.2} middle center>
+        <Block middle center>
           <Image resizeMode="contain" source={logo} style={styles.logo} />
         </Block>
-        <Block>
-          <Input 
-            label="E-mail" 
-            defaultValue={email} 
-            onChangeText={setEmail} 
-            next
-            submitEditing = {() => passwordRef.current.focus()}
-          />
-          <Input
-            secure
-            label="Senha"
-            defaultValue={password}
-            onChangeText={setPassword}
-            reference={passwordRef}
-            done
-            submitEditing={handleSubmit}
-          />
-          <Button onPress={onPasswordClicked} style={styles.forgotPassword}>
-            <Text
-              caption
-              primary
-              right
-              style={{ textDecorationLine: "underline" }}
-            >
-              Recuperar senha?
-            </Text>
-          </Button>
+        <Block padding={[theme.sizes.base, 0]} flex={6}>
+          <Block flex={false}>
+            <Input
+              label="E-mail"
+              defaultValue={email}
+              onChangeText={setEmail}
+              next
+              submitEditing={() => passwordRef.current.focus()}
+            />
+            <Input
+              secure
+              label="Senha"
+              defaultValue={password}
+              onChangeText={setPassword}
+              reference={passwordRef}
+              done
+              submitEditing={handleSubmit}
+            />
+            <Button onPress={onPasswordClicked} style={styles.forgotPassword}>
+              <Text
+                caption
+                primary
+                right
+                style={{ textDecorationLine: "underline" }}
+              >
+                Recuperar senha?
+              </Text>
+            </Button>
 
-          <Button onPress={handleSubmit} color={theme.colors.primary}>
-              {loader && 
+            <Button onPress={handleSubmit} color={theme.colors.primary}>
+              {loader && (
                 <Block flex={false} center>
-                  <DotsLoader color={theme.colors.white} size={10}/>  
+                  <DotsLoader color={theme.colors.white} size={10} />
                 </Block>
-              }
-              {!loader &&
+              )}
+              {!loader && (
                 <Text bold white center>
-                 Entrar
+                  Entrar
                 </Text>
-              }
-          </Button>
+              )}
+            </Button>
+          </Block>
           <Block padding={[theme.sizes.base * 2, 0, theme.sizes.base, 0]}>
             <Button color={theme.colors.google}>
               <Text bold white center>
