@@ -1,15 +1,19 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Provider } from "react-redux";
+import { PersistGate } from 'redux-persist/integration/react';
 
-import AppContainer from './src/routes'
+import { store, persistor } from './src/store'
 
-console.disableYellowBox = true
+import App from './src'
 
-export default function App() {
+export default function Index() {
+
   return (
-    <View style={{flex: 1}}>
-      <AppContainer/>
-    </View>
-  )
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <App />
+      </PersistGate>
+    </Provider>
+  );
 }
 

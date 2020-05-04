@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { KeyboardAvoidingView, Dimensions } from "react-native";
+import React, { useState, useRef } from "react";
+import { KeyboardAvoidingView, Keyboard } from "react-native";
 import { Block, Input, Button, Text } from "../../elements";
 import { theme } from "../../constants";
 
@@ -8,15 +8,66 @@ import { ScrollView } from "react-native-gesture-handler";
 
 import { CheckBox } from 'react-native-elements'
 
-const { width } = Dimensions.get('window')
+import { setUser } from "../../services/user";
+import AlertMessage from "../../components/Alert";
+import { DotsLoader } from 'react-native-indicator'
 
 export default function SignupScreen(props) {
-  const [email, setEmail] = useState("promobv@react.com");
-  const [password, setPassword] = useState("promobv");
+  const [userNickname, setUserNickname] = useState('')
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const [ checked, setChecked ] = useState(false)
+  const [loader, setLoader] = useState(false)
 
   const mockData = "Concordo com os TERMOS DE CONDIÇÕES DE USO e POLÍTICA DE PRIVACIDADE."
+
+  const emailRef = useRef();
+  const passwordRef = useRef();
+
+  async function handleSubmit() {
+    try {      
+      if(userNickname !== '' && email !== '' && password !== '') {
+        if(checked) {
+          setLoader(true);
+          await setUser(userNickname, email, password).then(res => {
+
+            switch (res.status) {
+              case 201:
+                Keyboard.dismiss();
+
+                AlertMessage({
+                  title: "Sucesso",
+                  message: "Cadastro realizado com sucesso.",
+                });
+
+                props.navigation.navigate("login");
+                break;
+            
+              default:
+                break;
+            }
+          })
+
+          setLoader(false)
+        }
+        else {
+          AlertMessage({
+            title: 'Atenção',
+            message: 'Concorde com os Termos de Condições de Uso e Política de Privacidade.'
+          })
+        }
+      } else {
+        AlertMessage({
+          title: "Atenção",
+          message: "O Cadastro possui campos não preenchidos.",
+        });
+      }
+      
+    } catch ({ response }) {
+      setLoader(false)
+    }
+  }
 
   return (
     <KeyboardAvoidingView style={styles.container}>
@@ -36,24 +87,35 @@ export default function SignupScreen(props) {
           </Block>
 
           <Block flex={0.7} padding={[theme.sizes.base, 0]}>
-            <Input label="Usuário" style={[styles.input]} />
+            <Input
+              label="Usuário"
+              defaultValue={userNickname}
+              onChangeText={setUserNickname}
+              next
+              submitEditing={() => emailRef.current.focus()}
+            />
             <Input
               label={
                 <Text style={{ color: theme.colors.gray }}>
-                  E-mail {""}
+                  E-mail
                   <Text style={[styles.message, { color: theme.colors.gray }]}>
                     (Encaminharemos um e-mail de confirmação)
                   </Text>
                 </Text>
               }
-              style={[styles.input]}
               defaultValue={email}
+              onChangeText={setEmail}
+              reference={emailRef}
+              next
+              submitEditing={() => passwordRef.current.focus()}
             />
             <Input
               secure
               label="Senha"
-              style={[styles.input]}
               defaultValue={password}
+              onChangeText={setPassword}
+              reference={passwordRef}
+              done
             />
 
             <CheckBox
@@ -64,14 +126,21 @@ export default function SignupScreen(props) {
               textStyle={{
                 fontSize: 10,
                 color: theme.colors.gray,
-                fontWeight: "normal"
+                fontWeight: "normal",
               }}
             />
 
-            <Button color={theme.colors.primary}>
-              <Text bold white center>
-                Cadastra-se
-              </Text>
+            <Button onPress={handleSubmit} color={theme.colors.primary}>
+              {loader && (
+                <Block flex={false} center>
+                  <DotsLoader color={theme.colors.white} size={10} />
+                </Block>
+              )}
+              {!loader && (
+                <Text bold white center>
+                  Cadastra-se
+                </Text>
+              )}
             </Button>
           </Block>
         </Block>

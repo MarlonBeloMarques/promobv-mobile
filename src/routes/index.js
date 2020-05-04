@@ -26,11 +26,21 @@ import { Ionicons } from "@expo/vector-icons";
 import { theme } from '../constants'
 import { Text, Block, Button } from '../elements'
 import { Transition } from 'react-native-reanimated'
+import { logout } from '../services/auth'
+import { useDispatch } from "react-redux";
+import { signOutRequest } from "../store/modules/auth/actions";
 
 const Header = (props) => {
+  const dispatch = useDispatch();
 
   function onClickMenu() {
     props.navigation.dispatch(DrawerActions.closeDrawer());
+  }
+
+  function onClickExit() {
+    dispatch(signOutRequest());
+    logout()
+    props.navigation.navigate("login");
   }
 
   return (
@@ -50,7 +60,7 @@ const Header = (props) => {
       </Block>
       <ScrollView>
         <DrawerItems {...props} ></DrawerItems>
-        <Block onPress={() => props.navigation.navigate('login')} margin={[theme.sizes.body - 5, 0, 0, theme.sizes.title - 2]} button>
+        <Block onPress={onClickExit} margin={[theme.sizes.body - 5, 0, 0, theme.sizes.title - 2]} button>
           <Text bold white>Sair</Text>
         </Block>
       </ScrollView>
@@ -59,11 +69,22 @@ const Header = (props) => {
 } 
 
 const menu = createDrawerNavigator({
-  Promoções: PromotionsScreen,
-  "Inserir promoção": Insert,
-  Notificações: NotificationsScreen,
-  'Termos de Uso': TermsOfServiceScreen,
-  'Minha conta': MyAccountScreen
+  Promoções: {
+    screen: PromotionsScreen,
+    path: 'promotions'
+  },
+  "Inserir promoção": {
+    screen: Insert,
+  },
+  Notificações: {
+    screen: NotificationsScreen,
+  },
+  'Termos de Uso': {
+    screen: TermsOfServiceScreen,
+  },
+  'Minha conta': {
+    screen: MyAccountScreen,
+  }
 },
 {
   drawerBackgroundColor: theme.colors.primary,
@@ -79,13 +100,15 @@ const menu = createDrawerNavigator({
 const childrens = createStackNavigator({
   menu: {
     screen: menu,
+    path: '',
     navigationOptions: {
       header: null
     }
   },
   Detalhes: {
     screen: DetailsScreen,
-    navigationOptions: {
+    path: 'details/:promotionId',
+    navigationOptions: ({navigation, screenProps}) => ({
       title: (
         <Text bold white>
           Detalhes
@@ -93,9 +116,15 @@ const childrens = createStackNavigator({
       ),
       headerTitleAlign: "left",
       headerStyle: {
-        height: Platform.OS === 'ios' ? theme.sizes.base * 6 : theme.sizes.base * 5,        shadowColor: "transparent",
+        height: Platform.OS === 'ios' ? theme.sizes.base * 6 : theme.sizes.base * 5, 
+        shadowColor: "transparent",
         backgroundColor: theme.colors.primary
       },
+      headerRight: (
+       <Button style onPress={navigation.getParam('onClickDenounce')}>
+         <Text white>Denunciar</Text>
+       </Button>
+      ),
       headerBackImage: (
         <Image source={require("../../assets/icons/back.png")} />
       ),
@@ -108,7 +137,7 @@ const childrens = createStackNavigator({
         alignItems: "center",
         padding: theme.sizes.base
       }
-    }
+    })
   },
   Perfil: {
     screen: ProfileScreen,
@@ -182,7 +211,8 @@ const childrens = createStackNavigator({
         height:
           Platform.OS === "ios" ? theme.sizes.base * 6 : theme.sizes.base * 5,
         shadowColor: "transparent",
-        backgroundColor: theme.colors.white
+        backgroundColor: theme.colors.white,
+        elevation: 0
       },
       headerBackImage: (
         <Image source={require("../../assets/icons/back.png")} />
@@ -251,24 +281,43 @@ const screens = createStackNavigator(
   }
 );
 
-const routes =createAnimatedSwitchNavigator({
-  auth: screens,
-  childrens : childrens
-},
-{
-  transition: (
-    <Transition.Together>
-      <Transition.Out
-        type='slide-left'
-        interpolation='easeIn'
-        durationMs={400}
-      />
-      <Transition.In 
-        type='fade'
-        durationMs={500}
-      />
-    </Transition.Together>
-  )
-})
 
-export default createAppContainer(routes);
+function getInitialRoute(signed) {
+  
+  if(signed) {
+    return 'childrens'
+  }
+
+  return 'auth'
+}
+
+export default (signed) =>
+  createAppContainer(
+    createAnimatedSwitchNavigator({
+      auth: {
+        screen: screens,
+        path: ''
+      },
+      childrens : {
+        screen: childrens,
+        path: ''
+      }
+    },
+    {
+      initialRouteName: getInitialRoute(signed),
+      transition: (
+        <Transition.Together>
+          <Transition.Out
+            type='slide-left'
+            interpolation='easeIn'
+            durationMs={400}
+          />
+          <Transition.In 
+            type='fade'
+            durationMs={500}
+          />
+        </Transition.Together>
+      )
+    })
+
+);

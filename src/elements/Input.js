@@ -53,25 +53,46 @@ export default function Input(props) {
     );
   }
 
-  const { email, phone, number, secure, error, style } = props;
+  const { next, done, email, phone, number, secure, error, style, reference, box } = props;
   const { toggleSecure } = isToggleSecure;
   const isSecure = toggleSecure ? false : secure;
-  const inputStyles = [ styles.input, error && { borderColor: theme.colors.accent }, style ]
+  const inputStyles = [ 
+    box ? { height: height, paddingTop: 12, paddingBottom: 12} : { height: theme.sizes.base * 3 },
+    styles.input, 
+    error && { borderColor: theme.colors.accent }, 
+    style
+   ]
+  
+   const keyType = next
+                  ? 'next'
+                  : done
+                  ? 'done'
+                  : 'done'
+  
   const inputType = email ? "email-address"
                   : number ? "numeric"
                   : phone ? "phone-pad"
                   : "default";
 
+  const [height, setHeight] = useState(theme.sizes.base * 3);
+
   return (
     <Block flex={false} margin={[theme.sizes.base / 1.5, 0]}>
       {renderLabel()}
       <TextInput
+        value={props.value}
         style={inputStyles}
         secureTextEntry={isSecure}
         autoComplete="off"
         autoCapitalize="none"
         autoCorrect={false}
         keyboardType={inputType}
+        defaultValue={props.defaultValue}
+        onChangeText={props.onChangeText}
+        returnKeyType={keyType}
+        onSubmitEditing={props.submitEditing}
+        ref={reference}
+        {...props}
       />
       {renderToggle()}
       {renderRight()}
@@ -85,10 +106,9 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.black,
     borderRadius: theme.sizes.radius,
     fontSize: theme.sizes.font,
-    fontWeight: "500",
     color: theme.colors.gray,
-    height: theme.sizes.base * 3,
-    paddingLeft: theme.sizes.base - 6
+    paddingLeft: theme.sizes.base - 6,
+    paddingRight: theme.sizes.base - 6,
   },
   toggle: {
     position: "absolute",
@@ -97,6 +117,10 @@ const styles = StyleSheet.create({
     height: theme.sizes.base * 2,
     top: theme.sizes.base * 2.4,
     paddingRight: theme.sizes.base - 6,
-    right: 0
-  }
+    right: 0,
+  },
 });
+
+Input.propTypes = {
+  submitEditing: () => {},
+};

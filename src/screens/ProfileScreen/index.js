@@ -1,31 +1,152 @@
-import React, { useState, useEffect } from "react";
-import { KeyboardAvoidingView, AsyncStorage, FlatList, StyleSheet, Image } from "react-native";
-import { Block, Input, Button, Text, Photo, Header } from "../../elements";
+import React, { useState, useEffect, useRef } from "react";
+import { Block, Input, Button, Text, Photo } from "../../elements";
 import { theme } from "../../constants";
-import { AntDesign } from "@expo/vector-icons";
+import * as SecureStore from "expo-secure-store";
+import * as ImagePicker from 'expo-image-picker';
+import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions';
 
-import profile from '../../../assets/images/profile-image.png'
-import styles from './styles'
+import profileImage from '../../../assets/images/profile-image.png'
 
 import { ScrollView } from "react-native-gesture-handler";
 
+import { getUser, updateUser, setUserPicture } from "../../services/user";
+import AlertMessage from "../../components/Alert";
+import { ModalLoader } from "../../components";
+import { DotsLoader } from 'react-native-indicator'
+
 export default function ProfileScreen(props) {
 
-  const [nome, setNome] = useState("");
-  const [cpf, setCpf] = useState("");
-  const [dataDeNascimento, setDataDeNascimento] = useState("");
-  const [telefone, setTelefone] = useState("");
+  const [id, setId] = useState(0)
+  const [name, setName] = useState('')
+  const [nickname, setNickname] = useState('')
+  const [cpf, setCpf] = useState('')
+  const [avatar, setAvatar] = useState()
+  const [dateOfBirth, setDateOfBirth] = useState('')
+  const [number, setNumber] = useState('')
+  const [email, setEmail] = useState('')
+
+  const [loading, setloading] = useState(true)
+  const [loader, setLoader] = useState(false)
+
+  const cpfRef = useRef()
+  const numberRef = useRef()
+  const dateOfBirthRef = useRef()
+
+  useEffect(() => {
+    async function loadProfile() {
+
+      const email = await SecureStore.getItemAsync('user_email')
+
+      await getUser(JSON.parse(email)).then((res) => {
+        const response = res.data;
+
+        setId(response.id)
+        setName(response.nome)
+        setNickname(response.apelido)
+        setCpf(response.cpf)
+        setAvatar(response.urlProfile)
+        setDateOfBirth(response.dataDeNascimento)
+        setNumber(response.telefone)
+        setEmail(response.email)
+      }, function({response}) {
+          if (response.status === 403) {
+            AlertMessage({
+              title: "Atenção",
+              message: "Sua sessão expirou.",
+            });
+            props.navigation.navigate("login");
+          }
+      });
+
+      setloading(false)
+    }
+
+    getPermissionAsync();
+    loadProfile();
+  }, []);
+
+  async function getPermissionAsync() {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        alert('Desculpe, precisamos de permissões de rolagem da câmera para fazer isso funcionar!');
+      }
+    }
+  }
+
+  async function submitPicture(photo) {
+
+    let localUri = photo.uri;
+    let filename = localUri.split("/").pop();
+
+    let match = /\.(\w+)$/.exec(filename);
+    let type = match ? `image/${match[1]}` : `image`;
+
+    let formData = new FormData();
+    formData.append("file", { uri: localUri, name: filename, type });
+
+    await setUserPicture(formData).then(res => {
+      console.log(res)
+    })
+
+  }
+
+  async function pickImage () {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      if (!result.cancelled) {
+        setAvatar(result.uri)
+        submitPicture(result)
+      }
+
+    } catch (E) {
+    }
+  };
+
+  async function handleSubmit() {
+    try {
+
+      setLoader(true)
+      await updateUser(id, name, cpf, number, dateOfBirth).then(res => {
+        
+        switch (res.status) {
+          case 204:
+            AlertMessage({
+              title: 'Sucesso',
+              message: 'Seus dados foram atualizados com sucesso.'
+            })
+            
+            setLoader(false)
+            break;
+        
+          default:
+            break;
+        }
+      })
+
+    } catch ({ response }) {
+      setLoader(false)
+    }
+  }
 
   return (
     <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
+      {loading && <ModalLoader loading={loading} />}
       <Block
         padding={[0, theme.sizes.padding]}
         space="between"
         color={theme.colors.white}
       >
         <Block padding={[theme.sizes.padding, 0, 0, 0]} center row>
-          <Button style>
-            <Image source={profile} style={styles.profile} />
+          <Button onPress={pickImage} style>
+            {avatar === null && <Photo avatar image={profileImage} />}
+            {avatar !== null && <Photo avatar image={avatar} />}
           </Button>
           <Block margin={[0, 0, 0, theme.sizes.header]}>
             <Text gray>Inserir imagem</Text>
@@ -34,14 +155,29 @@ export default function ProfileScreen(props) {
         <Block margin={[theme.sizes.header, 0]} flex={false}>
           <Input
             label="Nome completo"
-            style={[styles.input]}
-            defaultValue={nome}
+            defaultValue={name}
+            onChangeText={setName}
+            next
+            submitEditing={() => cpfRef.current.focus()}
           />
-          <Input label="CPF" style={[styles.input]} defaultValue={cpf} />
+          <Input
+            label="CPF"
+            number
+            defaultValue={cpf}
+            onChangeText={setCpf}
+            reference={cpfRef}
+            next
+            submitEditing={() => numberRef.current.focus()}
+          />
+
           <Input
             label="Telefone"
-            style={[styles.input]}
-            defaultValue={telefone}
+            number
+            defaultValue={number}
+            onChangeText={setNumber}
+            reference={numberRef}
+            next
+            submitEditing={() => dateOfBirthRef.current.focus()}
           />
         </Block>
 
@@ -49,17 +185,26 @@ export default function ProfileScreen(props) {
           <Block padding={[0, theme.sizes.padding * 6, 0, 0]}>
             <Input
               label="Data de nascimento"
-              style={[styles.input]}
-              defaultValue={dataDeNascimento}
+              defaultValue={dateOfBirth}
+              onChangeText={setDateOfBirth}
+              reference={dateOfBirthRef}
+              done
             />
           </Block>
         </Block>
 
         <Block padding={[theme.sizes.padding, 0]}>
-          <Button onPress={props.onRequestClose} color={theme.colors.primary}>
-            <Text bold center white>
-              Alterar
-            </Text>
+          <Button onPress={handleSubmit} color={theme.colors.primary}>
+            {loader && (
+              <Block flex={false} center>
+                <DotsLoader color={theme.colors.white} size={10} />
+              </Block>
+            )}
+            {!loader && (
+              <Text bold center white>
+                Alterar
+              </Text>
+            )}
           </Button>
         </Block>
       </Block>

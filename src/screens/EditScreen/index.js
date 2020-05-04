@@ -1,106 +1,252 @@
-import React, { useState } from "react";
-import { Modal, StyleSheet } from "react-native";
-import { Block, Text, Button, Input, Header } from "../../elements";
+import React, { useState, useEffect } from "react";
+import { StyleSheet } from "react-native";
+import { Block, Text, Button, Input } from "../../elements";
 import { theme } from "../../constants";
 import { ScrollView } from "react-native-gesture-handler";
 
-import { DrawerActions } from "react-navigation-drawer";
+import { getPromotion, updatePromotion } from "../../services/promotion";
+
+import { useSelector, useDispatch } from "react-redux";
+import { setCategoryUpdateAndInsert } from "../../store/modules/category/updateAndInsert/actions";
+
+import { Categories, Gallery, ModalLoader } from "../../components";
+import AlertMessage from "../../components/Alert";
+import { DotsLoader } from 'react-native-indicator'
 
 export default function Edit(props) {
-  const [titulo, setTitulo] = useState("");
-  const [descricao, setDescricao] = useState("");
-  const [local, setLocal] = useState("");
-  const [endereco, setEndereco] = useState("");
-  const [telefone, setTelefone] = useState("");
-  const [valor, setValor] = useState("");
-  const [categoria, setCategoria] = useState("");
+  const idNavigation = props.navigation.getParam("id");
 
-  function onClickMenu() {
-    props.navigation.dispatch(DrawerActions.openDrawer());
+  const dispatch = useDispatch();
+  const { id, name } = useSelector((state) => state.category_updateAndInsert, () => true); 
+
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [place, setPlace] = useState("");
+  const [address, setAddress] = useState("");
+  const [value, setValue] = useState('');
+  const [categoryId, setCategoryId] = useState();
+  const [categoryName, setCategoryName] = useState('');
+
+  const [showCategories, setShowCategories] = useState(false);
+
+  const [imageGallery, setImageGallery] = useState([]);
+  const [showGallery, setShowGallery] = useState(false);
+
+  const [loading, setLoading] = useState(true)
+  const [loader, setLoader] = useState(false)
+
+  props.navigation.addListener("willBlur", () => {
+    dispatch(setCategoryUpdateAndInsert(1, "Auto e Peças"));
+  });
+
+  useEffect(() => {
+    async function loadPromotion() {
+      await getPromotion(idNavigation).then(
+        (res) => {
+          const response = res.data;
+
+          setTitle(response.titulo);
+          setDescription(response.descricao);
+          setPlace(response.localizacao);
+          setAddress(response.endereco);
+          setValue(response.preco.toString());
+
+          setCategoryId(response.categoria.id);
+          setCategoryName(response.categoria.nome);
+
+          setImageGallery(response.galeriaDeImagens.urlImagens);
+        },
+        function ({ response }) {
+          if (response.status === 403) {
+            AlertMessage({
+              title: "Atenção",
+              message: "Sua sessão expirou.",
+            });
+            props.navigation.navigate("login");
+          }
+        }
+      );
+
+      setLoading(false)
+    }
+
+    loadPromotion()
+  }, []);
+
+  useEffect(() => {
+    setCategoryId(id)
+    setCategoryName(name)
+  }, [name])
+
+  async function handleSubmit() {
+    try {
+      setLoader(true)
+
+      await updatePromotion(idNavigation, description, value, place, address, title, categoryId)
+
+      AlertMessage({
+        title: 'Sucesso',
+        message: 'Sua promoção foi atualizada com sucesso.'
+      })
+
+      setLoader(false)
+
+      props.navigation.navigate("MinhasPromocoes");
+
+    } catch ({ response }) {
+      setLoader(false)
+    }
   }
 
-  return (
-    <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
-      <Block
-        padding={[0, theme.sizes.padding]}
-        space="between"
-        color={theme.colors.white}
-      >
-        <Block margin={[theme.sizes.header, 0]} flex={false}>
-          <Input label="Titulo" style={[styles.input]} defaultValue={titulo} />
-          <Input
-            label="Descrição"
-            style={[styles.input]}
-            defaultValue={descricao}
-          />
-          <Input label="Local" style={[styles.input]} defaultValue={local} />
-          <Input
-            label="Endereço"
-            style={[styles.input]}
-            defaultValue={endereco}
-          />
-          <Input
-            label="Telefone"
-            style={[styles.input]}
-            defaultValue={telefone}
-          />
+  function onClickCategory() {
+    setShowCategories(true);
+  }
 
-          <Block row>
-            <Block padding={[0, theme.sizes.padding, 0, 0]}>
+  function onHideCategory() {
+    setShowCategories(false);
+  }
+
+  function onClickGallery() {
+    setShowGallery(true);
+  }
+
+  function onHideGallery() {
+    setShowGallery(false);
+  }
+
+  function renderGallery() {
+    if (onClickGallery)
+      return (
+        <Gallery
+          showDetails={true}
+          idGallery={idNavigation}
+          visible={showGallery}
+          onRequestClose={onHideGallery}
+        ></Gallery>
+      );
+  }
+
+  function renderCategories() {
+    return (
+      <Categories
+        visible={showCategories}
+        onRequestClose={onHideCategory}
+      ></Categories>
+    );
+  }
+
+  function renderEdit() { 
+
+    return (
+      <>
+        {loading && <ModalLoader loading={loading} />}
+        {renderGallery()}
+        <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
+          <Block
+            padding={[0, theme.sizes.padding]}
+            space="between"
+            color={theme.colors.white}
+          >
+            <Block margin={[theme.sizes.header, 0]} flex={false}>
+              <Input 
+                label="Titulo" 
+                defaultValue={title} 
+                onChangeText={setTitle}/>
               <Input
-                label="Valor"
-                style={[styles.input]}
-                defaultValue={valor}
+                label="Descrição"
+                defaultValue={description}
+                onChangeText={setDescription}
               />
+              <Input 
+                label="Local" 
+                defaultValue={place}
+                onChangeText={setPlace}/>
+              <Input
+                label="Endereço"
+                defaultValue={address}
+                onChangeText={setAddress}
+              />
+
+              <Block row>
+                <Block padding={[0, theme.sizes.padding, 0, 0]}>
+                  <Input
+                    label="Valor"
+                    number
+                    defaultValue={value}
+                    onChangeText={setValue}
+                  />
+                </Block>
+
+                <Block margin={[theme.sizes.base / 1.5, 0]}>
+                  <Block padding={[0,0, theme.sizes.base - 10, 4]} flex={false}>
+                    <Text gray>
+                      Categoria
+                    </Text>
+                  </Block>
+                  <Button onPress={onClickCategory} style={styles.button}>
+                    <Text gray>
+                      {categoryName}
+                    </Text>
+                  </Button>
+                </Block>
+              </Block>
             </Block>
 
-            <Block>
-              <Input
-                label="Categoria"
-                style={[styles.input]}
-                defaultValue={categoria}
-              />
+            <Block row>
+              <Block flex={false}>
+                <Text bold gray>
+                  Galeria
+                </Text>
+                <Button onPress={onClickGallery} style={styles.plus}>
+                  <Text h3 gray>
+                    +5
+                  </Text>
+                </Button>
+              </Block>
+            </Block>
+
+            <Block middle padding={[theme.sizes.padding / 2, 0]}>
+              <Button onPress={handleSubmit} color={theme.colors.primary}>
+                {loader && 
+                  <Block flex={false} center>
+                    <DotsLoader color={theme.colors.white} size={10}/>  
+                  </Block>
+                }
+                {!loader && 
+                  <Text bold center white>
+                    Atualizar
+                  </Text>
+                }
+              </Button>
             </Block>
           </Block>
-        </Block>
+        </ScrollView>
+      </>
+    );
+  }
 
-        <Block row>
-          <Block flex={false}>
-            <Text bold gray>
-              Galeria
-            </Text>
-            <Button style={styles.plus}>
-              <Text h3 gray>
-                +5
-              </Text>
-            </Button>
-          </Block>
-        </Block>
-
-        <Block middle padding={[theme.sizes.padding / 2, 0]}>
-          <Button onPress={props.onRequestClose} color={theme.colors.primary}>
-            <Text bold center white>
-              Atualizar
-            </Text>
-          </Button>
-        </Block>
-      </Block>
-    </ScrollView>
-  );
+  if (showCategories) {
+    return renderCategories()
+  }
+  return renderEdit()
+  
 }
 
 const styles = StyleSheet.create({
-  input: {
-    borderColor: "transparent",
-    borderWidth: 1,
-    borderColor: theme.colors.gray3
-  },
-
   plus: {
     backgroundColor: theme.colors.gray2,
     padding: 20,
     borderRadius: theme.sizes.radius,
     marginHorizontal: 10,
-    marginTop: 10
-  }
+    marginTop: 10,
+  },
+
+  button: {
+    justifyContent: 'center',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: theme.colors.black,
+    borderRadius: theme.sizes.radius,
+    height: theme.sizes.base * 3,
+    paddingLeft: theme.sizes.base -6
+  },
 });

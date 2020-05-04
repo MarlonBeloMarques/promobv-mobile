@@ -1,21 +1,63 @@
-import React, { useState } from "react";
-import { StyleSheet, View, KeyboardAvoidingView, Image } from "react-native";
+import React, { useState, useRef } from "react";
+import { KeyboardAvoidingView, Image, Keyboard } from "react-native";
 import { Block, Input, Button, Text} from '../../elements'
 import { theme } from "../../constants";
 
 import styles from './styles'
 import logo from '../../../assets/images/promobv.png'
 
+import { signIn, successfulLogin } from '../../services/auth'
+import { StatusBar } from "react-native";
+
+import { useDispatch } from "react-redux";
+import { signInSuccess } from "../../store/modules/auth/actions";
+import { getUser } from "../../services/user";
+
+import { DotsLoader } from 'react-native-indicator';
+
 export default function LoginScreen(props) {
-  const [email, setEmail] = useState('promobv@react.com')
-  const [password, setPassword] = useState('promobv')
+
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const [loader, setLoader] = useState(false)
+
+  const dispatch = useDispatch()
+
+  const passwordRef = useRef();
+
+  async function handleSubmit() {
+    try {
+      setLoader(true)
+
+      const { headers : { authorization }, status } = await signIn(email, password)
+
+      switch (status) {
+        case 200:
+          await getUser(email).then(res => {
+            let response = res.data
+
+            dispatch(signInSuccess(authorization, JSON.parse(response.id)))
+          })
+
+          successfulLogin(authorization)
+
+          Keyboard.dismiss()
+
+          setLoader(false);
+
+          props.navigation.navigate('Promoções')
+        
+          break
+      }
+
+    } catch ({ response }) {
+      setLoader(false)
+  }
+}
 
   function onSignupClicked() {
     props.navigation.navigate('signup')
-  }
-
-  function onLoginClicked() {
-    props.navigation.navigate("Promoções");
   }
 
   function onPasswordClicked() {
@@ -24,19 +66,35 @@ export default function LoginScreen(props) {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-        <Block padding={[theme.sizes.base, theme.sizes.base * 2, 0, theme.sizes.base * 2]}>
-          
-          <Block middle flex={0.3} center>
-            <Image resizeMode='contain' source={logo} style={styles.logo} />
-          </Block>
-          
-          <Block middle flex={0.7}>
-            <Input label="E-mail" style={[styles.input]} defaultValue={email} />
+      <StatusBar barStyle="dark-content" />
+      <Block
+        padding={[
+          theme.sizes.base,
+          theme.sizes.base * 2,
+          0,
+          theme.sizes.base * 2,
+        ]}
+      >
+        <Block middle center>
+          <Image resizeMode="contain" source={logo} style={styles.logo} />
+        </Block>
+        <Block padding={[theme.sizes.base, 0]} flex={6}>
+          <Block flex={false}>
+            <Input
+              label="E-mail"
+              defaultValue={email}
+              onChangeText={setEmail}
+              next
+              submitEditing={() => passwordRef.current.focus()}
+            />
             <Input
               secure
               label="Senha"
-              style={[styles.input]}
               defaultValue={password}
+              onChangeText={setPassword}
+              reference={passwordRef}
+              done
+              submitEditing={handleSubmit}
             />
             <Button onPress={onPasswordClicked} style={styles.forgotPassword}>
               <Text
@@ -49,39 +107,43 @@ export default function LoginScreen(props) {
               </Text>
             </Button>
 
-            <Button onPress={onLoginClicked} color={theme.colors.primary}>
+            <Button onPress={handleSubmit} color={theme.colors.primary}>
+              {loader && (
+                <Block flex={false} center>
+                  <DotsLoader color={theme.colors.white} size={10} />
+                </Block>
+              )}
+              {!loader && (
+                <Text bold white center>
+                  Entrar
+                </Text>
+              )}
+            </Button>
+          </Block>
+          <Block padding={[theme.sizes.base * 2, 0, theme.sizes.base, 0]}>
+            <Button color={theme.colors.google}>
               <Text bold white center>
-                Entrar
+                Entrar com o Google
+              </Text>
+            </Button>
+            <Button color={theme.colors.facebook}>
+              <Text bold white center>
+                Entrar com o Facebook
+              </Text>
+            </Button>
+            <Button onPress={onSignupClicked} style={styles.signup}>
+              <Text
+                caption
+                primary
+                center
+                style={{ textDecorationLine: "underline" }}
+              >
+                Crie uma conta
               </Text>
             </Button>
           </Block>
         </Block>
-
-        <Block
-          padding={[theme.sizes.base, theme.sizes.base * 2]}
-          style={styles.end}
-        >
-          <Button color={theme.colors.google}>
-            <Text bold white center>
-              Entrar com o Google
-            </Text>
-          </Button>
-          <Button color={theme.colors.facebook}>
-            <Text bold white center>
-              Entrar com o Facebook
-            </Text>
-          </Button>
-          <Button onPress={onSignupClicked} style={styles.signup}>
-            <Text
-              caption
-              primary
-              center
-              style={{ textDecorationLine: "underline" }}
-            >
-              Crie uma conta
-            </Text>
-          </Button>
-        </Block>
+      </Block>
     </KeyboardAvoidingView>
   );
 }

@@ -1,5 +1,6 @@
 {
   "expo": {
+    "scheme": "myapp",
     "name": "Blank Template",
     "slug": "promobv",
     "privacy": "public",
@@ -25,6 +26,10 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.marlonmarqs.promobv",
+      "versionCode": 1
     }
   }
 }

@@ -1,41 +1,130 @@
 import React, { useEffect, useState } from "react";
-import { KeyboardAvoidingView, FlatList, StyleSheet, View, AsyncStorage } from "react-native";
+import { KeyboardAvoidingView, FlatList, StyleSheet, ActivityIndicator } from "react-native";
 import { Block, Text, Button, Header, Photo } from "../../elements";
-import { Insert } from "../../components";
+import { Insert, Categories } from "../../components";
 import { theme } from "../../constants";
-import { AntDesign } from "@expo/vector-icons";
-import { YOUR_IP } from "../../../config";
-
-import { } from "./styles";
-
+import { AntDesign, SimpleLineIcons } from "@expo/vector-icons";
 import { DrawerActions } from "react-navigation-drawer";
 
-export default function PasswordScreen(props) {
-  
-  const [feed, setFeed] = useState([]);
+import { } from "./styles";
+import { getPromotions, getPromotionsByCategory } from "../../services/promotion";
+
+import { useSelector, useDispatch } from "react-redux";
+
+import no_photo from "../../../assets/images/no-photo.png";
+import { refreshToken, successfulLogin } from "../../services/auth";
+import { signInSuccess } from "../../store/modules/auth/actions";
+
+export default function PromotionScreen(props) {
+  const dispatch = useDispatch();
+  const { idUser } = useSelector((state) => state.auth, () => true)
+  const { id, name } = useSelector((state) => state.category_promotions, () => true);
+
+  const [promotions, setPromotions] = useState([]);
   const [showInsert, setShowInsert] = useState(false);
+  const [showCategories, setShowCategories] = useState(false);
+
+  const [loading, setLoading] = useState(true)
+  const [refresh, setRefresh] = useState(false)
+
+  const [page, setPage] = useState(0)
+  const [total, setTotal] = useState(0)
 
   useEffect(() => {
-    async function loadFeed() {
-      const response = await fetch(
-        `http://${YOUR_IP}:3000/feed?_expand=author&_limit=5&_page=1`
-      );
+    async function checkRefreshToken() {
+      refreshToken().then((res) => {
+        dispatch(signInSuccess(res.headers.authorization, idUser))
+        successfulLogin(res.headers.authorization)
+      }, function({response}) {
 
-      const data = await response.json();
-
-      setFeed(data);
+      });
     }
-    //executa uma unica vez
-    loadFeed();
-  }, []);
+
+    checkRefreshToken()
+  }, [])
+
+  useEffect(() => {
+    if(id != 0) {
+      loadPromotionsByCategory()
+    }
+    else {
+      loadPromotionsGeneral()
+    }
+  }, [showCategories])
+
+  async function loadPromotionsByCategory(pageNumber = page) {
+    if(total && pageNumber >= total)
+      return;
+
+    await getPromotionsByCategory(id, pageNumber, 10).then((res) => {
+      const data = res.data['content'];
+      const totalPages = res.data.totalPages
+
+      setTotal(JSON.parse(totalPages))
+      setPromotions([...promotions, ...data])
+      setPage(pageNumber + 1)
+      },
+      function ({ response }) {}
+    );
+  }
+
+  async function loadPromotionsGeneral(pageNumber = page) {
+    if(total && pageNumber >= total) 
+      return;
+
+    await getPromotions(pageNumber, 10).then((res) => {
+      const data = res.data["content"];
+      const totalPages = res.data.totalPages;
+
+      setTotal(JSON.parse(totalPages))
+      setPromotions([...promotions, ...data])
+      setPage(pageNumber + 1)
+    }, function({response}) {
+      
+    });
+
+    setLoading(false)
+  }
+
+  function clearDate() {
+    setTotal(0);
+    setPage(0);
+    setPromotions([]);
+  }
+
+  async function onRefresh() {
+    setRefresh(true)
+    clearDate()
+
+    if(id == 0) {
+      getPromotions(0, 10).then((res) => {
+        const data = res.data["content"];
+        const totalPages = res.data.totalPages;
+      
+        setTotal(JSON.parse(totalPages))
+        setPromotions(data)
+        setPage(1)
+        setRefresh(false);
+      }, function({response}) {
+          setRefresh(false); 
+      });
+    } else {
+      getPromotionsByCategory(id, 0, 10).then((res) => {
+        const data = res.data["content"];
+        const totalPages = res.data.totalPages;
+      
+        setTotal(JSON.parse(totalPages))
+        setPromotions(data)
+        setPage(1)
+        setRefresh(false);
+      }, function({response}) {
+          setRefresh(false); 
+      });
+    }
+  }
 
   async function onDetailsClicked(id) {
-
-  const _id = id;
-
-  await AsyncStorage.setItem('promotion', JSON.stringify(_id))
-   
-  props.navigation.navigate("Detalhes", { id });
+    props.navigation.navigate("Detalhes", { id });
   }
 
   function onClickMenu() {
@@ -50,6 +139,16 @@ export default function PasswordScreen(props) {
     setShowInsert(false)
   }
 
+
+  function onClickCategory() {
+    setShowCategories(true);
+  }
+
+  function onHideCategory() {
+    clearDate();
+    setShowCategories(false);
+  }
+
   function renderInsert() {
     return (
       <Insert
@@ -60,78 +159,118 @@ export default function PasswordScreen(props) {
     )
   }
 
+  function renderCategories() {
+    return (
+      <Categories
+        screenPromotions={true}
+        visible={showCategories}
+        onRequestClose={onHideCategory}>
+      </Categories>
+    )
+  }
+
   function renderPromotions() {
     return (
       <KeyboardAvoidingView style={styles.container}>
         <Header barStyle='light-content' colorIcon={theme.colors.white} color={theme.colors.primary} onPress={onClickMenu}>Promoções</Header>
         <Block border center flex={false} padding={[15, 0, 15]}>
-          <Button style>
+          <Button onPress={onClickCategory} style>
             <Text bold color={theme.colors.primary}>
-              Categoria
+              {name}
             </Text>
           </Button>
         </Block>
 
-        <Block fixed>
-          <Button
-            onPress={onClickInsert}
-            disableRadiusDefault
-            radius={theme.sizes.radius * 4}
-            color={theme.colors.secondary}
-          >
-            <Block row padding={[0, theme.sizes.base * 2]} flex={false}>
-              <Block padding={[0, 10, 0, 0]} flex={false}>
-                <AntDesign
-                  name={"pluscircleo"}
-                  size={15}
-                  color={theme.colors.gray3}
-                />
-              </Block>
-              <Text white>Inserir promoção</Text>
-            </Block>
-          </Button>
-        </Block>
+        {loading === true &&
+          <Block middle>
+            <ActivityIndicator size="small" color='#00000'/>
+          </Block>
+        }
+        {loading === false && 
+          <>
 
-        <FlatList
-          style={styles.flatlist}
-          data={feed}
-          keyExtractor={post => String(post.id)}
-          renderItem={({ item }) => (
-            <Block
-              onPress={() => onDetailsClicked(item.id)}
-              button
-              size={140}
-              flex={false}
-              row
-              border
-            >
-              <Photo height={100} size={40} image={item.image} />
-              <Block padding={[15, 10, 0]}>
-                <Text gray bold size={18}>
-                  {item.description}
-                </Text>
-                <Block style={styles.end}>
-                  <Text secondary size={15} bold>
-                    {" "}
-                    {item.price}
-                  </Text>
-                  <Block padding={[5, 0, 0]} flex={false}>
-                    <Text gray3 bold>
-                      {" "}
-                      {item.description}
-                    </Text>
+            <Block fixed>
+              <Button
+                onPress={onClickInsert}
+                disableRadiusDefault
+                radius={theme.sizes.radius * 4}
+                color={theme.colors.secondary}
+              >
+                <Block row padding={[0, theme.sizes.base * 2]} flex={false}>
+                  <Block padding={[0, 10, 0, 0]} flex={false}>
+                    <AntDesign
+                      name={"pluscircleo"}
+                      size={15}
+                      color={theme.colors.gray3}
+                    />
                   </Block>
+                  <Text white>Inserir promoção</Text>
                 </Block>
-              </Block>
+              </Button>
             </Block>
-          )}
-        ></FlatList>
+            {promotions.length === 0 && 
+              <Block center margin={[theme.sizes.padding * 4, 0]}>
+                <Block flex={false} padding={theme.sizes.padding}>
+                  <SimpleLineIcons
+                    name={"handbag"}
+                    color={theme.colors.gray3}
+                    size={40}
+                  />
+                </Block>
+                <Text gray3>Não há promoções no momento.</Text>
+              </Block>
+            }
+
+            {promotions.length !== 0 && 
+              <FlatList
+                style={styles.flatlist}
+                data={promotions}
+                onRefresh={onRefresh}
+                refreshing={refresh}
+                keyExtractor={post => String(post.id)}
+                onEndReached={() => { id != 0 ? loadPromotionsByCategory() : loadPromotionsGeneral() }}
+                onEndReachedThreshold={0.1}
+                renderItem={({ item }) => (
+                  <Block
+                    onPress={() => onDetailsClicked(item.id)}
+                    button
+                    size={140}
+                    flex={false}
+                    row
+                    border
+                  >
+                    {item.imagem !== null && <Photo height={100} size={40} image={item.imagem} />}
+                    {item.imagem === null && <Photo height={100} size={40} image={no_photo} />}
+                    <Block padding={[15, 10, 0]}>
+                      <Text gray bold size={18}>
+                        {item.titulo}
+                      </Text>
+                      <Block style={styles.end}>
+                        <Text secondary size={15} bold>
+                          {"R$ "}{item.preco}
+                        </Text>
+                        <Block padding={[5, 0, 0]} flex={false}>
+                          <Text gray3 bold>
+                            {item.localizacao}
+                          </Text>
+                        </Block>
+                      </Block>
+                    </Block>
+                  </Block>
+                )}
+              ></FlatList>
+            } 
+          </>
+        }
       </KeyboardAvoidingView>
     );
   }
 
   if(showInsert) {
     return renderInsert()
+  }
+  if(showCategories) {
+    return renderCategories()
   }
   return renderPromotions()
   

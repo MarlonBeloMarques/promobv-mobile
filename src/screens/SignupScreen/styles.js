@@ -5,13 +5,6 @@ export default StyleSheet.create({
   container: {
     flex: 1
   },
-
-  input: {
-    borderColor: "transparent",
-    borderWidth: 1,
-    borderColor: theme.colors.gray3
-  },
-
   message: {
     fontSize: theme.sizes.caption
   },

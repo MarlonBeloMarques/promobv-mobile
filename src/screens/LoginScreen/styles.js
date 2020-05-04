@@ -6,12 +6,6 @@ export default StyleSheet.create({
     flex: 1
   },
 
-  input: {
-    borderColor: "transparent",
-    borderWidth: 1,
-    borderColor: theme.colors.gray3
-  },
-
   inputError: {
     borderBottomColor: theme.colors.accent
   },
@@ -23,11 +17,6 @@ export default StyleSheet.create({
 
   signup: {
     marginTop: theme.sizes.base / 2
-  },
-
-  end: {
-    flex: 0.3,
-    justifyContent: "flex-end"
   },
 
   logo: {
