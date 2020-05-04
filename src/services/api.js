@@ -5,7 +5,7 @@ import { logout } from './auth';
 import AlertMessage from '../components/Alert';
 
 const api = axios.create({
-  baseURL: 'https://promobv-dev.herokuapp.com/',
+  baseURL: 'https://promobv-dev.herokuapp.com',
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',

@@ -45,6 +45,7 @@ export default function Insert(props) {
   const priceRef = useRef();
 
   const [titleButtonModal, setTitleButtonModal] = useState('Cancelar')
+  const [height, setHeight] = useState(theme.sizes.base * 3);
 
   if(!props.modal) {
     props.navigation.addListener("willBlur", () => {
@@ -88,12 +89,6 @@ export default function Insert(props) {
     }
 
     checkFields()
-  })
-
-  useEffect(() => {
-    return () => {
-    // 
-    };
   })
 
   async function submitPicture(photo, promoId) {
@@ -297,112 +292,135 @@ export default function Insert(props) {
         } 
       }
 
-      const [height, setHeight] = useState(theme.sizes.base * 3);
+      function validatesNumber() {
+        if(numberUser !== null && numberUser !== '') {
+          return (
+            <Block
+              padding={[0, theme.sizes.padding]}
+              space="between"
+              color={theme.colors.white}
+            >
+              <Block margin={[theme.sizes.header, 0]} flex={false}>
+                <Input
+                  label="Titulo"
+                  defaultValue={title}
+                  onChangeText={setTitle}
+                  next
+                  submitEditing={() => descriptionRef.current.focus()}
+                />
+                <Input
+                  box={height}
+                  onContentSizeChange={(e) =>
+                    setHeight(e.nativeEvent.contentSize.height)
+                  }
+                  multiline
+                  label="Descrição"
+                  defaultValue={description}
+                  onChangeText={setDescription}
+                  reference={descriptionRef}
+                  next
+                  submitEditing={() => localizationRef.current.focus()}
+                />
+                <Input
+                  label="Local"
+                  defaultValue={localization}
+                  onChangeText={setLocalization}
+                  reference={localizationRef}
+                  next
+                  submitEditing={() => addressRef.current.focus()}
+                />
+                <Input
+                  label="Endereço"
+                  defaultValue={address}
+                  onChangeText={setAddress}
+                  reference={addressRef}
+                  next
+                  submitEditing={() => priceRef.current.focus()}
+                />
+
+                <Block row>
+                  <Block padding={[0, theme.sizes.padding, 0, 0]}>
+                    <Input
+                      number
+                      label="Valor"
+                      defaultValue={price}
+                      onChangeText={setPrice}
+                      reference={priceRef}
+                      done
+                    />
+                  </Block>
+
+                  <Block margin={[theme.sizes.base / 1.5, 0]}>
+                    <Block
+                      padding={[0, 0, theme.sizes.base - 10, 4]}
+                      flex={false}
+                    >
+                      <Text gray>Categoria</Text>
+                    </Block>
+                    <Button onPress={onClickCategory} style={styles.button}>
+                      <Text gray>{name}</Text>
+                    </Button>
+                  </Block>
+                </Block>
+              </Block>
+
+              <Block row>
+                <Block flex={false}>
+                  <Text bold gray>
+                    Galeria
+                  </Text>
+                  {renderButtonGallery()}
+                </Block>
+              </Block>
+
+              {buttonAction(titleModal)}
+            </Block>
+          );     
+        } else {
+          return (
+            <Block
+              margin={[
+                theme.sizes.padding * 4,
+                theme.sizes.padding,
+                0,
+                theme.sizes.padding,
+              ]}
+            >
+              <Block padding={theme.sizes.padding} center>
+                <Ionicons
+                  name={"ios-rocket"}
+                  color={theme.colors.gray3}
+                  size={40}
+                />
+              </Block>
+              <Text center gray3>
+                Seus dados cadastrais estão incompletos. Navegue até a barra de
+                menu, em{" "}
+                <Text bold gray3>
+                  Minha Conta
+                </Text>{" "}
+                e Atualize seu número telefônico.
+              </Text>
+              <Block margin={[theme.sizes.padding, 0]}>
+                {props.modal && (
+                  <Button onPress={closeInsert} color={theme.colors.primary}>
+                    <Text center bold white>
+                      Voltar
+                    </Text>
+                  </Button>
+                )}
+              </Block>
+            </Block>
+          );
+        }
+      }
 
       return (
         <>
             {renderGallery()}
             <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
               {header(activeIcon)}
-              {numberUser !== '' && 
-                <>
-                  <Block
-                    padding={[0, theme.sizes.padding]}
-                    space="between"
-                    color={theme.colors.white}
-                  > 
-                    <Block margin={[theme.sizes.header, 0]} flex={false}>
-                      <Input
-                        label="Titulo"
-                        defaultValue={title}
-                        onChangeText={setTitle}
-                        next
-                        submitEditing = {() => descriptionRef.current.focus()} 
-                      />
-                      <Input
-                        box={height}
-                        onContentSizeChange={e => setHeight(e.nativeEvent.contentSize.height)}
-                        multiline   
-                        label="Descrição"
-                        defaultValue={description}
-                        onChangeText={setDescription}
-                        next
-                        submitEditing = {() => localizationRef.current.focus()}
-                      />
-                      <Input 
-                        label="Local" 
-                        defaultValue={localization} 
-                        onChangeText={setLocalization}
-                        reference={localizationRef}
-                        next
-                        submitEditing = {() => addressRef.current.focus()}
-                      />
-                      <Input
-                        label="Endereço"
-                        defaultValue={address}
-                        onChangeText={setAddress}
-                        reference={addressRef}
-                        next
-                        submitEditing = {() => priceRef.current.focus()}
-                      />
-
-                      <Block row>
-                        <Block padding={[0, theme.sizes.padding, 0, 0]}>
-                          <Input
-                            number
-                            label="Valor"
-                            defaultValue={price}
-                            onChangeText={setPrice}
-                            reference={priceRef}
-                            done
-                          />
-                        </Block>
-
-                        <Block margin={[theme.sizes.base / 1.5, 0]}>
-                          <Block padding={[0,0, theme.sizes.base - 10, 4]} flex={false}>
-                            <Text gray>
-                              Categoria
-                            </Text>
-                          </Block>
-                          <Button onPress={onClickCategory} style={styles.button}>
-                            <Text gray>
-                              {name}
-                            </Text>
-                          </Button>
-                        </Block>
-                      </Block>
-                    </Block>
-
-                    <Block row>
-                      <Block flex={false}>
-                        <Text bold gray>
-                          Galeria
-                        </Text>
-                        {renderButtonGallery()}
-                      </Block>
-                    </Block>
-
-                    {buttonAction(titleModal)}
-                  </Block>
-                </>
-              }
-              {numberUser === '' || numberUser === null && 
-                <Block margin={[theme.sizes.padding * 4, theme.sizes.padding, 0, theme.sizes.padding]}>
-                  <Block padding={theme.sizes.padding} center>
-                    <Ionicons name={'ios-rocket'} color={theme.colors.gray3} size={40}/>
-                  </Block>
-                  <Text center gray3>
-                    Seus dados cadastrais estão incompletos. Navegue até a barra de menu, em <Text bold gray3>Minha Conta</Text> e Atualize seu número telefônico.
-                  </Text>
-                  <Block margin={[theme.sizes.padding, 0]}>
-                    {props.modal && 
-                      <Button onPress={closeInsert} color={theme.colors.primary}>
-                        <Text center bold white>Voltar</Text>
-                      </Button>
-                    }
-                  </Block>
-                </Block>
-              }
+              {validatesNumber()}
             </ScrollView>
         </>
       );

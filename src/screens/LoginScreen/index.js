@@ -11,7 +11,6 @@ import { StatusBar } from "react-native";
 
 import { useDispatch } from "react-redux";
 import { signInSuccess } from "../../store/modules/auth/actions";
-import AlertMessage from "../../components/Alert";
 import { getUser } from "../../services/user";
 
 import { DotsLoader } from 'react-native-indicator';
@@ -35,12 +34,7 @@ export default function LoginScreen(props) {
 
       switch (status) {
         case 200:
-          // AlertMessage({
-          //   title: 'Sucesso',
-          //   message: 'Acesso realizado com sucesso.'
-          // })
-
-          getUser(email).then(res => {
+          await getUser(email).then(res => {
             let response = res.data
 
             dispatch(signInSuccess(authorization, JSON.parse(response.id)))

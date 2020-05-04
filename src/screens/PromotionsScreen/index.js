@@ -17,12 +17,12 @@ import { signInSuccess } from "../../store/modules/auth/actions";
 
 export default function PromotionScreen(props) {
   const dispatch = useDispatch();
-
+  const { idUser } = useSelector((state) => state.auth, () => true)
   const { id, name } = useSelector((state) => state.category_promotions, () => true);
+
   const [promotions, setPromotions] = useState([]);
   const [showInsert, setShowInsert] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
-  const [userId, setUserId] = useState(0);
 
   const [loading, setLoading] = useState(true)
   const [refresh, setRefresh] = useState(false)
@@ -33,7 +33,7 @@ export default function PromotionScreen(props) {
   useEffect(() => {
     async function checkRefreshToken() {
       refreshToken().then((res) => {
-        dispatch(signInSuccess(res.headers.authorization, userId))
+        dispatch(signInSuccess(res.headers.authorization, idUser))
         successfulLogin(res.headers.authorization)
       }, function({response}) {
 
