@@ -73,7 +73,7 @@ export default function SignupScreen(props) {
     <KeyboardAvoidingView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Block padding={[0, theme.sizes.base * 2]}>
-          <Block flex={0.3}>
+          {/* <Block flex={0.3}>
             <Button color={theme.colors.google}>
               <Text bold white center>
                 Entrar com o Google
@@ -84,9 +84,9 @@ export default function SignupScreen(props) {
                 Entrar com o Facebook
               </Text>
             </Button>
-          </Block>
+          </Block> */}
 
-          <Block flex={0.7} padding={[theme.sizes.base, 0]}>
+          <Block padding={[theme.sizes.base, 0]}>
             <Input
               label="Usuário"
               defaultValue={userNickname}
@@ -130,18 +130,20 @@ export default function SignupScreen(props) {
               }}
             />
 
-            <Button onPress={handleSubmit} color={theme.colors.primary}>
-              {loader && (
-                <Block flex={false} center>
-                  <DotsLoader color={theme.colors.white} size={10} />
-                </Block>
-              )}
-              {!loader && (
-                <Text bold white center>
-                  Cadastra-se
-                </Text>
-              )}
-            </Button>
+            <Block flex={false} padding={[theme.sizes.padding, 0]}>
+              <Button onPress={handleSubmit} color={theme.colors.primary}>
+                {loader && (
+                  <Block flex={false} center>
+                    <DotsLoader color={theme.colors.white} size={10} />
+                  </Block>
+                )}
+                {!loader && (
+                  <Text bold white center>
+                    Cadastra-se
+                  </Text>
+                )}
+              </Button>
+            </Block>
           </Block>
         </Block>
       </ScrollView>
