@@ -52,6 +52,9 @@ export default function DetailsScreen(props) {
     async function loadDetails(id) {
       await getPromotion(id).then(res => {
         const response = res.data
+
+        console.log(response)
+
         setDetails({ name: response.apelidoUsuario,
                      title: response.titulo,
                      avatar : response.userUrlProfile,
@@ -60,7 +63,8 @@ export default function DetailsScreen(props) {
                      price: response.preco,
                      localization: response.localizacao,
                      address: response.endereco,
-                     number: response.userTelefone })
+                     number: response.userTelefone,
+                     numberContact: response.numeroContato })
 
         setImageGallery(response.galeriaDeImagens.urlImagens)
         setNotifications(response.notificacoes)
@@ -293,13 +297,15 @@ export default function DetailsScreen(props) {
                       color={theme.colors.gray3}
                     />
                   </Block>
-                  <Block padding={5}>
-                    <Ionicons
-                      name={"ios-phone-portrait"}
-                      size={20}
-                      color={theme.colors.gray3}
-                    />
-                  </Block>
+                  {details.numberContact !== '' && details.numberContact !== null &&
+                    <Block padding={5}>
+                      <Ionicons
+                        name={"ios-phone-portrait"}
+                        size={20}
+                        color={theme.colors.gray3}
+                      />
+                    </Block>
+                  }
                 </Block>
                 <Block>
                   <Block margin={5} padding={[2, 0]}>
@@ -309,9 +315,11 @@ export default function DetailsScreen(props) {
                       {details.address}
                     </Text>
                   </Block>
-                  <Block margin={5} padding={[2, 0]}>
-                    <Text>{details.number}</Text>
-                  </Block>
+                  {details.numberContact !== '' && details.numberContact !== null &&
+                    <Block margin={5} padding={[2, 0]}>
+                      <Text>{details.numberContact}</Text>
+                    </Block>
+                  }
                 </Block>
               </Block>
             </Block>
