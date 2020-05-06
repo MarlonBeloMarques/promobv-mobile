@@ -12,6 +12,7 @@ import { setCategoryUpdateAndInsert } from "../../store/modules/category/updateA
 import { Categories, Gallery, ModalLoader } from "../../components";
 import AlertMessage from "../../components/Alert";
 import { DotsLoader } from 'react-native-indicator'
+import { logout } from "../../services/auth";
 
 export default function Edit(props) {
   const idNavigation = props.navigation.getParam("id");
@@ -64,6 +65,7 @@ export default function Edit(props) {
               title: "Atenção",
               message: "Sua sessão expirou.",
             });
+            logout()
             props.navigation.navigate("login");
           }
         }

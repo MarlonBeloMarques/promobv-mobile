@@ -53,8 +53,6 @@ export default function DetailsScreen(props) {
       await getPromotion(id).then(res => {
         const response = res.data
 
-        console.log(response)
-
         setDetails({ name: response.apelidoUsuario,
                      title: response.titulo,
                      avatar : response.userUrlProfile,
@@ -95,23 +93,30 @@ export default function DetailsScreen(props) {
   }, [notifications])
 
   async function onClickDenounce() {
-    await interactNotification(FormatCurrentDate(), new Date().toLocaleTimeString(), 2, idUser, id).then(res => {
-      let response = res.data
+    if(idUser !== 0) {
+      await interactNotification(FormatCurrentDate(), new Date().toLocaleTimeString(), 2, idUser, id).then(res => {
+        let response = res.data
 
-      if(res.status === 202) {
-        AlertMessage({
-          title: 'Atenção',
-          message: `${response.message}`
-        })
-      }
+        if(res.status === 202) {
+          AlertMessage({
+            title: 'Atenção',
+            message: `${response.message}`
+          })
+        }
 
-      if(res.status === 201) {
-        AlertMessage({
-          title: 'Atenção',
-          message: 'Você denunciou essa promoção.'
-        })
-      }
-    })
+        if(res.status === 201) {
+          AlertMessage({
+            title: 'Atenção',
+            message: 'Você denunciou essa promoção.'
+          })
+        }
+      })
+    } else {
+      AlertMessage({
+        title: 'Atenção',
+        message: 'Você não tem acesso para interagir com essa promoção.'
+      })
+    }
   }
 
   function sharePromotion() {
@@ -141,17 +146,24 @@ export default function DetailsScreen(props) {
   }
 
   async function onClickInteractNotification() {
-    await interactNotification(FormatCurrentDate(), new Date().toLocaleTimeString(), 1, idUserProfile, id).then(res => {
+    if(idUser !== 0) {
+      await interactNotification(FormatCurrentDate(), new Date().toLocaleTimeString(), 1, idUserProfile, id).then(res => {
 
-      if(res.status === 202) {
-        setUserName('')
-      }
-    })
+        if(res.status === 202) {
+          setUserName('')
+        }
+      })
 
-    await getPromotion(id).then(res => {
-      const response = res.data
-      setNotifications(response.notificacoes)
-    })
+      await getPromotion(id).then(res => {
+        const response = res.data
+        setNotifications(response.notificacoes)
+      })
+    } else {
+      AlertMessage({
+        title: "Atenção",
+        message: "Você não tem acesso para interagir com essa promoção.",
+      });
+    }
   }
 
   function onClickGallery() {

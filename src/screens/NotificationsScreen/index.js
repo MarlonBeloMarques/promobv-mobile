@@ -11,6 +11,7 @@ import { DrawerActions } from "react-navigation-drawer";
 import { Ionicons } from "@expo/vector-icons";
 import { getUser } from "../../services/user";
 import AlertMessage from "../../components/Alert";
+import { logout } from "../../services/auth";
 
 export default function NotificationsScreen(props) {
   const [notifications, setNotifications] = useState([]);
@@ -81,6 +82,7 @@ export default function NotificationsScreen(props) {
             title: "Atenção",
             message: "Sua sessão expirou.",
           });
+          logout()
           props.navigation.navigate("login");
         }
       }
@@ -110,6 +112,7 @@ export default function NotificationsScreen(props) {
             title: "Atenção",
             message: "Sua sessão expirou.",
           });
+          logout()
           props.navigation.navigate("login");
         }
       }
