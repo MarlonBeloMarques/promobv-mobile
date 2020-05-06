@@ -15,6 +15,7 @@ import AlertMessage from "../../components/Alert";
 import { ModalLoader } from "../../components";
 import { DotsLoader } from 'react-native-indicator'
 import { logout } from "../../services/auth";
+import { KeyboardAvoidingView } from "react-native";
 
 export default function ProfileScreen(props) {
 
@@ -138,78 +139,80 @@ export default function ProfileScreen(props) {
   }
 
   return (
-    <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
-      {loading && <ModalLoader loading={loading} />}
-      <Block
-        padding={[0, theme.sizes.padding]}
-        space="between"
-        color={theme.colors.white}
-      >
-        <Block padding={[theme.sizes.padding, 0, 0, 0]} center row>
-          <Button onPress={pickImage} style>
-            {avatar === null && <Photo avatar image={profileImage} />}
-            {avatar !== null && <Photo avatar image={avatar} />}
-          </Button>
-          <Block margin={[0, 0, 0, theme.sizes.header]}>
-            <Text gray>Inserir imagem</Text>
+    <KeyboardAvoidingView style={styles.container} behavior={"padding"}>
+      <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
+        {loading && <ModalLoader loading={loading} />}
+        <Block
+          padding={[0, theme.sizes.padding]}
+          space="between"
+          color={theme.colors.white}
+        >
+          <Block padding={[theme.sizes.padding, 0, 0, 0]} center row>
+            <Button onPress={pickImage} style>
+              {avatar === null && <Photo avatar image={profileImage} />}
+              {avatar !== null && <Photo avatar image={avatar} />}
+            </Button>
+            <Block margin={[0, 0, 0, theme.sizes.header]}>
+              <Text gray>Inserir imagem</Text>
+            </Block>
           </Block>
-        </Block>
-        <Block margin={[theme.sizes.header, 0]} flex={false}>
-          <Input
-            label="Nome completo"
-            defaultValue={name}
-            onChangeText={setName}
-            next
-            submitEditing={() => cpfRef.current.focus()}
-          />
-          <Input
-            label="CPF"
-            number
-            defaultValue={cpf}
-            onChangeText={setCpf}
-            reference={cpfRef}
-            next
-            submitEditing={() => numberRef.current.focus()}
-          />
-
-          <Input
-            label="Telefone"
-            number
-            defaultValue={number}
-            onChangeText={setNumber}
-            reference={numberRef}
-            next
-            submitEditing={() => dateOfBirthRef.current.focus()}
-          />
-        </Block>
-
-        <Block row>
-          <Block padding={[0, theme.sizes.padding * 6, 0, 0]}>
+          <Block margin={[theme.sizes.header, 0]} flex={false}>
             <Input
-              label="Data de nascimento"
-              defaultValue={dateOfBirth}
-              onChangeText={setDateOfBirth}
-              reference={dateOfBirthRef}
-              done
+              label="Nome completo"
+              defaultValue={name}
+              onChangeText={setName}
+              next
+              submitEditing={() => cpfRef.current.focus()}
+            />
+            <Input
+              label="CPF"
+              number
+              defaultValue={cpf}
+              onChangeText={setCpf}
+              reference={cpfRef}
+              next
+              submitEditing={() => numberRef.current.focus()}
+            />
+
+            <Input
+              label="Telefone"
+              number
+              defaultValue={number}
+              onChangeText={setNumber}
+              reference={numberRef}
+              next
+              submitEditing={() => dateOfBirthRef.current.focus()}
             />
           </Block>
-        </Block>
 
-        <Block padding={[theme.sizes.padding, 0]}>
-          <Button onPress={handleSubmit} color={theme.colors.primary}>
-            {loader && (
-              <Block flex={false} center>
-                <DotsLoader color={theme.colors.white} size={10} />
-              </Block>
-            )}
-            {!loader && (
-              <Text bold center white>
-                Alterar
-              </Text>
-            )}
-          </Button>
+          <Block row>
+            <Block padding={[0, theme.sizes.padding * 6, 0, 0]}>
+              <Input
+                label="Data de nascimento"
+                defaultValue={dateOfBirth}
+                onChangeText={setDateOfBirth}
+                reference={dateOfBirthRef}
+                done
+              />
+            </Block>
+          </Block>
+
+          <Block padding={[theme.sizes.padding, 0]}>
+            <Button onPress={handleSubmit} color={theme.colors.primary}>
+              {loader && (
+                <Block flex={false} center>
+                  <DotsLoader color={theme.colors.white} size={10} />
+                </Block>
+              )}
+              {!loader && (
+                <Text bold center white>
+                  Alterar
+                </Text>
+              )}
+            </Button>
+          </Block>
         </Block>
-      </Block>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
