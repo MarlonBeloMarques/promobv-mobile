@@ -41,6 +41,7 @@ export default function SignupScreen(props) {
                   message: "Cadastro realizado com sucesso.",
                 });
 
+                logout()
                 props.navigation.navigate("login");
                 break;
             
