@@ -23,6 +23,7 @@ export default function Edit(props) {
   const [description, setDescription] = useState("");
   const [place, setPlace] = useState("");
   const [address, setAddress] = useState("");
+  const [numberContact, setNumberContact] = useState("");
   const [value, setValue] = useState('');
   const [categoryId, setCategoryId] = useState();
   const [categoryName, setCategoryName] = useState('');
@@ -49,6 +50,7 @@ export default function Edit(props) {
           setDescription(response.descricao);
           setPlace(response.localizacao);
           setAddress(response.endereco);
+          setNumberContact(response.numeroContato)
           setValue(response.preco.toString());
 
           setCategoryId(response.categoria.id);
@@ -82,7 +84,7 @@ export default function Edit(props) {
     try {
       setLoader(true)
 
-      await updatePromotion(idNavigation, description, value, place, address, title, categoryId)
+      await updatePromotion(idNavigation, description, value, place, address, title, numberContact, categoryId)
 
       AlertMessage({
         title: 'Sucesso',
@@ -165,6 +167,11 @@ export default function Edit(props) {
                 label="Endereço"
                 defaultValue={address}
                 onChangeText={setAddress}
+              />
+              <Input
+                label="Número de Contato"
+                defaultValue={numberContact}
+                onChangeText={setNumberContact}
               />
 
               <Block row>

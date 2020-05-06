@@ -34,13 +34,12 @@ export default function LoginScreen(props) {
 
       switch (status) {
         case 200:
+          await successfulLogin(authorization)
+
           await getUser(email).then(res => {
             let response = res.data
-
             dispatch(signInSuccess(authorization, JSON.parse(response.id)))
           })
-
-          successfulLogin(authorization)
 
           Keyboard.dismiss()
 
@@ -75,10 +74,10 @@ export default function LoginScreen(props) {
           theme.sizes.base * 2,
         ]}
       >
-        <Block middle center>
+        <Block flex={0.4} middle center>
           <Image resizeMode="contain" source={logo} style={styles.logo} />
         </Block>
-        <Block padding={[theme.sizes.base, 0]} flex={6}>
+        <Block middle padding={[theme.sizes.base, 0]}>
           <Block flex={false}>
             <Input
               label="E-mail"
@@ -119,18 +118,6 @@ export default function LoginScreen(props) {
                 </Text>
               )}
             </Button>
-          </Block>
-          <Block padding={[theme.sizes.base * 2, 0, theme.sizes.base, 0]}>
-            <Button color={theme.colors.google}>
-              <Text bold white center>
-                Entrar com o Google
-              </Text>
-            </Button>
-            <Button color={theme.colors.facebook}>
-              <Text bold white center>
-                Entrar com o Facebook
-              </Text>
-            </Button>
             <Button onPress={onSignupClicked} style={styles.signup}>
               <Text
                 caption
@@ -142,6 +129,19 @@ export default function LoginScreen(props) {
               </Text>
             </Button>
           </Block>
+          {/* <Block padding={[theme.sizes.base * 2, 0, theme.sizes.base, 0]}>
+            <Button color={theme.colors.google}>
+              <Text bold white center>
+                Entrar com o Google
+              </Text>
+            </Button>
+            <Button color={theme.colors.facebook}>
+              <Text bold white center>
+                Entrar com o Facebook
+              </Text>
+            </Button>
+            
+          </Block> */}
         </Block>
       </Block>
     </KeyboardAvoidingView>

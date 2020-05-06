@@ -3,7 +3,6 @@ import { Modal, StyleSheet, Keyboard, Image } from "react-native";
 import { Block, Text, Button, Input, Header } from "../elements";
 import { theme } from "../constants";
 import { ScrollView } from "react-native-gesture-handler";
-import * as SecureStore from "expo-secure-store";
 
 import { setPromotion, setPromotionPicture } from "../services/promotion/index";
 
@@ -18,8 +17,6 @@ import Categories from './Categories'
 
 import AlertMessage from './Alert'
 import Gallery from "./Gallery";
-import { getUser } from "../services/user";
-import { Ionicons } from "@expo/vector-icons";
 
 export default function Insert(props) {
   const dispatch = useDispatch();
@@ -30,12 +27,11 @@ export default function Insert(props) {
   const[description, setDescription] = useState('')
   const[localization, setLocalization] = useState('')
   const[address, setAddress] = useState('')
+  const[numberContact, setNumberContact] = useState('')
   const[price, setPrice] = useState('')
 
   const [showCategories, setShowCategories] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
-
-  const [numberUser, setNumberUser] = useState('')
 
   const [loader, setLoader] = useState(false)
 
@@ -43,6 +39,7 @@ export default function Insert(props) {
   const localizationRef = useRef();
   const addressRef = useRef();
   const priceRef = useRef();
+  const numberContactRef = useRef();
 
   const [titleButtonModal, setTitleButtonModal] = useState('Cancelar')
   const [height, setHeight] = useState(theme.sizes.base * 3);
@@ -54,33 +51,9 @@ export default function Insert(props) {
   }
 
   useEffect(() => {
-    async function loadNumberUser() {
-      const email = await SecureStore.getItemAsync('user_email')
-  
-      getUser(JSON.parse(email)).then((res) => {
-        const response = res.data   
-        setNumberUser(response.telefone)
-      }, function({response}) {
-          if (response.status === 403) {
-            AlertMessage({
-              title: "Atenção",
-              message: "Sua sessão expirou.",
-            });
-            if(props.modal)
-              props.onRequestClose()
-            else 
-              props.navigation.navigate('login')
-          }
-      })
-    }
-
-    loadNumberUser()
-  }, [])
-
-  useEffect(() => {
     function checkFields() {
       if(props.modal) {
-        if(title !== '' && description !== '' && localization !== '' && address !== '' && price !== '' && images.length !== 0) {
+        if(title !== '' && description !== '' && localization !== '' && address !== '' && price !== '' && numberContact !== '' && images.length !== 0) {
           setTitleButtonModal('Inserir')
         } else {
           setTitleButtonModal('Cancelar');
@@ -125,7 +98,7 @@ export default function Insert(props) {
         if(props.modal) {
   
           if(titleButtonModal === 'Inserir') {
-            await setPromotion(description, price, localization, address, title, id).then(res => {
+            await setPromotion(description, price, localization, address, title, numberContact, id).then(res => {
               let promo = res.headers.location
               let N = res.config.baseURL
               
@@ -148,8 +121,8 @@ export default function Insert(props) {
           closeInsert() 
   
         } else {
-          if(title !== '' && description !== '' && localization !== '' && address !== '' && price !== '' && images.length !== 0) {
-            await setPromotion(description, price, localization, address, title, id).then(res => {
+          if(title !== '' && description !== '' && localization !== '' && address !== '' && price !== '' && numberContact !== '' && images.length !== 0) {
+            await setPromotion(description, price, localization, address, title, numberContact, id).then(res => {
               let promo = res.headers.location;
               let N = res.config.baseURL;
   
@@ -165,6 +138,7 @@ export default function Insert(props) {
             setLocalization('')
             setAddress('')
             setPrice('')
+            setNumberContact('')
 
   
             AlertMessage({
@@ -292,9 +266,14 @@ export default function Insert(props) {
         } 
       }
 
-      function validatesNumber() {
-        if(numberUser !== null && numberUser !== '') {
-          return (
+      return (
+        <>
+          {renderGallery()}
+          <ScrollView
+            backgroundColor="white"
+            showsVerticalScrollIndicator={false}
+          >
+            {header(activeIcon)}
             <Block
               padding={[0, theme.sizes.padding]}
               space="between"
@@ -326,6 +305,14 @@ export default function Insert(props) {
                   defaultValue={localization}
                   onChangeText={setLocalization}
                   reference={localizationRef}
+                  next
+                  submitEditing={() => numberContactRef.current.focus()}
+                />
+                <Input
+                  label="Número de Contato"
+                  defaultValue={numberContact}
+                  onChangeText={setNumberContact}
+                  reference={numberContactRef}
                   next
                   submitEditing={() => addressRef.current.focus()}
                 />
@@ -375,53 +362,7 @@ export default function Insert(props) {
 
               {buttonAction(titleModal)}
             </Block>
-          );     
-        } else {
-          return (
-            <Block
-              margin={[
-                theme.sizes.padding * 4,
-                theme.sizes.padding,
-                0,
-                theme.sizes.padding,
-              ]}
-            >
-              <Block padding={theme.sizes.padding} center>
-                <Ionicons
-                  name={"ios-rocket"}
-                  color={theme.colors.gray3}
-                  size={40}
-                />
-              </Block>
-              <Text center gray3>
-                Seus dados cadastrais estão incompletos. Navegue até a barra de
-                menu, em{" "}
-                <Text bold gray3>
-                  Minha Conta
-                </Text>{" "}
-                e Atualize seu número telefônico.
-              </Text>
-              <Block margin={[theme.sizes.padding, 0]}>
-                {props.modal && (
-                  <Button onPress={closeInsert} color={theme.colors.primary}>
-                    <Text center bold white>
-                      Voltar
-                    </Text>
-                  </Button>
-                )}
-              </Block>
-            </Block>
-          );
-        }
-      }
-
-      return (
-        <>
-            {renderGallery()}
-            <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
-              {header(activeIcon)}
-              {validatesNumber()}
-            </ScrollView>
+          </ScrollView>
         </>
       );
     }

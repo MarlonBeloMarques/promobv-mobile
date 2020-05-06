@@ -16,12 +16,12 @@ export function getMyPromotions() {
   return api.get('/promocoes/user')
 }
 
-export function updatePromotion(id, descricao, preco, localizacao, endereco, titulo, idCategoria) {
-  return api.put(`/promocoes/${id}`, {descricao, preco, localizacao, endereco, titulo, idCategoria})
+export function updatePromotion(id, descricao, preco, localizacao, endereco, titulo, numeroContato, idCategoria) {
+  return api.put(`/promocoes/${id}`, {descricao, preco, localizacao, endereco, titulo, numeroContato, idCategoria})
 }
 
-export function setPromotion(descricao, preco, localizacao, endereco, titulo, idCategoria) {
-  return api.post(`/promocoes`, {descricao, preco, localizacao, endereco, titulo, idCategoria})
+export function setPromotion(descricao, preco, localizacao, endereco, titulo, numeroContato, idCategoria) {
+  return api.post(`/promocoes`, {descricao, preco, localizacao, endereco, titulo, numeroContato, idCategoria})
 }
 
 export function setPromotionPicture(id, data) {

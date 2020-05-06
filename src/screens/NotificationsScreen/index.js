@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { KeyboardAvoidingView, FlatList, StyleSheet, ActivityIndicator } from "react-native";
+import { KeyboardAvoidingView, FlatList, StyleSheet, ActivityIndicator, AsyncStorage } from "react-native";
 import { Block, Text, Photo, Header } from "../../elements";
 import { theme } from "../../constants";
 import { getNotifications, checkReports } from '../../services/notification'
@@ -30,6 +30,7 @@ export default function NotificationsScreen(props) {
 
       try {
         let email = await SecureStore.getItemAsync("user_email");
+        let message = await AsyncStorage.getItem("message");
   
         await getUser(JSON.parse(email)).then((res) => {
           const response = res.data;
@@ -39,11 +40,15 @@ export default function NotificationsScreen(props) {
         await checkReports(userId).then((res) => {
           const response = res.data;
 
-          if (res.status === 200) {
-            AlertMessage({
-              title: "Atenção",
-              message: `${response}`,
-            });
+          if (res.status === 200) { 
+            if((message === null || parseInt(message) < response.length) && response.length != 0) {
+              AlertMessage({
+                title: "Atenção",
+                message: `${response}`,
+              });
+            }
+
+            AsyncStorage.setItem('message', JSON.stringify(response.length))
           }
         });
       } catch ({response}) {
