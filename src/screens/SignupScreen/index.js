@@ -71,7 +71,7 @@ export default function SignupScreen(props) {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} behavior={'padding'}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Block padding={[0, theme.sizes.base * 2]}>
           {/* <Block flex={0.3}>

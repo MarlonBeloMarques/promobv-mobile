@@ -17,6 +17,7 @@ import Categories from './Categories'
 
 import AlertMessage from './Alert'
 import Gallery from "./Gallery";
+import { KeyboardAvoidingView } from "react-native";
 
 export default function Insert(props) {
   const dispatch = useDispatch();
@@ -269,100 +270,102 @@ export default function Insert(props) {
       return (
         <>
           {renderGallery()}
-          <ScrollView
-            backgroundColor="white"
-            showsVerticalScrollIndicator={false}
-          >
-            {header(activeIcon)}
-            <Block
-              padding={[0, theme.sizes.padding]}
-              space="between"
-              color={theme.colors.white}
+          <KeyboardAvoidingView style={styles.container} behavior={'padding'}>
+            <ScrollView
+              backgroundColor="white"
+              showsVerticalScrollIndicator={false}
             >
-              <Block margin={[theme.sizes.header, 0]} flex={false}>
-                <Input
-                  label="Titulo"
-                  defaultValue={title}
-                  onChangeText={setTitle}
-                  next
-                  submitEditing={() => descriptionRef.current.focus()}
-                />
-                <Input
-                  box={height}
-                  onContentSizeChange={(e) =>
-                    setHeight(e.nativeEvent.contentSize.height)
-                  }
-                  multiline
-                  label="Descrição"
-                  defaultValue={description}
-                  onChangeText={setDescription}
-                  reference={descriptionRef}
-                  next
-                  submitEditing={() => localizationRef.current.focus()}
-                />
-                <Input
-                  label="Local"
-                  defaultValue={localization}
-                  onChangeText={setLocalization}
-                  reference={localizationRef}
-                  next
-                  submitEditing={() => numberContactRef.current.focus()}
-                />
-                <Input
-                  label="Número de Contato"
-                  defaultValue={numberContact}
-                  onChangeText={setNumberContact}
-                  reference={numberContactRef}
-                  next
-                  submitEditing={() => addressRef.current.focus()}
-                />
-                <Input
-                  label="Endereço"
-                  defaultValue={address}
-                  onChangeText={setAddress}
-                  reference={addressRef}
-                  next
-                  submitEditing={() => priceRef.current.focus()}
-                />
+              {header(activeIcon)}
+              <Block
+                padding={[0, theme.sizes.padding]}
+                space="between"
+                color={theme.colors.white}
+              >
+                <Block margin={[theme.sizes.header, 0]} flex={false}>
+                  <Input
+                    label="Titulo"
+                    defaultValue={title}
+                    onChangeText={setTitle}
+                    next
+                    submitEditing={() => descriptionRef.current.focus()}
+                  />
+                  <Input
+                    box={height}
+                    onContentSizeChange={(e) =>
+                      setHeight(e.nativeEvent.contentSize.height)
+                    }
+                    multiline
+                    label="Descrição"
+                    defaultValue={description}
+                    onChangeText={setDescription}
+                    reference={descriptionRef}
+                    next
+                    submitEditing={() => localizationRef.current.focus()}
+                  />
+                  <Input
+                    label="Local"
+                    defaultValue={localization}
+                    onChangeText={setLocalization}
+                    reference={localizationRef}
+                    next
+                    submitEditing={() => numberContactRef.current.focus()}
+                  />
+                  <Input
+                    label="Número de Contato"
+                    defaultValue={numberContact}
+                    onChangeText={setNumberContact}
+                    reference={numberContactRef}
+                    next
+                    submitEditing={() => addressRef.current.focus()}
+                  />
+                  <Input
+                    label="Endereço"
+                    defaultValue={address}
+                    onChangeText={setAddress}
+                    reference={addressRef}
+                    next
+                    submitEditing={() => priceRef.current.focus()}
+                  />
+
+                  <Block row>
+                    <Block padding={[0, theme.sizes.padding, 0, 0]}>
+                      <Input
+                        number
+                        label="Valor"
+                        defaultValue={price}
+                        onChangeText={setPrice}
+                        reference={priceRef}
+                        done
+                      />
+                    </Block>
+
+                    <Block margin={[theme.sizes.base / 1.5, 0]}>
+                      <Block
+                        padding={[0, 0, theme.sizes.base - 10, 4]}
+                        flex={false}
+                      >
+                        <Text gray>Categoria</Text>
+                      </Block>
+                      <Button onPress={onClickCategory} style={styles.button}>
+                        <Text gray>{name}</Text>
+                      </Button>
+                    </Block>
+                  </Block>
+                </Block>
 
                 <Block row>
-                  <Block padding={[0, theme.sizes.padding, 0, 0]}>
-                    <Input
-                      number
-                      label="Valor"
-                      defaultValue={price}
-                      onChangeText={setPrice}
-                      reference={priceRef}
-                      done
-                    />
-                  </Block>
-
-                  <Block margin={[theme.sizes.base / 1.5, 0]}>
-                    <Block
-                      padding={[0, 0, theme.sizes.base - 10, 4]}
-                      flex={false}
-                    >
-                      <Text gray>Categoria</Text>
-                    </Block>
-                    <Button onPress={onClickCategory} style={styles.button}>
-                      <Text gray>{name}</Text>
-                    </Button>
+                  <Block flex={false}>
+                    <Text bold gray>
+                      Galeria
+                    </Text>
+                    {renderButtonGallery()}
                   </Block>
                 </Block>
-              </Block>
 
-              <Block row>
-                <Block flex={false}>
-                  <Text bold gray>
-                    Galeria
-                  </Text>
-                  {renderButtonGallery()}
-                </Block>
+                {buttonAction(titleModal)}
               </Block>
-
-              {buttonAction(titleModal)}
-            </Block>
-          </ScrollView>
+            </ScrollView>
+          </KeyboardAvoidingView>
         </>
       );
     }
@@ -409,6 +412,10 @@ Insert.propTypes = {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+
   plus: {
     backgroundColor: theme.colors.gray2,
     padding: 20,

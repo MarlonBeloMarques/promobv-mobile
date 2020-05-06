@@ -10,7 +10,7 @@ export default function PasswordScreen(props) {
   const [email, setEmail] = useState("promobv@react.com");
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} behavior={'padding'}>
       <Block padding={[0, theme.sizes.base * 2]}>
         <Text h3 style={{ marginTop: theme.sizes.h1 }} gray bold center>
           Esqueceu sua senha?

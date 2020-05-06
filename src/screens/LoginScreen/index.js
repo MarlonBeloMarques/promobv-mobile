@@ -64,7 +64,7 @@ export default function LoginScreen(props) {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} behavior={'padding'}>
       <StatusBar barStyle="dark-content" />
       <Block
         padding={[
