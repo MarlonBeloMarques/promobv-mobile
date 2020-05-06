@@ -74,7 +74,7 @@ export default function LoginScreen(props) {
           theme.sizes.base * 2,
         ]}
       >
-        <Block flex={0.3} middle center>
+        <Block flex={0.4} middle center>
           <Image resizeMode="contain" source={logo} style={styles.logo} />
         </Block>
         <Block middle padding={[theme.sizes.base, 0]}>
