@@ -20,7 +20,7 @@ export default function PasswordScreen(props) {
           recuperar seu acesso.
         </Text>
 
-        <Block margin={[theme.sizes.base, 0]}>
+        <Block flex={false}  padding={[theme.sizes.base, 0]}>
           <Input label="E-mail" />
           <Block margin={[theme.sizes.base, 0]} flex={false}>
             <Button color={theme.colors.primary}>

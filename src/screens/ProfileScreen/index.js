@@ -5,6 +5,7 @@ import * as SecureStore from "expo-secure-store";
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
+import styles from './styles'
 
 import profileImage from '../../../assets/images/profile-image.png'
 
