@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, KeyboardAvoidingView } from "react-native";
+import { StyleSheet } from "react-native";
 import { Block, Text, Button, Input } from "../../elements";
 import { theme } from "../../constants";
 import { ScrollView } from "react-native-gesture-handler";
@@ -145,7 +145,6 @@ export default function Edit(props) {
       <>
         {loading && <ModalLoader loading={loading} />}
         {renderGallery()}
-        <KeyboardAvoidingView style={styles.container} behavior={'padding'}>
           <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
             <Block
               padding={[0, theme.sizes.padding]}
@@ -231,7 +230,6 @@ export default function Edit(props) {
               </Block>
             </Block>
           </ScrollView>
-        </KeyboardAvoidingView>
       </>
     );
   }
@@ -244,9 +242,6 @@ export default function Edit(props) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   plus: {
     backgroundColor: theme.colors.gray2,
     padding: 20,
