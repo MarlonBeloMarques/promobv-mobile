@@ -1,7 +1,7 @@
 {
   "expo": {
-    "scheme": "myapp",
-    "name": "Blank Template",
+    "scheme": "promobv",
+    "name": "PromoBV",
     "slug": "promobv",
     "privacy": "public",
     "sdkVersion": "36.0.0",

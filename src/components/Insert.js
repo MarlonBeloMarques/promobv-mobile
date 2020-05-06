@@ -17,7 +17,6 @@ import Categories from './Categories'
 
 import AlertMessage from './Alert'
 import Gallery from "./Gallery";
-import { KeyboardAvoidingView } from "react-native";
 
 export default function Insert(props) {
   const dispatch = useDispatch();
@@ -270,7 +269,6 @@ export default function Insert(props) {
       return (
         <>
           {renderGallery()}
-          <KeyboardAvoidingView style={styles.container} behavior={'padding'}>
             <ScrollView
               backgroundColor="white"
               showsVerticalScrollIndicator={false}
@@ -365,7 +363,6 @@ export default function Insert(props) {
                 {buttonAction(titleModal)}
               </Block>
             </ScrollView>
-          </KeyboardAvoidingView>
         </>
       );
     }
@@ -412,10 +409,6 @@ Insert.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-
   plus: {
     backgroundColor: theme.colors.gray2,
     padding: 20,
