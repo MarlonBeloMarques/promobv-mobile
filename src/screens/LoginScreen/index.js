@@ -49,21 +49,20 @@ export default function LoginScreen(props) {
           props.navigation.navigate('Promoções')
         
           break
-
-        case 403:
-          AlertMessage({
-            title: 'Atenção',
-            message: 'Verifique no seu email a confirmação de usuário.'
-          })
-
-          Keyboard.dismiss()
-
-          setLoader(false);
       }
 
 
     } catch ({ response }) {
       setLoader(false)
+      if(response.status === 403) {
+        AlertMessage({
+          title: "Atenção",
+          message: "Verifique no seu e-mail a confirmação de usuário.",
+        });
+
+        setEmail('')
+        setPassword('')
+      }
   }
 }
 
