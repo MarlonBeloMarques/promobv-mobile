@@ -1,6 +1,5 @@
 import api from '../api'
 import * as SecureStore from "expo-secure-store";
-import { useDispatch } from "react-redux";
 
 var jwtDecode = require("jwt-decode");
 
@@ -19,11 +18,9 @@ export async function successfulLogin(authorizationValue) {
 }
 
 export async function logout() {
-  const dispatch = useDispatch();
 
   await SecureStore.deleteItemAsync('user_token');
   await SecureStore.deleteItemAsync('user_email');
-  dispatch(signOutRequest());
 }
 
 export function refreshToken() {
