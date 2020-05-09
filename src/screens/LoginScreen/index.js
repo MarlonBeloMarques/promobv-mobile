@@ -14,6 +14,7 @@ import { signInSuccess } from "../../store/modules/auth/actions";
 import { getUser } from "../../services/user";
 
 import { DotsLoader } from 'react-native-indicator';
+import AlertMessage from "../../components/Alert";
 
 export default function LoginScreen(props) {
 
@@ -48,7 +49,18 @@ export default function LoginScreen(props) {
           props.navigation.navigate('Promoções')
         
           break
+
+        case 403:
+          AlertMessage({
+            title: 'Atenção',
+            message: 'Verifique no seu email a confirmação de usuário.'
+          })
+
+          Keyboard.dismiss()
+
+          setLoader(false);
       }
+
 
     } catch ({ response }) {
       setLoader(false)

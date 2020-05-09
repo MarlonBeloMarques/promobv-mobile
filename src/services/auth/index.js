@@ -29,3 +29,11 @@ export async function logout() {
 export function refreshToken() {
   return api.post('/auth/refresh_token')
 }
+
+export function checkEmail(email) {
+  return api.get(`/auth/check_email?value=${email}`)
+}
+
+export function newPassword(email, password) {
+  return api.post('/auth/new_password', {email, password})
+}
