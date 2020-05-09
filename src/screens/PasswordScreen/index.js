@@ -18,9 +18,9 @@ export default function PasswordScreen(props) {
 
   const confirmPasswordRef = useRef();
 
-  async function checkEmailUser() {
+  function checkEmailUser() {
     setLoader(true)
-    await checkEmail(email).then(res => {
+    checkEmail(email).then(res => {
       let response = res.data
 
       if(res.status === 200) {
@@ -29,12 +29,16 @@ export default function PasswordScreen(props) {
           setChecked(true)
         }
       }
+
+      if(res.status === 404) {
+        setLoader(false);
+        AlertMessage({
+          title: "Atenção",
+          message: "E-mail não encontrado.",
+        });
+      }
     }, function() {
-      setLoader(false)
-      AlertMessage({
-        title: "Atenção",
-        message: "E-mail não encontrado.",
-      });
+        setLoader(false)
     })
   }
 
