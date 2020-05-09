@@ -30,6 +30,7 @@ export default function ProfileScreen(props) {
 
   const [loading, setloading] = useState(true)
   const [loader, setLoader] = useState(false)
+  const [loaderImage, setLoaderImage] = useState(false)
 
   const cpfRef = useRef()
   const numberRef = useRef()
@@ -80,6 +81,8 @@ export default function ProfileScreen(props) {
 
   async function submitPicture(photo) {
 
+    setLoaderImage(true)
+
     let localUri = photo.uri;
     let filename = localUri.split("/").pop();
 
@@ -93,6 +96,8 @@ export default function ProfileScreen(props) {
       console.log(res)
     })
 
+    setAvatar(photo.uri);
+    setLoaderImage(false)
   }
 
   async function pickImage () {
@@ -104,7 +109,6 @@ export default function ProfileScreen(props) {
         quality: 1,
       });
       if (!result.cancelled) {
-        setAvatar(result.uri)
         submitPicture(result)
       }
 
@@ -152,7 +156,12 @@ export default function ProfileScreen(props) {
             {avatar !== null && <Photo avatar image={avatar} />}
           </Button>
           <Block margin={[0, 0, 0, theme.sizes.header]}>
-            <Text gray>Inserir imagem</Text>
+            {loaderImage && 
+              <Text gray>Carregando...</Text>
+            }
+            {!loaderImage &&
+              <Text gray>Inserir imagem</Text>
+            }
           </Block>
         </Block>
         <Block margin={[theme.sizes.header, 0]} flex={false}>

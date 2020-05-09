@@ -1,5 +1,4 @@
 import React, { useState, useRef } from "react";
-import { ScrollView } from "react-native";
 import { Block, Input, Button, Text } from "../../elements";
 import { theme } from "../../constants";
 import { DotsLoader } from "react-native-indicator";
@@ -7,6 +6,7 @@ import { DotsLoader } from "react-native-indicator";
 import { checkEmail, newPassword } from "../../services/auth";
 import AlertMessage from "../../components/Alert";
 import { Keyboard } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function PasswordScreen(props) {
   const [email, setEmail] = useState("");
@@ -18,14 +18,23 @@ export default function PasswordScreen(props) {
 
   const confirmPasswordRef = useRef();
 
-  function checkEmailUser() {
+  async function checkEmailUser() {
     setLoader(true)
-    checkEmail(email).then(res => {
+    await checkEmail(email).then(res => {
       let response = res.data
-       if(response) {
-         setLoader(false)
-         setChecked(true)
-       }
+
+      if(res.status === 200) {
+        if(response) {
+          setLoader(false)
+          setChecked(true)
+        }
+      }
+    }, function() {
+      setLoader(false)
+      AlertMessage({
+        title: "Atenção",
+        message: "E-mail não encontrado.",
+      });
     })
   }
 
