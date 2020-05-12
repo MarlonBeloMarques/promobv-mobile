@@ -34,7 +34,7 @@ const Gallery = (props) => {
     }
 
     loadGallery()
-  }, [])
+  }, [idGallery])
 
   async function addImage() {
     if(image.length <= 4) {
