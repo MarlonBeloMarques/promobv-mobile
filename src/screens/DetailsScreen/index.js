@@ -93,6 +93,7 @@ export default function DetailsScreen(props) {
   }, [notifications])
 
   async function onClickDenounce() {
+    console.log('teste')
     if(idUser !== 0) {
       await interactNotification(FormatCurrentDate(), new Date().toLocaleTimeString(), 2, idUser, id).then(res => {
         let response = res.data
@@ -122,7 +123,10 @@ export default function DetailsScreen(props) {
   function sharePromotion() {
     let idLink = EncryptedLinking(id == null ? idLinking : id)
     Share.share({
-      message: "Clique no link para visualizar a promoção, " + Linking.makeUrl(`/details/${idLink}`),
+      // app prod
+      message: "Clique no link para visualizar a promoção, " + `https://promobv-dev.herokuapp.com/promocoes/redirect-details?id=${idLink}`,
+      //app desenv
+      //message: "Clique no link para visualizar a promoção, " + Linking.makeUrl(`details/${idLink}`),
       url: Linking.makeUrl(),
       title: details.title,
     })
@@ -147,8 +151,7 @@ export default function DetailsScreen(props) {
 
   async function onClickInteractNotification() {
     if(idUser !== 0) {
-      await interactNotification(FormatCurrentDate(), new Date().toLocaleTimeString(), 1, idUserProfile, id).then(res => {
-
+      await interactNotification(FormatCurrentDate(), new Date().toLocaleTimeString(), 1, idUserProfile, id == null ? idLinking : id).then(res => {
         if(res.status === 202) {
           setUserName('')
         }
@@ -168,23 +171,22 @@ export default function DetailsScreen(props) {
 
   function onClickGallery() {
     setShowGallery(true);
-    }
+  }
 
     function onHideGallery() {
       setShowGallery(false);
-    }
+  }
 
-    function renderGallery() {
-
-      if(onClickGallery)
-        return (
-          <Gallery
-            showDetails={true}
-            idGallery={id}
-            visible={showGallery}
-            onRequestClose={onHideGallery}
-          ></Gallery>
-        )
+  function renderGallery() {
+    if(onClickGallery)
+      return (
+        <Gallery
+          showDetails={true}
+          idGallery={id == null ? idLinking : id}
+          visible={showGallery}
+          onRequestClose={onHideGallery}
+        ></Gallery>
+      )
   }
 
   async function getUserNotification() {

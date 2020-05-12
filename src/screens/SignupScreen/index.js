@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { KeyboardAvoidingView, Keyboard } from "react-native";
+import { Keyboard } from "react-native";
 import { Block, Input, Button, Text } from "../../elements";
 import { theme } from "../../constants";
 
@@ -38,10 +38,9 @@ export default function SignupScreen(props) {
 
                 AlertMessage({
                   title: "Sucesso",
-                  message: "Cadastro realizado com sucesso.",
+                  message: "Cadastro realizado com sucesso. Verifique seu e-mail para finalizar o cadastro.",
                 });
 
-                logout()
                 props.navigation.navigate("login");
                 break;
             
@@ -71,7 +70,6 @@ export default function SignupScreen(props) {
   }
 
   return (
-   // <KeyboardAvoidingView style={styles.container} behavior={'padding'}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Block padding={[0, theme.sizes.base * 2]}>
           {/* <Block flex={0.3}>
@@ -148,6 +146,5 @@ export default function SignupScreen(props) {
           </Block>
         </Block>
       </ScrollView>
-  //  </KeyboardAvoidingView>
   );
 }

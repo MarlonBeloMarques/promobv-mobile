@@ -3,6 +3,7 @@ import { Alert } from 'react-native'
 import * as SecureStore from "expo-secure-store";
 import { logout } from './auth';
 import AlertMessage from '../components/Alert';
+import { useDispatch } from 'react-redux';
 
 const api = axios.create({
   baseURL: 'https://promobv-dev.herokuapp.com',
@@ -43,6 +44,7 @@ api.interceptors.response.use(function (response) {
   return response
   
 }, function (error) {
+  const dispatch = useDispatch();
   // Qualquer código de status que esteja fora do intervalo de 2xx faz com que esta função seja acionada
   // Faça algo com erro de resposta
   // console.log ('resposta interceptada:', error.response.data)
@@ -88,6 +90,11 @@ api.interceptors.response.use(function (response) {
   }
 
   function handle403() {
+    AlertMessage({
+      title: 'Atenção',
+      message: 'Sua sessão expirou.'
+    })
+    dispatch(signOutRequest())
     logout()
   }
 

@@ -19,6 +19,6 @@ export function EncryptedLinking(id) {
 
 export function DecryptedLinking(encrypt) {
   let linkdescrypt = decrypt("key secury linking promobv", encrypt);
-  let id = linkdescrypt.charAt(4);
+  let id = linkdescrypt.substring(4, (linkdescrypt.length - 11))
   return parseInt(id)
 }

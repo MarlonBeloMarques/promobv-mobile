@@ -14,6 +14,7 @@ import { signInSuccess } from "../../store/modules/auth/actions";
 import { getUser } from "../../services/user";
 
 import { DotsLoader } from 'react-native-indicator';
+import AlertMessage from "../../components/Alert";
 
 export default function LoginScreen(props) {
 
@@ -50,8 +51,18 @@ export default function LoginScreen(props) {
           break
       }
 
+
     } catch ({ response }) {
       setLoader(false)
+      if(response.status === 403) {
+        AlertMessage({
+          title: "Atenção",
+          message: "Verifique no seu e-mail a confirmação de usuário.",
+        });
+
+        setEmail('')
+        setPassword('')
+      }
   }
 }
 
