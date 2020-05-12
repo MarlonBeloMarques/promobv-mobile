@@ -10,7 +10,7 @@ import { signIn, successfulLogin } from '../../services/auth'
 import { StatusBar } from "react-native";
 
 import { useDispatch } from "react-redux";
-import { signInSuccess } from "../../store/modules/auth/actions";
+import { signInSuccess, signOutRequest } from "../../store/modules/auth/actions";
 import { getUser } from "../../services/user";
 
 import { DotsLoader } from 'react-native-indicator';
@@ -26,6 +26,10 @@ export default function LoginScreen(props) {
   const dispatch = useDispatch()
 
   const passwordRef = useRef();
+
+  useEffect(() => {
+    dispatch(signOutRequest())
+  }, [])
 
   async function handleSubmit() {
     try {
