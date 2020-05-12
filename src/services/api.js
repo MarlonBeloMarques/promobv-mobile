@@ -51,8 +51,6 @@ api.interceptors.response.use(function (response) {
 
   let errorObj = error.response.data
 
-  
-
   switch (errorObj.status) {
     case 401:
       handle401()
@@ -96,7 +94,7 @@ api.interceptors.response.use(function (response) {
       title: 'Atenção',
       message: 'Sua sessão expirou.'
     })
-    dispatch(signOutRequest());
+    dispatch(signOutRequest())
     logout()
   }
 
