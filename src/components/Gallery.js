@@ -40,6 +40,7 @@ const Gallery = (props) => {
     if(image.length <= 4) {
       let result = await ImagePicker.launchImageLibraryAsync({
         aspect: [4, 3],
+        quality: 1,
       });
       
       if (!result.cancelled) {
