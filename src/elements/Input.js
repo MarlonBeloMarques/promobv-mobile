@@ -1,5 +1,6 @@
 import React, { Component, useState } from "react";
 import { StyleSheet, TextInput } from "react-native";
+import { TextInputMask } from "react-native-masked-text";
 import Icon from "react-native-vector-icons/Ionicons";
 import Text from "./Text";
 import Block from "./Block";
@@ -53,7 +54,7 @@ export default function Input(props) {
     );
   }
 
-  const { next, done, email, phone, number, secure, error, style, reference, box } = props;
+  const { next, done, email, phone, number, secure, error, style, reference, box, type } = props;
   const { toggleSecure } = isToggleSecure;
   const isSecure = toggleSecure ? false : secure;
   const inputStyles = [ 
@@ -76,28 +77,54 @@ export default function Input(props) {
 
   const [height, setHeight] = useState(theme.sizes.base * 3);
 
-  return (
-    <Block flex={false} margin={[theme.sizes.base / 1.5, 0]}>
-      {renderLabel()}
-      <TextInput
-        value={props.value}
-        style={inputStyles}
-        secureTextEntry={isSecure}
-        autoComplete="off"
-        autoCapitalize="none"
-        autoCorrect={false}
-        keyboardType={inputType}
-        defaultValue={props.defaultValue}
-        onChangeText={props.onChangeText}
-        returnKeyType={keyType}
-        onSubmitEditing={props.submitEditing}
-        ref={reference}
-        {...props}
-      />
-      {renderToggle()}
-      {renderRight()}
-    </Block>
-  );
+  if(props.mask) {
+    return (
+      <Block flex={false} margin={[theme.sizes.base / 1.5, 0]}>
+        {renderLabel()}
+        <TextInputMask
+          value={props.value}
+          type={type}
+          style={inputStyles}
+          secureTextEntry={isSecure}
+          autoComplete="off"
+          autoCapitalize="none"
+          autoCorrect={false}
+          keyboardType={inputType}
+          defaultValue={props.defaultValue}
+          onChangeText={props.onChangeText}
+          returnKeyType={keyType}
+          onSubmitEditing={props.submitEditing}
+          ref={reference}
+          {...props}
+        />
+        {renderToggle()}
+        {renderRight()}
+      </Block>
+    );
+  } else {
+    return (
+      <Block flex={false} margin={[theme.sizes.base / 1.5, 0]}>
+        {renderLabel()}
+        <TextInput
+          value={props.value}
+          style={inputStyles}
+          secureTextEntry={isSecure}
+          autoComplete="off"
+          autoCapitalize="none"
+          autoCorrect={false}
+          keyboardType={inputType}
+          defaultValue={props.defaultValue}
+          onChangeText={props.onChangeText}
+          returnKeyType={keyType}
+          onSubmitEditing={props.submitEditing}
+          ref={reference}
+          {...props}
+        />
+        {renderToggle()}
+        {renderRight()}
+      </Block>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -123,4 +150,5 @@ const styles = StyleSheet.create({
 
 Input.propTypes = {
   submitEditing: () => {},
+  mask: false
 };

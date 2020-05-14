@@ -310,6 +310,10 @@ export default function Insert(props) {
                   />
                   <Input
                     label="Número de Contato"
+                    mask={true}
+                    type={'cel-phone'}
+                    number
+                    value={numberContact}
                     defaultValue={numberContact}
                     onChangeText={setNumberContact}
                     reference={numberContactRef}
