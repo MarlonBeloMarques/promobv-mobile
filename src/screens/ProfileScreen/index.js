@@ -5,7 +5,6 @@ import * as SecureStore from "expo-secure-store";
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
-import styles from './styles'
 
 import profileImage from '../../../assets/images/profile-image.png'
 
@@ -170,31 +169,43 @@ export default function ProfileScreen(props) {
             defaultValue={name}
             onChangeText={setName}
             next
-            submitEditing={() => cpfRef.current.focus()}
+            submitEditing={() => cpfRef.current._inputElement.focus()}
           />
           <Input
             label="CPF"
+            mask={true}
+            type={'cpf'}
             number
+            value={cpf}
             defaultValue={cpf}
             onChangeText={setCpf}
             reference={cpfRef}
             next
-            submitEditing={() => numberRef.current.focus()}
+            submitEditing={() => numberRef.current._inputElement.focus()}
           />
           <Input
             label="Telefone"
+            mask={true}
+            type={'cel-phone'}
             number
+            value={number}
             defaultValue={number}
             onChangeText={setNumber}
             reference={numberRef}
             next
-            submitEditing={() => dateOfBirthRef.current.focus()}
+            submitEditing={() => dateOfBirthRef.current._inputElement.focus()}
           />
         </Block>
         <Block row>
           <Block padding={[0, theme.sizes.padding * 6, 0, 0]}>
             <Input
               label="Data de nascimento"
+              mask={true}
+              type={'datetime'}
+              options={{
+                format: 'DD/MM/YYYY'
+              }}
+              value={dateOfBirth}
               defaultValue={dateOfBirth}
               onChangeText={setDateOfBirth}
               reference={dateOfBirthRef}
