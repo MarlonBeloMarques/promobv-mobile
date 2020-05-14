@@ -13,7 +13,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { getUser, updateUser, setUserPicture } from "../../services/user";
 import AlertMessage from "../../components/Alert";
 import { ModalLoader } from "../../components";
-import { DotsLoader } from 'react-native-indicator'
+import { DotsLoader, CirclesLoader } from 'react-native-indicator'
 import { logout } from "../../services/auth";
 
 export default function ProfileScreen(props) {
@@ -34,6 +34,8 @@ export default function ProfileScreen(props) {
   const cpfRef = useRef()
   const numberRef = useRef()
   const dateOfBirthRef = useRef()
+
+  console.log(avatar)
 
   useEffect(() => {
     async function loadProfile() {
@@ -149,18 +151,20 @@ export default function ProfileScreen(props) {
         space="between"
         color={theme.colors.white}
       >
-        <Block padding={[theme.sizes.padding, 0, 0, 0]} center row>
-          <Button onPress={pickImage} style>
-            {avatar === null && <Photo avatar image={profileImage} />}
-            {avatar !== null && <Photo avatar image={avatar} />}
-          </Button>
+        <Block fullBorder padding={[theme.sizes.padding, 0, 0, 0]} center row>
+          {loaderImage && (
+            <Block margin={[0, 0, 0, theme.sizes.caption]} padding={[theme.sizes.caption - 2, 0]} flex={false} center middle>
+              <CirclesLoader color={theme.colors.tertiary} size={18} dotRadius={4} />
+            </Block>
+          )}
+          {!loaderImage && (
+            <Button onPress={pickImage} style>
+              {avatar == null && <Photo avatar image={profileImage} />}
+              {avatar != null && <Photo avatar image={avatar} />}
+            </Button>
+          )}
           <Block margin={[0, 0, 0, theme.sizes.header]}>
-            {loaderImage && 
-              <Text gray>Carregando...</Text>
-            }
-            {!loaderImage &&
-              <Text gray>Inserir imagem</Text>
-            }
+            <Text gray>Inserir imagem</Text>
           </Block>
         </Block>
         <Block margin={[theme.sizes.header, 0]} flex={false}>
@@ -174,7 +178,7 @@ export default function ProfileScreen(props) {
           <Input
             label="CPF"
             mask={true}
-            type={'cpf'}
+            type={"cpf"}
             number
             value={cpf}
             defaultValue={cpf}
@@ -186,7 +190,7 @@ export default function ProfileScreen(props) {
           <Input
             label="Telefone"
             mask={true}
-            type={'cel-phone'}
+            type={"cel-phone"}
             number
             value={number}
             defaultValue={number}
@@ -201,9 +205,9 @@ export default function ProfileScreen(props) {
             <Input
               label="Data de nascimento"
               mask={true}
-              type={'datetime'}
+              type={"datetime"}
               options={{
-                format: 'DD/MM/YYYY'
+                format: "DD/MM/YYYY",
               }}
               value={dateOfBirth}
               defaultValue={dateOfBirth}
