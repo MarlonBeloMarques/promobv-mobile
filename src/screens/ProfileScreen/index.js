@@ -151,7 +151,7 @@ export default function ProfileScreen(props) {
         space="between"
         color={theme.colors.white}
       >
-        <Block fullBorder padding={[theme.sizes.padding, 0, 0, 0]} center row>
+        <Block padding={[theme.sizes.padding, 0, 0, 0]} center row>
           {loaderImage && (
             <Block margin={[0, 0, 0, theme.sizes.caption]} padding={[theme.sizes.caption - 2, 0]} flex={false} center middle>
               <CirclesLoader color={theme.colors.tertiary} size={18} dotRadius={4} />
@@ -209,6 +209,7 @@ export default function ProfileScreen(props) {
               options={{
                 format: "DD/MM/YYYY",
               }}
+              number
               value={dateOfBirth}
               defaultValue={dateOfBirth}
               onChangeText={setDateOfBirth}
