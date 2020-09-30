@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import { signInSuccess, signOutRequest } from "../../store/modules/auth/actions";
 import { getUser } from "../../services/user";
 
-import { DotsLoader } from 'react-native-indicator';
+import { DotIndicator } from 'react-native-indicators';
 import AlertMessage from "../../components/Alert";
 
 export default function LoginScreen(props) {
@@ -79,7 +79,7 @@ export default function LoginScreen(props) {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={'padding'}>
+    <KeyboardAvoidingView style={styles.container} behavior={"padding"}>
       <StatusBar barStyle="dark-content" />
       <Block
         padding={[
@@ -124,7 +124,7 @@ export default function LoginScreen(props) {
             <Button onPress={handleSubmit} color={theme.colors.primary}>
               {loader && (
                 <Block flex={false} center>
-                  <DotsLoader color={theme.colors.white} size={10} />
+                  <DotIndicator color={theme.colors.white} size={5} />
                 </Block>
               )}
               {!loader && (
