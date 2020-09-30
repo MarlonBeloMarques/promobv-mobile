@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Block, Input, Button, Text } from "../../elements";
 import { theme } from "../../constants";
-import { DotsLoader } from "react-native-indicator";
+import { DotIndicator } from "react-native-indicators";
 
 import { checkEmail, newPassword } from "../../services/auth";
 import AlertMessage from "../../components/Alert";
@@ -95,9 +95,7 @@ export default function PasswordScreen(props) {
   }
 
   return (
-    <ScrollView
-      backgroundColor="white"
-      showsVerticalScrollIndicator={false}>
+    <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
       <Block padding={[0, theme.sizes.base * 2]}>
         <Text h3 style={{ marginTop: theme.sizes.h1 }} gray bold center>
           Esqueceu sua senha?
@@ -145,7 +143,7 @@ export default function PasswordScreen(props) {
             >
               {loader && (
                 <Block flex={false} center>
-                  <DotsLoader color={theme.colors.white} size={10} />
+                  <DotIndicator color={theme.colors.white} size={5} />
                 </Block>
               )}
               {renderTitleButton()}

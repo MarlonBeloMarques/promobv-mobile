@@ -10,7 +10,7 @@ import { CheckBox } from 'react-native-elements'
 
 import { setUser } from "../../services/user";
 import AlertMessage from "../../components/Alert";
-import { DotsLoader } from 'react-native-indicator'
+import { DotIndicator } from 'react-native-indicators'
 
 export default function SignupScreen(props) {
   const [userNickname, setUserNickname] = useState('')
@@ -70,9 +70,9 @@ export default function SignupScreen(props) {
   }
 
   return (
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Block padding={[0, theme.sizes.base * 2]}>
-          {/* <Block flex={0.3}>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <Block padding={[0, theme.sizes.base * 2]}>
+        {/* <Block flex={0.3}>
             <Button color={theme.colors.google}>
               <Text bold white center>
                 Entrar com o Google
@@ -85,66 +85,66 @@ export default function SignupScreen(props) {
             </Button>
           </Block> */}
 
-          <Block flex={false} padding={[theme.sizes.base, 0]}>
-            <Input
-              label="Usuário"
-              defaultValue={userNickname}
-              onChangeText={setUserNickname}
-              next
-              submitEditing={() => emailRef.current.focus()}
-            />
-            <Input
-              label={
-                <Text style={{ color: theme.colors.gray }}>
-                  E-mail
-                  <Text style={[styles.message, { color: theme.colors.gray }]}>
-                    (Encaminharemos um e-mail de confirmação)
-                  </Text>
+        <Block flex={false} padding={[theme.sizes.base, 0]}>
+          <Input
+            label="Usuário"
+            defaultValue={userNickname}
+            onChangeText={setUserNickname}
+            next
+            submitEditing={() => emailRef.current.focus()}
+          />
+          <Input
+            label={
+              <Text style={{ color: theme.colors.gray }}>
+                E-mail
+                <Text style={[styles.message, { color: theme.colors.gray }]}>
+                  (Encaminharemos um e-mail de confirmação)
                 </Text>
-              }
-              defaultValue={email}
-              onChangeText={setEmail}
-              reference={emailRef}
-              next
-              submitEditing={() => passwordRef.current.focus()}
-            />
-            <Input
-              secure
-              label="Senha"
-              defaultValue={password}
-              onChangeText={setPassword}
-              reference={passwordRef}
-              done
-            />
+              </Text>
+            }
+            defaultValue={email}
+            onChangeText={setEmail}
+            reference={emailRef}
+            next
+            submitEditing={() => passwordRef.current.focus()}
+          />
+          <Input
+            secure
+            label="Senha"
+            defaultValue={password}
+            onChangeText={setPassword}
+            reference={passwordRef}
+            done
+          />
 
-            <CheckBox
-              title={mockData}
-              checked={checked}
-              onPress={() => setChecked(!checked)}
-              containerStyle={styles.checkbox}
-              textStyle={{
-                fontSize: 10,
-                color: theme.colors.gray,
-                fontWeight: "normal",
-              }}
-            />
+          <CheckBox
+            title={mockData}
+            checked={checked}
+            onPress={() => setChecked(!checked)}
+            containerStyle={styles.checkbox}
+            textStyle={{
+              fontSize: 10,
+              color: theme.colors.gray,
+              fontWeight: "normal",
+            }}
+          />
 
-            <Block flex={false} padding={[theme.sizes.padding, 0]}>
-              <Button onPress={handleSubmit} color={theme.colors.primary}>
-                {loader && (
-                  <Block flex={false} center>
-                    <DotsLoader color={theme.colors.white} size={10} />
-                  </Block>
-                )}
-                {!loader && (
-                  <Text bold white center>
-                    Cadastra-se
-                  </Text>
-                )}
-              </Button>
-            </Block>
+          <Block flex={false} padding={[theme.sizes.padding, 0]}>
+            <Button onPress={handleSubmit} color={theme.colors.primary}>
+              {loader && (
+                <Block flex={false} center>
+                  <DotIndicator color={theme.colors.white} size={5} />
+                </Block>
+              )}
+              {!loader && (
+                <Text bold white center>
+                  Cadastra-se
+                </Text>
+              )}
+            </Button>
           </Block>
         </Block>
-      </ScrollView>
+      </Block>
+    </ScrollView>
   );
 }
