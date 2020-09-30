@@ -11,7 +11,7 @@ import { setCategoryUpdateAndInsert } from "../store/modules/category/updateAndI
 import { setImagesPromotion } from "../store/modules/images/actions";
 
 import { DrawerActions } from "react-navigation-drawer";
-import { DotsLoader } from 'react-native-indicator'
+import { DotIndicator } from 'react-native-indicators'
 
 import Categories from './Categories'
 
@@ -171,7 +171,7 @@ export default function Insert(props) {
         <Button onPress={handleSubmit} color={theme.colors.primary}>
           {loader && (
             <Block flex={false} center>
-              <DotsLoader color={theme.colors.white} size={10} />
+              <DotIndicator color={theme.colors.white} size={5} />
             </Block>
           )}
           {!loader &&

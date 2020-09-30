@@ -13,7 +13,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { getUser, updateUser, setUserPicture } from "../../services/user";
 import AlertMessage from "../../components/Alert";
 import { ModalLoader } from "../../components";
-import { DotsLoader, CirclesLoader } from 'react-native-indicator'
+import { DotIndicator, MaterialIndicator } from 'react-native-indicators'
 import { logout } from "../../services/auth";
 
 export default function ProfileScreen(props) {
@@ -153,8 +153,17 @@ export default function ProfileScreen(props) {
       >
         <Block padding={[theme.sizes.padding, 0, 0, 0]} center row>
           {loaderImage && (
-            <Block margin={[0, 0, 0, theme.sizes.caption]} padding={[theme.sizes.caption - 2, 0]} flex={false} center middle>
-              <CirclesLoader color={theme.colors.tertiary} size={18} dotRadius={4} />
+            <Block
+              margin={[0, 0, 0, theme.sizes.caption]}
+              padding={[theme.sizes.caption - 2, 0]}
+              flex={false}
+              center
+              middle
+            >
+              <MaterialIndicator
+                color={theme.colors.tertiary}
+                size={16}
+              />
             </Block>
           )}
           {!loaderImage && (
@@ -222,7 +231,7 @@ export default function ProfileScreen(props) {
           <Button onPress={handleSubmit} color={theme.colors.primary}>
             {loader && (
               <Block flex={false} center>
-                <DotsLoader color={theme.colors.white} size={10} />
+                <DotIndicator color={theme.colors.white} size={5} />
               </Block>
             )}
             {!loader && (

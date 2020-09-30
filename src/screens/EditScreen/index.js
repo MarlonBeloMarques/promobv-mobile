@@ -11,7 +11,7 @@ import { setCategoryUpdateAndInsert } from "../../store/modules/category/updateA
 
 import { Categories, Gallery, ModalLoader } from "../../components";
 import AlertMessage from "../../components/Alert";
-import { DotsLoader } from 'react-native-indicator'
+import { DotIndicator } from 'react-native-indicators'
 import { logout } from "../../services/auth";
 
 export default function Edit(props) {
@@ -145,95 +145,99 @@ export default function Edit(props) {
       <>
         {loading && <ModalLoader loading={loading} />}
         {renderGallery()}
-          <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
-            <Block
-              padding={[0, theme.sizes.padding]}
-              space="between"
-              color={theme.colors.white}
-            >
-              <Block margin={[theme.sizes.header, 0]} flex={false}>
-                <Input 
-                  label="Titulo" 
-                  defaultValue={title} 
-                  onChangeText={setTitle}/>
-                <Input
-                  label="Descrição"
-                  defaultValue={description}
-                  onChangeText={setDescription}
-                />
-                <Input 
-                  label="Local" 
-                  defaultValue={place}
-                  onChangeText={setPlace}/>
-                <Input
-                  label="Endereço"
-                  defaultValue={address}
-                  onChangeText={setAddress}
-                />
-                <Input
-                  label="Número de Contato"
-                  mask={true}
-                  type={'cel-phone'}
-                  number
-                  value={numberContact}
-                  defaultValue={numberContact}
-                  onChangeText={setNumberContact}
-                />
-
-                <Block row>
-                  <Block padding={[0, theme.sizes.padding, 0, 0]}>
-                    <Input
-                      label="Valor"
-                      number
-                      defaultValue={value}
-                      onChangeText={setValue}
-                    />
-                  </Block>
-
-                  <Block margin={[theme.sizes.base / 1.5, 0]}>
-                    <Block padding={[0,0, theme.sizes.base - 10, 4]} flex={false}>
-                      <Text gray>
-                        Categoria
-                      </Text>
-                    </Block>
-                    <Button onPress={onClickCategory} style={styles.button}>
-                      <Text gray>
-                        {categoryName}
-                      </Text>
-                    </Button>
-                  </Block>
-                </Block>
-              </Block>
+        <ScrollView
+          backgroundColor="white"
+          showsVerticalScrollIndicator={false}
+        >
+          <Block
+            padding={[0, theme.sizes.padding]}
+            space="between"
+            color={theme.colors.white}
+          >
+            <Block margin={[theme.sizes.header, 0]} flex={false}>
+              <Input
+                label="Titulo"
+                defaultValue={title}
+                onChangeText={setTitle}
+              />
+              <Input
+                label="Descrição"
+                defaultValue={description}
+                onChangeText={setDescription}
+              />
+              <Input
+                label="Local"
+                defaultValue={place}
+                onChangeText={setPlace}
+              />
+              <Input
+                label="Endereço"
+                defaultValue={address}
+                onChangeText={setAddress}
+              />
+              <Input
+                label="Número de Contato"
+                mask={true}
+                type={"cel-phone"}
+                number
+                value={numberContact}
+                defaultValue={numberContact}
+                onChangeText={setNumberContact}
+              />
 
               <Block row>
-                <Block flex={false}>
-                  <Text bold gray>
-                    Galeria
-                  </Text>
-                  <Button onPress={onClickGallery} style={styles.plus}>
-                    <Text h3 gray>
-                      +5
-                    </Text>
+                <Block padding={[0, theme.sizes.padding, 0, 0]}>
+                  <Input
+                    label="Valor"
+                    number
+                    defaultValue={value}
+                    onChangeText={setValue}
+                  />
+                </Block>
+
+                <Block margin={[theme.sizes.base / 1.5, 0]}>
+                  <Block
+                    padding={[0, 0, theme.sizes.base - 10, 4]}
+                    flex={false}
+                  >
+                    <Text gray>Categoria</Text>
+                  </Block>
+                  <Button onPress={onClickCategory} style={styles.button}>
+                    <Text gray>{categoryName}</Text>
                   </Button>
                 </Block>
               </Block>
+            </Block>
 
-              <Block middle padding={[theme.sizes.padding / 2, 0]}>
-                <Button onPress={handleSubmit} color={theme.colors.primary}>
-                  {loader && 
-                    <Block flex={false} center>
-                      <DotsLoader color={theme.colors.white} size={10}/>  
-                    </Block>
-                  }
-                  {!loader && 
-                    <Text bold center white>
-                      Atualizar
-                    </Text>
-                  }
+            <Block row>
+              <Block flex={false}>
+                <Text bold gray>
+                  Galeria
+                </Text>
+                <Button onPress={onClickGallery} style={styles.plus}>
+                  <Text h3 gray>
+                    +5
+                  </Text>
                 </Button>
               </Block>
             </Block>
-          </ScrollView>
+
+            <Block middle padding={[theme.sizes.padding / 2, 0]}>
+              <Button onPress={handleSubmit} color={theme.colors.primary}>
+                {loader && (
+                  <Block flex={false} center>
+                    <DotIndicator color={theme.colors.white} size={5} />
+                  </Block>
+                )}
+                {!loader && (
+                  <Text bold center white>
+                    Atualizar
+                  </Text>
+                )}
+              </Button>
+            </Block>
+          </Block>
+        </ScrollView>
       </>
     );
   }
