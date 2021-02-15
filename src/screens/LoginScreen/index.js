@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { KeyboardAvoidingView, Image, Keyboard } from "react-native";
+import { KeyboardAvoidingView, Image, Keyboard, ScrollView } from "react-native";
 import { Block, Input, Button, Text} from '../../elements'
 import { theme } from "../../constants";
 
@@ -79,86 +79,90 @@ export default function LoginScreen(props) {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={"padding"}>
-      <StatusBar barStyle="dark-content" />
-      <Block
-        padding={[
-          theme.sizes.base,
-          theme.sizes.base * 2,
-          0,
-          theme.sizes.base * 2,
-        ]}
-      >
-        <Block flex={0.4} middle center>
-          <Image resizeMode="contain" source={logo} style={styles.logo} />
-        </Block>
-        <Block padding={[theme.sizes.base, 0]}>
-          <Block flex={false}>
-            <Input
-              label="E-mail"
-              defaultValue={email}
-              onChangeText={setEmail}
-              next
-              submitEditing={() => passwordRef.current.focus()}
-            />
-            <Input
-              secure
-              label="Senha"
-              defaultValue={password}
-              onChangeText={setPassword}
-              reference={passwordRef}
-              done
-              submitEditing={handleSubmit}
-            />
-            <Button onPress={onPasswordClicked} style={styles.forgotPassword}>
-              <Text
-                caption
-                primary
-                right
-                style={{ textDecorationLine: "underline" }}
-              >
-                Recuperar senha?
-              </Text>
-            </Button>
-
-            <Button onPress={handleSubmit} color={theme.colors.primary}>
-              {loader && (
-                <Block flex={false} center>
-                  <DotIndicator color={theme.colors.white} size={5} />
-                </Block>
-              )}
-              {!loader && (
-                <Text bold white center>
-                  Entrar
-                </Text>
-              )}
-            </Button>
-            <Button onPress={onSignupClicked} style={styles.signup}>
-              <Text
-                caption
-                primary
-                center
-                style={{ textDecorationLine: "underline" }}
-              >
-                Crie uma conta
-              </Text>
-            </Button>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <KeyboardAvoidingView behavior={"padding"}>
+        <StatusBar barStyle="dark-content" />
+        <Block
+          padding={[
+            theme.sizes.base,
+            theme.sizes.base * 2,
+            0,
+            theme.sizes.base * 2,
+          ]}
+        >
+          <Block flex={false} middle center>
+            <Image resizeMode="contain" source={logo} style={styles.logo} />
           </Block>
-          {/* <Block padding={[theme.sizes.base * 2, 0, theme.sizes.base, 0]}>
-            <Button color={theme.colors.google}>
-              <Text bold white center>
-                Entrar com o Google
-              </Text>
-            </Button>
-            <Button color={theme.colors.facebook}>
-              <Text bold white center>
-                Entrar com o Facebook
-              </Text>
-            </Button>
-            
-          </Block> */}
+          <Block flex={false} padding={[theme.sizes.base, 0]}>
+            <Block flex={false}>
+              <Input
+                label="E-mail"
+                defaultValue={email}
+                onChangeText={setEmail}
+                next
+                submitEditing={() => passwordRef.current.focus()}
+              />
+              <Input
+                secure
+                label="Senha"
+                defaultValue={password}
+                onChangeText={setPassword}
+                reference={passwordRef}
+                done
+                submitEditing={handleSubmit}
+              />
+              <Button onPress={onPasswordClicked} style={styles.forgotPassword}>
+                <Text
+                  caption
+                  primary
+                  right
+                  style={{ textDecorationLine: "underline" }}
+                >
+                  Recuperar senha?
+                </Text>
+              </Button>
+
+              <Button onPress={handleSubmit} color={theme.colors.primary}>
+                {loader && (
+                  <Block flex={false} center>
+                    <DotIndicator color={theme.colors.white} size={5} />
+                  </Block>
+                )}
+                {!loader && (
+                  <Text bold white center>
+                    Entrar
+                  </Text>
+                )}
+              </Button>
+              <Button onPress={onSignupClicked} style={styles.signup}>
+                <Text
+                  caption
+                  primary
+                  center
+                  style={{ textDecorationLine: "underline" }}
+                >
+                  Crie uma conta
+                </Text>
+              </Button>
+            </Block>
+            <Block
+              flex={false}
+              padding={[theme.sizes.base * 2, 0, theme.sizes.base, 0]}
+            >
+              <Button color={theme.colors.google}>
+                <Text bold white center>
+                  Entrar com o Google
+                </Text>
+              </Button>
+              <Button color={theme.colors.facebook}>
+                <Text bold white center>
+                  Entrar com o Facebook
+                </Text>
+              </Button>
+            </Block>
+          </Block>
         </Block>
-      </Block>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 }

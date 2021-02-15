@@ -7,6 +7,8 @@ import { checkEmail, newPassword } from "../../services/auth";
 import AlertMessage from "../../components/Alert";
 import { Keyboard } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import styles from "../LoginScreen/styles";
+import { KeyboardAvoidingView } from "react-native";
 
 export default function PasswordScreen(props) {
   const [email, setEmail] = useState("");
@@ -95,62 +97,64 @@ export default function PasswordScreen(props) {
   }
 
   return (
-    <ScrollView backgroundColor="white" showsVerticalScrollIndicator={false}>
-      <Block padding={[0, theme.sizes.base * 2]}>
-        <Text h3 style={{ marginTop: theme.sizes.h1 }} gray bold center>
-          Esqueceu sua senha?
-        </Text>
-        <Text light gray center style={{ marginTop: theme.sizes.h1 }}>
-          Insira seu e-mail e encaminharemos um e-mail para que você possa
-          atualizar sua senha.
-        </Text>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+      <KeyboardAvoidingView behavior={"padding"}>
+        <Block flex={false} padding={[0, theme.sizes.base * 2]}>
+          <Text h3 style={{ marginTop: theme.sizes.h1 }} gray bold center>
+            Esqueceu sua senha?
+          </Text>
+          <Text light gray center style={{ marginTop: theme.sizes.h1 }}>
+            Insira seu e-mail e encaminharemos um e-mail para que você possa
+            atualizar sua senha.
+          </Text>
 
-        <Block flex={false} padding={[theme.sizes.base, 0]}>
-          <Input
-            label="E-mail"
-            defaultValue={email}
-            onChangeText={setEmail}
-            done
-            submitEditing={checkEmailUser}
-          />
-          {checked && (
-            <>
-              <Input
-                secure
-                label="Senha"
-                defaultValue={password}
-                onChangeText={setPassword}
-                next
-                submitEditing={() => confirmPasswordRef.current.focus()}
-              />
-              <Input
-                secure
-                label="Confirmar senha"
-                defaultValue={confirmPassword}
-                onChangeText={setConfirmPassword}
-                reference={confirmPasswordRef}
-                done
-                submitEditing={handleSubmit}
-              />
-            </>
-          )}
-          <Block margin={[theme.sizes.base, 0]} flex={false}>
-            <Button
-              onPress={() => {
-                checked === true ? handleSubmit() : checkEmailUser();
-              }}
-              color={theme.colors.primary}
-            >
-              {loader && (
-                <Block flex={false} center>
-                  <DotIndicator color={theme.colors.white} size={5} />
-                </Block>
-              )}
-              {renderTitleButton()}
-            </Button>
+          <Block flex={false} padding={[theme.sizes.base, 0]}>
+            <Input
+              label="E-mail"
+              defaultValue={email}
+              onChangeText={setEmail}
+              done
+              submitEditing={checkEmailUser}
+            />
+            {checked && (
+              <>
+                <Input
+                  secure
+                  label="Senha"
+                  defaultValue={password}
+                  onChangeText={setPassword}
+                  next
+                  submitEditing={() => confirmPasswordRef.current.focus()}
+                />
+                <Input
+                  secure
+                  label="Confirmar senha"
+                  defaultValue={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                  reference={confirmPasswordRef}
+                  done
+                  submitEditing={handleSubmit}
+                />
+              </>
+            )}
+            <Block margin={[theme.sizes.base, 0]} flex={false}>
+              <Button
+                onPress={() => {
+                  checked === true ? handleSubmit() : checkEmailUser();
+                }}
+                color={theme.colors.primary}
+              >
+                {loader && (
+                  <Block flex={false} center>
+                    <DotIndicator color={theme.colors.white} size={5} />
+                  </Block>
+                )}
+                {renderTitleButton()}
+              </Button>
+            </Block>
           </Block>
         </Block>
-      </Block>
+      </KeyboardAvoidingView>
     </ScrollView>
   );
 }
