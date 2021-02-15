@@ -202,7 +202,7 @@ export default function PromotionScreen(props) {
                 radius={theme.sizes.radius * 4}
                 color={theme.colors.secondary}
               >
-                <Block row padding={[0, theme.sizes.base * 2]} flex={false}>
+                <Block center row padding={[0, theme.sizes.base * 2]} flex={false}>
                   <Block padding={[0, 10, 0, 0]} flex={false}>
                     <AntDesign
                       name={"pluscircleo"}

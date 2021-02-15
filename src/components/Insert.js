@@ -188,13 +188,13 @@ export default function Insert(props) {
     if(activeIcon) {
        return (
          <Header barStyle='dark-content' colorIcon={theme.colors.gray} onPress={onClickMenu} color={theme.colors.white}>
-          <Text gray>Inserir</Text>
+          <Text h3 bold gray>Inserir</Text>
         </Header>
        )
     } else {
         return (
           <Header barStyle='dark-content' colorIcon={theme.colors.white} color={theme.colors.white}>
-            <Text gray>Inserir</Text>
+            <Text h3 bold gray>Inserir</Text>
           </Header>
         );
     }

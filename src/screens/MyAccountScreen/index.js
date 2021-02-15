@@ -22,7 +22,7 @@ export default function MyAccountScreen(props) {
   return (
     <KeyboardAvoidingView style={styles.container}>
       <Header barStyle='dark-content' onPress={onClickMenu} color={theme.colors.white}>
-        <Text gray>Minha Conta</Text>
+        <Text h3 bold gray>Minha Conta</Text>
       </Header>
       <Block>
         <Block
