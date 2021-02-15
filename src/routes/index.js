@@ -100,44 +100,43 @@ const menu = createDrawerNavigator({
 const childrens = createStackNavigator({
   menu: {
     screen: menu,
-    path: '',
+    path: "",
     navigationOptions: {
-      header: null
-    }
+      header: null,
+    },
   },
   Detalhes: {
     screen: DetailsScreen,
-    path: 'details/:promotionId',
-    navigationOptions: ({navigation, screenProps}) => ({
+    path: "details/:promotionId",
+    navigationOptions: ({ navigation }) => ({
       title: (
         <Text bold white>
           Detalhes
         </Text>
       ),
+      headerTintColor: theme.colors.white,
       headerTitleAlign: "left",
       headerStyle: {
-        height: Platform.OS === 'ios' ? theme.sizes.base * 6 : theme.sizes.base * 5, 
+        height:
+          Platform.OS === "ios" ? theme.sizes.base * 6 : theme.sizes.base * 5,
         shadowColor: "transparent",
-        backgroundColor: theme.colors.primary
+        backgroundColor: theme.colors.primary,
       },
       headerRight: (
-       <Button style onPress={navigation.getParam('onClickDenounce')}>
-         <Text white>Denunciar</Text>
-       </Button>
-      ),
-      headerBackImage: (
-        <Image source={require("../../assets/icons/back.png")} />
+        <Button style onPress={navigation.getParam("onClickDenounce")}>
+          <Text white>Denunciar</Text>
+        </Button>
       ),
       headerBackTitleVisible: null,
       headerLeftContainerStyle: {
         alignItems: "center",
-        padding: theme.sizes.base
+        padding: theme.sizes.base,
       },
       headerRightContainerStyle: {
         alignItems: "center",
-        padding: theme.sizes.base
-      }
-    })
+        padding: theme.sizes.base,
+      },
+    }),
   },
   Perfil: {
     screen: ProfileScreen,
@@ -147,26 +146,25 @@ const childrens = createStackNavigator({
           Perfil
         </Text>
       ),
+      headerTintColor: theme.colors.gray,
       headerTitleAlign: "left",
       headerStyle: {
-        height: Platform.OS === "ios" ? theme.sizes.base * 6 : theme.sizes.base * 5,
+        height:
+          Platform.OS === "ios" ? theme.sizes.base * 6 : theme.sizes.base * 5,
         shadowColor: "transparent",
         backgroundColor: theme.colors.white,
-        elevation: 0
+        elevation: 0,
       },
-      headerBackImage: (
-        <Image source={require("../../assets/icons/back.png")} />
-      ),
       headerBackTitleVisible: null,
       headerLeftContainerStyle: {
         alignItems: "center",
-        padding: theme.sizes.base
+        padding: theme.sizes.base,
       },
       headerRightContainerStyle: {
         alignItems: "center",
-        padding: theme.sizes.base
-      }
-    }
+        padding: theme.sizes.base,
+      },
+    },
   },
   MinhasPromocoes: {
     screen: MyPromotionsScreen,
@@ -176,27 +174,25 @@ const childrens = createStackNavigator({
           Minhas Promoções
         </Text>
       ),
+      headerTintColor: theme.colors.gray,
       headerTitleAlign: "left",
       headerStyle: {
         height:
           Platform.OS === "ios" ? theme.sizes.base * 6 : theme.sizes.base * 5,
         shadowColor: "transparent",
         backgroundColor: theme.colors.white,
-        elevation: 0
+        elevation: 0,
       },
-      headerBackImage: (
-        <Image source={require("../../assets/icons/back.png")} />
-      ),
       headerBackTitleVisible: null,
       headerLeftContainerStyle: {
         alignItems: "center",
-        padding: theme.sizes.base
+        padding: theme.sizes.base,
       },
       headerRightContainerStyle: {
         alignItems: "center",
-        padding: theme.sizes.base
-      }
-    }
+        padding: theme.sizes.base,
+      },
+    },
   },
   Editar: {
     screen: EditScreen,
@@ -206,28 +202,26 @@ const childrens = createStackNavigator({
           Editar promoções
         </Text>
       ),
+      headerTintColor: theme.colors.gray,
       headerTitleAlign: "left",
       headerStyle: {
         height:
           Platform.OS === "ios" ? theme.sizes.base * 6 : theme.sizes.base * 5,
         shadowColor: "transparent",
         backgroundColor: theme.colors.white,
-        elevation: 0
+        elevation: 0,
       },
-      headerBackImage: (
-        <Image source={require("../../assets/icons/back.png")} />
-      ),
       headerBackTitleVisible: null,
       headerLeftContainerStyle: {
         alignItems: "center",
-        padding: theme.sizes.base
+        padding: theme.sizes.base,
       },
       headerRightContainerStyle: {
         alignItems: "center",
-        padding: theme.sizes.base
-      }
-    }
-  }
+        padding: theme.sizes.base,
+      },
+    },
+  },
 });
 
 const screens = createStackNavigator(
@@ -242,7 +236,7 @@ const screens = createStackNavigator(
       screen: SignupScreen,
       navigationOptions: {
         title: <Text bold gray>Cadastro</Text>,
-        headerTitleAlign: "left"
+        headerTitleAlign: "left",
       }
     },
     password: {
@@ -255,6 +249,7 @@ const screens = createStackNavigator(
   },
   {
     defaultNavigationOptions: {
+      headerTintColor: theme.colors.gray,
       headerStyle: {
         height: Platform.OS === 'ios' ? theme.sizes.base * 6 : theme.sizes.base * 5,
         shadowColor: "transparent",
@@ -262,15 +257,12 @@ const screens = createStackNavigator(
         elevation: 0
       },
       cardStyle: { backgroundColor: "white" },
-      headerBackImage: (
-        <Image source={require("../../assets/icons/back.png")} />
-      ),
       headerBackTitleVisible: null,
       title: null,
       headerLeftContainerStyle: {
         alignItems: "center",
         marginLeft: Platform.OS === 'ios' ? theme.sizes.base : 0,
-        padding: theme.sizes.base
+        padding: theme.sizes.base,
       },
       headerRightContainerStyle: {
         alignItems: "center",
