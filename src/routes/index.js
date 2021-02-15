@@ -110,7 +110,7 @@ const childrens = createStackNavigator({
     path: "details/:promotionId",
     navigationOptions: ({ navigation }) => ({
       title: (
-        <Text bold white>
+        <Text h3 bold white>
           Detalhes
         </Text>
       ),
@@ -124,7 +124,9 @@ const childrens = createStackNavigator({
       },
       headerRight: (
         <Button style onPress={navigation.getParam("onClickDenounce")}>
-          <Text white>Denunciar</Text>
+          <Text h3 bold white>
+            Denunciar
+          </Text>
         </Button>
       ),
       headerBackTitleVisible: null,
@@ -142,7 +144,7 @@ const childrens = createStackNavigator({
     screen: ProfileScreen,
     navigationOptions: {
       title: (
-        <Text bold gray>
+        <Text h3 bold gray>
           Perfil
         </Text>
       ),
@@ -170,7 +172,7 @@ const childrens = createStackNavigator({
     screen: MyPromotionsScreen,
     navigationOptions: {
       title: (
-        <Text bold gray>
+        <Text h3 bold gray>
           Minhas Promoções
         </Text>
       ),
@@ -198,7 +200,7 @@ const childrens = createStackNavigator({
     screen: EditScreen,
     navigationOptions: {
       title: (
-        <Text bold gray>
+        <Text h3 bold gray>
           Editar promoções
         </Text>
       ),
@@ -229,47 +231,56 @@ const screens = createStackNavigator(
     login: {
       screen: LoginScreen,
       navigationOptions: {
-        header: null
-      }
+        header: null,
+      },
     },
     signup: {
       screen: SignupScreen,
       navigationOptions: {
-        title: <Text bold gray>Cadastro</Text>,
+        title: (
+          <Text h3 bold gray>
+            Cadastro
+          </Text>
+        ),
         headerTitleAlign: "left",
-      }
+      },
     },
     password: {
       screen: PasswordScreen,
       navigationOptions: {
-        title: <Text bold gray>Recuperar senha</Text>,
-        headerTitleAlign: "left"
-      }
-    }
+        title: (
+          <Text h3 bold gray>
+            Recuperar senha
+          </Text>
+        ),
+        headerTitleAlign: "left",
+      },
+    },
   },
   {
     defaultNavigationOptions: {
       headerTintColor: theme.colors.gray,
       headerStyle: {
-        height: Platform.OS === 'ios' ? theme.sizes.base * 6 : theme.sizes.base * 5,
+        height:
+          Platform.OS === "ios" ? theme.sizes.base * 6 : theme.sizes.base * 5,
         shadowColor: "transparent",
         backgroundColor: theme.colors.white,
-        elevation: 0
+        elevation: 0,
       },
       cardStyle: { backgroundColor: "white" },
       headerBackTitleVisible: null,
       title: null,
       headerLeftContainerStyle: {
         alignItems: "center",
-        marginLeft: Platform.OS === 'ios' ? theme.sizes.base : 0,
+        marginLeft: Platform.OS === "ios" ? theme.sizes.base : 0,
         padding: theme.sizes.base,
       },
       headerRightContainerStyle: {
         alignItems: "center",
-        marginLeft: Platform.OS === 'ios' ? theme.sizes.base : 0,
-        padding: theme.sizes.base
-      }
-    }
+        marginLeft: Platform.OS === "ios" ? theme.sizes.base : 0,
+        padding: theme.sizes.base,
+      },
+    },
   }
 );
 

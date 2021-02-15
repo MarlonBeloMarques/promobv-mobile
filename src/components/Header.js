@@ -1,10 +1,9 @@
 import React from 'react';
 import { StatusBar, Platform } from "react-native";
-import { StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'
 
 import { theme } from '../constants';
-import { Text, Block, Button } from './index'
+import { Text, Block, Button } from '../elements/index'
 
 export default function Header(props) {
 
@@ -22,7 +21,7 @@ export default function Header(props) {
         <Ionicons name={"ios-menu"} size={30} color={props.colorIcon} />
       </Button>
       <Block padding={[0,0,0,theme.sizes.base * 2.2]}>
-        <Text white bold>{props.children}</Text>
+        <Text h3 white bold>{props.children}</Text>
       </Block>
     </Block>
   );

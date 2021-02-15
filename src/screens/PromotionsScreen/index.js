@@ -189,7 +189,7 @@ export default function PromotionScreen(props) {
         </Block>
 
         {loading === true && (
-          <Block middle>
+          <Block color="white" middle>
             <ActivityIndicator size="small" color="#00000" />
           </Block>
         )}
