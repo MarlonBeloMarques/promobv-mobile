@@ -247,6 +247,7 @@ export default function DetailsScreen(props) {
       <StatusBar barStyle={"light-content"} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <Block
+          color="white"
           padding={theme.sizes.header}
           size={theme.sizes.base * 5}
           flex={false}
@@ -264,7 +265,7 @@ export default function DetailsScreen(props) {
           {details.image === null && <Photo height={100} size={100} image={no_photo} />}
           {details.image !== null && <Photo height={100} size={100} image={details.image} />}
         </Block>
-        <Block>
+        <Block color="white">
           <Block border padding={[10, 50]} flex={false} row>
             <Block row flex={false}>
               <Button onPress={onClickInteractNotification} style>
