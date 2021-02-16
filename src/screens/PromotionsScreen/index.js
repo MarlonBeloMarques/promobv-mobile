@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { KeyboardAvoidingView, FlatList, StyleSheet, ActivityIndicator } from "react-native";
 import { Block, Text, Button, Header, Photo } from "../../elements";
-import { Insert, Categories } from "../../components";
+import { Insert, Categories, PromotionCard } from "../../components";
 import { theme } from "../../constants";
 import { AntDesign, SimpleLineIcons } from "@expo/vector-icons";
 import { DrawerActions } from "react-navigation-drawer";
@@ -246,38 +246,7 @@ export default function PromotionScreen(props) {
                   }}
                   onEndReachedThreshold={0.1}
                   renderItem={({ item }) => (
-                    <Block
-                      color="white"
-                      onPress={() => onDetailsClicked(item.id)}
-                      button
-                      size={140}
-                      flex={false}
-                      row
-                      border
-                    >
-                      {item.imagem !== null && (
-                        <Photo height={100} size={40} image={item.imagem} />
-                      )}
-                      {item.imagem === null && (
-                        <Photo height={100} size={40} image={no_photo} />
-                      )}
-                      <Block padding={[15, 10, 0]}>
-                        <Text gray bold size={18}>
-                          {item.titulo}
-                        </Text>
-                        <Block style={styles.end}>
-                          <Text secondary size={15} bold>
-                            {"R$ "}
-                            {item.preco}
-                          </Text>
-                          <Block padding={[5, 0, 0]} flex={false}>
-                            <Text gray3 bold>
-                              {item.localizacao}
-                            </Text>
-                          </Block>
-                        </Block>
-                      </Block>
-                    </Block>
+                    <PromotionCard item={item} onDetailsClicked={onDetailsClicked}/>
                   )}
                 ></FlatList>
               )}
@@ -303,12 +272,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center"
   },
-
-  end: {
-    justifyContent: "flex-end",
-    marginBottom: 10
-  },
-
   flatlist: {
     zIndex: 1
   }
