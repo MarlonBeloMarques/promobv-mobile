@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { KeyboardAvoidingView, AsyncStorage, FlatList, StyleSheet, Platform, ActivityIndicator } from "react-native";
-import { Block, Button, Text, Photo } from "../../elements";
+import { KeyboardAvoidingView, AsyncStorage, FlatList, StyleSheet, ActivityIndicator } from "react-native";
+import { Block, Text } from "../../elements";
 import { theme } from "../../constants";
-import { AntDesign, SimpleLineIcons } from "@expo/vector-icons";
+import { SimpleLineIcons } from "@expo/vector-icons";
 import { getMyPromotions, deletePromotion } from "../../services/promotion";
 import * as SecureStore from "expo-secure-store";
 
-import no_photo from "../../../assets/images/no-photo.png";
 import { Alert } from "react-native";
 import { checkReports } from "../../services/notification";
 import { getUser } from "../../services/user";
 import AlertMessage from "../../components/Alert";
 import { logout } from "../../services/auth";
+import { MyPromotionCard } from "../../components";
 
 export default function MyPromotionsScreen(props) {
 
@@ -53,7 +53,6 @@ export default function MyPromotionsScreen(props) {
       }
     }
 
-    //executa uma unica vez
     loadPromotions()
     checkReportsPromotions()
   }, []);
@@ -129,7 +128,7 @@ export default function MyPromotionsScreen(props) {
           <ActivityIndicator size="small" color="#00000" />
         </Block>
       )}
-      {loading === false && 
+      {loading === false && (
         <>
           {promotions.length === 0 && (
             <Block center margin={[theme.sizes.padding * 4, 0]}>
@@ -140,7 +139,9 @@ export default function MyPromotionsScreen(props) {
                   size={40}
                 />
               </Block>
-              <Text gray3>Você não possui promoções publicadas no momento.</Text>
+              <Text gray3>
+                Você não possui promoções publicadas no momento.
+              </Text>
             </Block>
           )}
           {promotions.length !== 0 && (
@@ -150,73 +151,16 @@ export default function MyPromotionsScreen(props) {
               data={promotions}
               keyExtractor={(post) => String(post.id)}
               renderItem={({ item }) => (
-                <Block
-                  margin={[theme.sizes.base, theme.sizes.padding]}
-                  onPress={() => onDetailsClicked(item.id)}
-                  button
-                  size={115}
-                  flex={false}
-                  row
-                  card
-                  shadow
-                  color={theme.colors.white}
-                >
-                  {item.imagem === null && (
-                    <Photo
-                      style={Platform.OS === "ios" && styles.radius}
-                      height={100}
-                      size={20}
-                      image={no_photo}
-                    />
-                  )}
-                  {item.imagem !== null && (
-                    <Photo
-                      style={Platform.OS === "ios" && styles.radius}
-                      height={100}
-                      size={20}
-                      image={item.imagem}
-                    />
-                  )}
-                  <Block padding={[15, 10, 0]}>
-                    <Text gray bold size={14}>
-                      {item.titulo}
-                    </Text>
-                    <Block style={styles.end}>
-                      <Text secondary size={12} bold>
-                        {"R$ "}
-                        {item.preco}
-                      </Text>
-                      <Block padding={[5, 0, 0]} flex={false}>
-                        <Text gray3 bold>
-                          {item.localizacao}
-                        </Text>
-                      </Block>
-                    </Block>
-                  </Block>
-                  <Block column flex={false} padding={theme.sizes.base / 2}>
-                    <Button onPress={() => deletePromotionClicked(item.id)} style>
-                      <AntDesign
-                        name={"close"}
-                        size={18}
-                        color={theme.colors.gray3}
-                      />
-                    </Button>
-                    <Block bottom>
-                      <Button style onPress={() => onClickEdit(item.id)}>
-                        <AntDesign
-                          name={"edit"}
-                          size={18}
-                          color={theme.colors.gray3}
-                        />
-                      </Button>
-                    </Block>
-                  </Block>
-                </Block>
+                <MyPromotionCard 
+                  item={item} 
+                  deletePromotionClicked={deletePromotionClicked} 
+                  onDetailsClicked={onDetailsClicked} 
+                  onClickEdit={onClickEdit}/>
               )}
-            ></FlatList>     
+            ></FlatList>
           )}
         </>
-      }
+      )}
     </KeyboardAvoidingView>
   );
 }
@@ -226,15 +170,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     backgroundColor: theme.colors.white
-  },
-
-  radius: {
-    borderBottomStartRadius: theme.sizes.radius * 2,
-    borderTopStartRadius: theme.sizes.radius * 2
-  },
-
-  end: {
-    justifyContent: "flex-end",
-    marginBottom: 10
   }
 });
