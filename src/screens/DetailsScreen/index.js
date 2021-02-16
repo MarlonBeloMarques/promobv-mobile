@@ -241,159 +241,177 @@ export default function DetailsScreen(props) {
 
   return (
     <>
-    {loading && <ModalLoader loading={loading} />}
-    {renderGallery()}
-    <KeyboardAvoidingView style={styles.container}>
-      <StatusBar barStyle={"light-content"} />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Block
-          color="white"
-          padding={theme.sizes.header}
-          size={theme.sizes.base * 5}
-          flex={false}
-          row
-        >
-          {details.avatar === null && <Photo avatar image={profile} />}
-          {details.avatar !== null && <Photo avatar image={details.avatar} />}
-          <Block padding={[10, 10, 10, 20]}>
-            <Text bold size={theme.sizes.header} color={theme.colors.gray}>
-              {details.name}
-            </Text>
+      {loading && <ModalLoader loading={loading} />}
+      {renderGallery()}
+      <KeyboardAvoidingView style={styles.container}>
+        <StatusBar barStyle={"light-content"} />
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Block
+            color="white"
+            padding={theme.sizes.header}
+            size={theme.sizes.base * 5}
+            flex={false}
+            row
+          >
+            {details.avatar === null && <Photo avatar image={profile} />}
+            {details.avatar !== null && <Photo avatar image={details.avatar} />}
+            <Block padding={[10, 10, 10, 20]}>
+              <Text bold size={theme.sizes.header} color={theme.colors.gray}>
+                {details.name}
+              </Text>
+            </Block>
           </Block>
-        </Block>
-        <Block size={300} flex={false}>
-          {details.image === null && <Photo height={100} size={100} image={no_photo} />}
-          {details.image !== null && <Photo height={100} size={100} image={details.image} />}
-        </Block>
-        <Block color="white">
-          <Block border padding={[10, 50]} flex={false} row>
-            <Block row flex={false}>
-              <Button onPress={onClickInteractNotification} style>
-                {showIcon()}
-              </Button>
-              <Block padding={[0, theme.sizes.base]} middle flex={false}>
-                <Text gray3>
-                  {showNotifications()}
-                </Text>
+          <Block size={300} flex={false}>
+            {details.image === null && (
+              <Photo height={100} size={100} image={no_photo} />
+            )}
+            {details.image !== null && (
+              <Photo height={100} size={100} image={details.image} />
+            )}
+          </Block>
+          <Block color="white">
+            <Block border padding={[10, 50]} flex={false} row>
+              <Block row flex={false}>
+                <Button onPress={onClickInteractNotification} style>
+                  {showIcon()}
+                </Button>
+                <Block padding={[0, theme.sizes.base]} middle flex={false}>
+                  <Text gray3>{showNotifications()}</Text>
+                </Block>
+              </Block>
+              <Block row right>
+                <Button onPress={sharePromotion} style>
+                  <Ionicons
+                    name={Platform.OS === "ios" ? "ios-share" : "md-share-alt"}
+                    size={30}
+                    color={theme.colors.gray3}
+                  />
+                </Button>
               </Block>
             </Block>
-            <Block row right>
-              <Button onPress={sharePromotion} style>
-                <Ionicons
-                  name={"ios-share"}
-                  size={30}
-                  color={theme.colors.gray3}
-                />
-              </Button>
-            </Block>
-          </Block>
-          <Block padding={[10, 40]}>
-            <Text center bold h2 color={theme.colors.gray}>
-              {details.title}
-            </Text>
-            <Block flex={false} margin={[12, 0]}>
-              <Text light color={theme.colors.gray}>
-                {details.description}
+            <Block padding={[10, 40, 0, 40]}>
+              <Text center bold h2 color={theme.colors.gray}>
+                {details.title}
               </Text>
-            </Block>
-            <Block padding={[20, 0, 10, 0]} flex={false} border>
-              <Text h3 bold color={theme.colors.secondary}>
-                {"R$ "}
-                {details.price}
-              </Text>
-            </Block>
-            <Block flex={false} border>
-              <Block flex={false} row>
-                <Block flex={false} center column>
-                  <Block padding={5}>
+              <Block flex={false} margin={[12, 0]}>
+                <Text light color={theme.colors.gray}>
+                  {details.description}
+                </Text>
+              </Block>
+              <Block padding={[20, 0, 10, 0]} flex={false} border>
+                <Text h3 bold color={theme.colors.secondary}>
+                  {"R$ "}
+                  {details.price}
+                </Text>
+              </Block>
+              <Block flex={false} row border>
+                <Block
+                  flex={false}
+                  center
+                  column
+                  margin={[theme.sizes.base, 0]}
+                >
+                  <Block center middle style={{ width: 26 }}>
                     <Ionicons
-                      name={"ios-locate"}
+                      name={Platform.OS === "ios" ? "ios-locate" : "md-locate"}
                       size={20}
                       color={theme.colors.gray3}
                     />
                   </Block>
-                  {details.numberContact !== '' && details.numberContact !== null &&
-                    <Block padding={5}>
-                      <Ionicons
-                        name={"ios-phone-portrait"}
-                        size={20}
-                        color={theme.colors.gray3}
-                      />
-                    </Block>
-                  }
+                  {details.numberContact !== "" &&
+                    details.numberContact !== null && (
+                      <Block
+                        center
+                        middle
+                        style={{ width: 26 }}
+                        padding={[theme.sizes.caption, 0, 0, 0]}
+                      >
+                        <Ionicons
+                          name={
+                            Platform.OS === "ios"
+                              ? "ios-phone-portrait"
+                              : "md-phone-portrait"
+                          }
+                          size={20}
+                          color={theme.colors.gray3}
+                        />
+                      </Block>
+                    )}
                 </Block>
-                <Block>
-                  <Block margin={5} padding={[2, 0]}>
+                <Block column padding={[0, 0, 0, theme.sizes.caption /2]} margin={[theme.sizes.base, 0]}>
+                  <Block>
                     <Text>
                       {details.localization}
                       {", "}
                       {details.address}
                     </Text>
                   </Block>
-                  {details.numberContact !== '' && details.numberContact !== null &&
-                    <Block margin={5} padding={[2, 0]}>
-                      <Text>{details.numberContact}</Text>
-                    </Block>
-                  }
+                  {details.numberContact !== "" &&
+                    details.numberContact !== null && (
+                      <Block padding={[theme.sizes.caption, 0, 0, 0]}>
+                        <Text>{details.numberContact}</Text>
+                      </Block>
+                    )}
                 </Block>
               </Block>
-            </Block>
-            <Block margin={[8, 0, 0, 0]} size={200}>
-              <Text bold h3 gray>
-                Galeria
-              </Text>
-
-              <Block padding={[15]} row flex={false}>
-                <Block padding={[0, 10, 0, 0]} flex={false}>
-                  {imageGallery[0] == null &&
-                  <Photo
-                    content={true}
-                    size={80}
-                    height={80}
-                    card
-                    image={no_photo}
-                  />}
-                  {imageGallery[0] !== null &&
-                  <Photo
-                    content={true}
-                    size={80}
-                    height={80}
-                    card
-                    image={imageGallery[0]}
-                  />}
-                </Block>
-                <Block flex={false}>
-                  {imageGallery[1] == null &&
-                  <Photo
-                    content={true}
-                    size={80}
-                    height={80}
-                    card
-                    image={no_photo}
-                  />}
-                  {imageGallery[1] !== null &&
-                  <Photo
-                    content={true}
-                    size={80}
-                    height={80}
-                    card
-                    image={imageGallery[1]}
-                  />}
-                </Block>
-                <Block flex={false}>
-                  <Button onPress={onClickGallery} style={styles.plus}>
-                    <Text h3 gray>
-                      +
-                    </Text>
-                  </Button>
+              <Block margin={[8, 0, 0, 0]} size={180}>
+                <Text bold h3 gray>
+                  Galeria
+                </Text>
+                <Block padding={[20, 0, 0, 0]} row flex={false}>
+                  <Block padding={[0, 10, 0, 0]} flex={false}>
+                    {imageGallery[0] == null && (
+                      <Photo
+                        content={true}
+                        size={80}
+                        height={80}
+                        card
+                        image={no_photo}
+                      />
+                    )}
+                    {imageGallery[0] !== null && (
+                      <Photo
+                        content={true}
+                        size={80}
+                        height={80}
+                        card
+                        image={imageGallery[0]}
+                      />
+                    )}
+                  </Block>
+                  <Block flex={false}>
+                    {imageGallery[1] == null && (
+                      <Photo
+                        content={true}
+                        size={80}
+                        height={80}
+                        card
+                        image={no_photo}
+                      />
+                    )}
+                    {imageGallery[1] !== null && (
+                      <Photo
+                        content={true}
+                        size={80}
+                        height={80}
+                        card
+                        image={imageGallery[1]}
+                      />
+                    )}
+                  </Block>
+                  <Block flex={false}>
+                    <Button onPress={onClickGallery} style={styles.plus}>
+                      <Text h3 gray>
+                        +
+                      </Text>
+                    </Button>
+                  </Block>
                 </Block>
               </Block>
-
             </Block>
           </Block>
-        </Block>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </>
   );
 }
