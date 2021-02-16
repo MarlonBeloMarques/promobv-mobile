@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Keyboard } from "react-native";
 import { Block, Input, Button, Text } from "../../elements";
 import { theme } from "../../constants";
@@ -20,13 +20,75 @@ export default function SignupScreen(props) {
 
   const [ checked, setChecked ] = useState(false)
   const [loader, setLoader] = useState(false)
+  const [errors, setErrors] = useState([]);
+  const [exceptionsErrors, setExceptionsErrors] = useState([]);
+
+  const errorStyle = (key) => {
+    return errors.includes(key) ? true : false;
+  };
+
+  const checkErrors = (value) => {
+    errors.forEach((error, index) => {
+      if (error === value) {
+        errors.splice(index, 1);
+      }
+    });
+  };
+
+  const messagesError = [
+    {
+      fieldName: "userNickname",
+      message: "Usuário incorreto",
+    },
+    {
+      fieldName: "email",
+      message: "E-mail incorreto",
+    },
+  ];
+
+  const setErrorType = (error1, error2, label) => {
+    if (exceptionsErrors.length === 0) {
+      return errorStyle(error1)
+        ? messagesError.filter((item) => {
+            return item.fieldName === error1;
+          })[0].message : label;
+    } else if (
+      email &&
+      password &&
+      userNickname
+    ) {
+      if (
+        exceptionsErrors.filter((item) => {
+          return error2 === item.fieldName;
+        })[0] !== undefined
+      ) {
+        return errorStyle(error2) ? exceptionsErrors.filter((item) => {
+              return error2 === item.fieldName;
+            })[0].message : label;
+      }
+    }
+
+    return label;
+  };
 
   const mockData = "Concordo com os TERMOS DE CONDIÇÕES DE USO e POLÍTICA DE PRIVACIDADE."
 
   const emailRef = useRef();
   const passwordRef = useRef();
 
+  useEffect(() => {
+    if (userNickname !== "") checkErrors("userNickname");
+    if (userNickname !== "") checkErrors("apelido");
+    if (email !== "") checkErrors("email");
+    if (password !== "") checkErrors("password");
+  }, [userNickname, email, password]);
+
   async function handleSubmit() {
+    
+    if (userNickname === "") setErrors((prevErrors) => [...prevErrors, "userNickname"]);
+    if (email === "") setErrors((prevErrors) => [...prevErrors, "email"]);
+    if (password === "") setErrors((prevErrors) => [...prevErrors, "password"]);
+
     try {      
       if(userNickname !== '' && email !== '' && password !== '') {
         if(checked) {
@@ -59,13 +121,20 @@ export default function SignupScreen(props) {
           })
         }
       } else {
-        AlertMessage({
-          title: "Atenção",
-          message: "O Cadastro possui campos não preenchidos.",
-        });
+        setErrors((prevErrors) => [...prevErrors, "userNickname"]);
+        setErrors((prevErrors) => [...prevErrors, "email"]);
+        setErrors((prevErrors) => [...prevErrors, "password"]);
       }
       
     } catch ({ response }) {
+      const err = [];
+      for (const item of response.data.errors) {
+        err.push(item.fieldName);
+      }
+
+      setErrors([]);
+      setExceptionsErrors(response.data.errors);
+      setErrors(err);
       setLoader(false)
     }
   }
@@ -89,30 +158,36 @@ export default function SignupScreen(props) {
 
           <Block flex={false} padding={[theme.sizes.base, 0]}>
             <Input
-              label="Usuário"
+              label={setErrorType("userNickname", "apelido", "Usuário")}
+              error={
+                exceptionsErrors.length === 0
+                  ? errorStyle("userNickname")
+                  : errorStyle("apelido")
+              }
               defaultValue={userNickname}
               onChangeText={setUserNickname}
               next
               submitEditing={() => emailRef.current.focus()}
             />
             <Input
-              label={
-                <Text style={{ color: theme.colors.gray }}>
-                  E-mail{' '}
-                  <Text style={[styles.message, { color: theme.colors.gray }]}>
-                    (Encaminharemos um e-mail de confirmação)
-                  </Text>
-                </Text>
+              label={setErrorType("email", "email", "E-mail")}
+              message={"(Encaminharemos um e-mail de confirmação)"}
+              error={
+                exceptionsErrors.length === 0
+                  ? errorStyle("email")
+                  : errorStyle("email")
               }
               defaultValue={email}
               onChangeText={setEmail}
+              email
               reference={emailRef}
               next
               submitEditing={() => passwordRef.current.focus()}
             />
             <Input
               secure
-              label="Senha"
+              label={errorStyle("password") ? "Senha incorreta" : "Senha"}
+              error={errorStyle("password")}
               defaultValue={password}
               onChangeText={setPassword}
               reference={passwordRef}
@@ -133,12 +208,11 @@ export default function SignupScreen(props) {
 
             <Block flex={false} padding={[theme.sizes.padding, 0]}>
               <Button onPress={handleSubmit} color={theme.colors.primary}>
-                {loader && (
+                {loader ? (
                   <Block flex={false} center>
                     <DotIndicator color={theme.colors.white} size={5} />
                   </Block>
-                )}
-                {!loader && (
+                ) : (
                   <Text bold white center>
                     Cadastra-se
                   </Text>

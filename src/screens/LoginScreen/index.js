@@ -14,7 +14,6 @@ import { signInSuccess, signOutRequest } from "../../store/modules/auth/actions"
 import { getUser } from "../../services/user";
 
 import { DotIndicator } from 'react-native-indicators';
-import AlertMessage from "../../components/Alert";
 
 export default function LoginScreen(props) {
 
@@ -22,10 +21,28 @@ export default function LoginScreen(props) {
   const [password, setPassword] = useState('')
 
   const [loader, setLoader] = useState(false)
+  const [errors, setErrors] = useState([]);
+
+  const errorStyle = (key) => {
+    return errors.includes(key) ? true : false;
+  };
+
+  const checkErrors = (value) => {
+    errors.forEach((error, index) => {
+      if (error === value) {
+        errors.splice(index, 1);
+      }
+    });
+  };
 
   const dispatch = useDispatch()
 
   const passwordRef = useRef();
+
+  useEffect(() => {
+    if (email !== '') checkErrors("email");
+    if (password !== '') checkErrors("password");
+  }, [email, password]);
 
   useEffect(() => {
     dispatch(signOutRequest())
@@ -37,36 +54,29 @@ export default function LoginScreen(props) {
 
       const { headers : { authorization }, status } = await signIn(email, password)
 
-      switch (status) {
-        case 200:
-          await successfulLogin(authorization)
+      if(email !== '' && password !== '') {
+        switch (status) {
+          case 200:
+            await successfulLogin(authorization)
 
-          await getUser(email).then(res => {
-            let response = res.data
-            dispatch(signInSuccess(authorization, JSON.parse(response.id)))
-          })
+            await getUser(email).then(res => {
+              let response = res.data
+              dispatch(signInSuccess(authorization, JSON.parse(response.id)))
+            })
 
-          Keyboard.dismiss()
+            Keyboard.dismiss()
 
-          setLoader(false);
+            setLoader(false);
 
-          props.navigation.navigate('Promoções')
-        
-          break
+            props.navigation.navigate('Promoções')
+          
+            break
+        }
       }
-
-
     } catch ({ response }) {
       setLoader(false)
-      if(response.status === 403) {
-        AlertMessage({
-          title: "Atenção",
-          message: "Verifique no seu e-mail a confirmação de usuário.",
-        });
-
-        setEmail('')
-        setPassword('')
-      }
+      setErrors((prevErrors) => [...prevErrors, "email"]);
+      setErrors((prevErrors) => [...prevErrors, "password"]);
   }
 }
 
@@ -96,15 +106,18 @@ export default function LoginScreen(props) {
           <Block flex={false} padding={[theme.sizes.base, 0]}>
             <Block flex={false}>
               <Input
-                label="E-mail"
+                label={errorStyle("email") ? "E-mail incorreto" : "E-mail"}
+                error={errorStyle("email")}
                 defaultValue={email}
+                email
                 onChangeText={setEmail}
                 next
                 submitEditing={() => passwordRef.current.focus()}
               />
               <Input
                 secure
-                label="Senha"
+                label={errorStyle("password") ? "Senha incorreta" : "Senha"}
+                error={errorStyle("password")}
                 defaultValue={password}
                 onChangeText={setPassword}
                 reference={passwordRef}
@@ -123,16 +136,15 @@ export default function LoginScreen(props) {
               </Button>
 
               <Button onPress={handleSubmit} color={theme.colors.primary}>
-                {loader && (
+                {loader ? (
                   <Block flex={false} center>
                     <DotIndicator color={theme.colors.white} size={5} />
                   </Block>
-                )}
-                {!loader && (
+                ) :
                   <Text bold white center>
                     Entrar
                   </Text>
-                )}
+                }
               </Button>
               <Button onPress={onSignupClicked} style={styles.signup}>
                 <Text

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Block, Input, Button, Text } from "../../elements";
 import { theme } from "../../constants";
 import { DotIndicator } from "react-native-indicators";
@@ -17,8 +17,27 @@ export default function PasswordScreen(props) {
   const [confirmPassword, setConfirmPassword] = useState('')
 
   const [loader, setLoader] = useState(false);
+  const [errors, setErrors] = useState([]);
+
+  const errorStyle = (key) => {
+    return errors.includes(key) ? true : false;
+  };
+
+  const checkErrors = (value) => {
+    errors.forEach((error, index) => {
+      if (error === value) {
+        errors.splice(index, 1);
+      }
+    });
+  };
 
   const confirmPasswordRef = useRef();
+
+  useEffect(() => {
+    if (email !== "") checkErrors("email");
+    if (password !== "") checkErrors("password");
+    if (confirmPassword !== "") checkErrors("confirmPassword");
+  }, [email, password, confirmPassword]);
 
   function checkEmailUser() {
     setLoader(true)
@@ -34,22 +53,19 @@ export default function PasswordScreen(props) {
 
       if(res.status === 404) {
         setLoader(false);
-        AlertMessage({
-          title: "Atenção",
-          message: "E-mail não encontrado.",
-        });
+        setErrors((prevErrors) => [...prevErrors, "email"]);
       }
     }, function() {
         setLoader(false)
+        setErrors((prevErrors) => [...prevErrors, "email"]);
     })
   }
 
   async function handleSubmit() {
-    if(email !== '' && password !== '' && confirmPassword !== '') {
+    if(password !== '' && confirmPassword !== '') {
       if(password === confirmPassword) {
         setLoader(true)
         await newPassword(email, password).then(res => {
-          console.log(res.status)
           if(res.status === 204) {
             AlertMessage({
               title: "Sucesso",
@@ -61,19 +77,21 @@ export default function PasswordScreen(props) {
             props.navigation.navigate('login')
           }
         }, function() {
-          setLoader(false)
+          setLoader(false);
+          setErrors((prevErrors) => [...prevErrors, "password"]);
+          setErrors((prevErrors) => [...prevErrors, "confirmPassword"]);
         })
       } else {
+        setErrors((prevErrors) => [...prevErrors, "password"]);
+        setErrors((prevErrors) => [...prevErrors, "confirmPassword"]);
         AlertMessage({
           title: 'Atenção',
           message: 'Verifique se as senhas estão iguais.'
         })
       }
     } else {
-      AlertMessage({
-        title: 'Atenção',
-        message: 'Verifique se os campos estão todos preenchidos.'
-      })
+      setErrors((prevErrors) => [...prevErrors, "password"]);
+      setErrors((prevErrors) => [...prevErrors, "confirmPassword"]); 
     }
    
     Keyboard.dismiss();
@@ -110,9 +128,12 @@ export default function PasswordScreen(props) {
 
           <Block flex={false} padding={[theme.sizes.base, 0]}>
             <Input
-              label="E-mail"
+              label={errorStyle("email") ? "E-mail incorreto" : "E-mail"}
+              error={errorStyle("email")}
               defaultValue={email}
+              email
               onChangeText={setEmail}
+              editable={!checked}
               done
               submitEditing={checkEmailUser}
             />
@@ -120,7 +141,8 @@ export default function PasswordScreen(props) {
               <>
                 <Input
                   secure
-                  label="Senha"
+                  label={errorStyle("password") ? "Senha incorreta" : "Senha"}
+                  error={errorStyle("password")}
                   defaultValue={password}
                   onChangeText={setPassword}
                   next
@@ -128,7 +150,12 @@ export default function PasswordScreen(props) {
                 />
                 <Input
                   secure
-                  label="Confirmar senha"
+                  label={
+                    errorStyle("confirmPassword")
+                      ? "Confirmar senha incorreto"
+                      : "Confirmar senha"
+                  }
+                  error={errorStyle("confirmPassword")}
                   defaultValue={confirmPassword}
                   onChangeText={setConfirmPassword}
                   reference={confirmPasswordRef}

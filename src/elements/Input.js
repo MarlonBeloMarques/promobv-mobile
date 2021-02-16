@@ -15,10 +15,24 @@ export default function Input(props) {
     const { label, error } = props;
 
     return (
-      <Block padding={[0,0, theme.sizes.base - 10, 4]} flex={false}>
-        {label ? 
-          (<Text gray={!error} accent={error}>{label}</Text>)
-        : null}
+      <Block padding={[0, 0, theme.sizes.base - 10, 4]} flex={false} style={{ flexDirection: message ? 'row' : null, alignItems: message ? 'flex-end': null }}>
+        {label ? (
+          <Text gray={!error} accent={error}>
+            {label}
+          </Text>
+        ) : null}
+        {message ? (
+          <Text
+            caption
+            style={{
+              paddingLeft: theme.sizes.caption / 2,
+            }}
+            white={!error}
+            accent={error}
+          >
+            {message}
+          </Text>
+        ) : null}
       </Block>
     );
   }
@@ -54,7 +68,7 @@ export default function Input(props) {
     );
   }
 
-  const { next, done, email, phone, number, secure, error, style, reference, box, type } = props;
+  const { next, done, email, phone, number, secure, error, style, reference, box, type, editable, message } = props;
   const { toggleSecure } = isToggleSecure;
   const isSecure = toggleSecure ? false : secure;
   const inputStyles = [ 
@@ -95,6 +109,7 @@ export default function Input(props) {
           returnKeyType={keyType}
           onSubmitEditing={props.submitEditing}
           ref={reference}
+          editable={editable}
           {...props}
         />
         {renderToggle()}
@@ -118,6 +133,7 @@ export default function Input(props) {
           returnKeyType={keyType}
           onSubmitEditing={props.submitEditing}
           ref={reference}
+          editable={editable}
           {...props}
         />
         {renderToggle()}
