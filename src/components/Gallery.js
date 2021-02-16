@@ -122,10 +122,15 @@ const Gallery = (props) => {
       onRequestClose={props.onRequestClose}
       style={{margin: 0, marginTop: height / 9}}
     >
-      <Block card color={theme.colors.white} padding={[ Platform.OS === 'ios' ? 20 : 10]}>
+      <Block 
+        style={{ 
+          borderTopStartRadius : theme.sizes.radius * 2, 
+          borderTopEndRadius : theme.sizes.radius * 2}} 
+        color={theme.colors.white} 
+        padding={[ Platform.OS === 'ios' ? 20 : 10]}>
         <Block flex={false} row padding={[theme.sizes.base, theme.sizes.base]}>
           {showAddIcon()}
-          <Text bold gray>
+          <Text h3 bold gray>
             Galeria
           </Text>
         </Block>

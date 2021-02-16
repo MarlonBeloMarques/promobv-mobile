@@ -6,10 +6,6 @@ export default StyleSheet.create({
     flex: 1
   },
 
-  inputError: {
-    borderBottomColor: theme.colors.accent
-  },
-
   forgotPassword: {
     marginTop: 1,
     marginBottom: theme.sizes.base

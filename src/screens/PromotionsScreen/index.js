@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { KeyboardAvoidingView, FlatList, StyleSheet, ActivityIndicator } from "react-native";
 import { Block, Text, Button, Header, Photo } from "../../elements";
-import { Insert, Categories } from "../../components";
+import { Insert, Categories, PromotionCard } from "../../components";
 import { theme } from "../../constants";
 import { AntDesign, SimpleLineIcons } from "@expo/vector-icons";
 import { DrawerActions } from "react-navigation-drawer";
@@ -172,8 +172,15 @@ export default function PromotionScreen(props) {
   function renderPromotions() {
     return (
       <KeyboardAvoidingView style={styles.container}>
-        <Header barStyle='light-content' colorIcon={theme.colors.white} color={theme.colors.primary} onPress={onClickMenu}>Promoções</Header>
-        <Block border center flex={false} padding={[15, 0, 15]}>
+        <Header
+          barStyle="light-content"
+          colorIcon={theme.colors.white}
+          color={theme.colors.primary}
+          onPress={onClickMenu}
+        >
+          Promoções
+        </Header>
+        <Block color="white" border center flex={false} padding={[15, 0, 15]}>
           <Button onPress={onClickCategory} style>
             <Text bold color={theme.colors.primary}>
               {name}
@@ -181,14 +188,13 @@ export default function PromotionScreen(props) {
           </Button>
         </Block>
 
-        {loading === true &&
-          <Block middle>
-            <ActivityIndicator size="small" color='#00000'/>
+        {loading === true && (
+          <Block color="white" middle>
+            <ActivityIndicator size="small" color="#00000" />
           </Block>
-        }
-        {loading === false && 
+        )}
+        {loading === false && (
           <>
-
             <Block fixed>
               <Button
                 onPress={onClickInsert}
@@ -196,7 +202,7 @@ export default function PromotionScreen(props) {
                 radius={theme.sizes.radius * 4}
                 color={theme.colors.secondary}
               >
-                <Block row padding={[0, theme.sizes.base * 2]} flex={false}>
+                <Block center row padding={[0, theme.sizes.base * 2]} flex={false}>
                   <Block padding={[0, 10, 0, 0]} flex={false}>
                     <AntDesign
                       name={"pluscircleo"}
@@ -208,60 +214,45 @@ export default function PromotionScreen(props) {
                 </Block>
               </Button>
             </Block>
-            {promotions.length === 0 && 
-              <Block center margin={[theme.sizes.padding * 4, 0]}>
-                <Block flex={false} padding={theme.sizes.padding}>
-                  <SimpleLineIcons
-                    name={"handbag"}
-                    color={theme.colors.gray3}
-                    size={40}
-                  />
-                </Block>
-                <Text gray3>Não há promoções no momento.</Text>
-              </Block>
-            }
-
-            {promotions.length !== 0 && 
-              <FlatList
-                style={styles.flatlist}
-                data={promotions}
-                onRefresh={onRefresh}
-                refreshing={refresh}
-                keyExtractor={post => String(post.id)}
-                onEndReached={() => { id != 0 ? loadPromotionsByCategory() : loadPromotionsGeneral() }}
-                onEndReachedThreshold={0.1}
-                renderItem={({ item }) => (
-                  <Block
-                    onPress={() => onDetailsClicked(item.id)}
-                    button
-                    size={140}
-                    flex={false}
-                    row
-                    border
-                  >
-                    {item.imagem !== null && <Photo height={100} size={40} image={item.imagem} />}
-                    {item.imagem === null && <Photo height={100} size={40} image={no_photo} />}
-                    <Block padding={[15, 10, 0]}>
-                      <Text gray bold size={18}>
-                        {item.titulo}
-                      </Text>
-                      <Block style={styles.end}>
-                        <Text secondary size={15} bold>
-                          {"R$ "}{item.preco}
-                        </Text>
-                        <Block padding={[5, 0, 0]} flex={false}>
-                          <Text gray3 bold>
-                            {item.localizacao}
-                          </Text>
-                        </Block>
-                      </Block>
-                    </Block>
+            <Block color="white">
+              {promotions.length === 0 && (
+                <Block
+                  color="white"
+                  center
+                  margin={[theme.sizes.padding * 4, 0]}
+                >
+                  <Block flex={false} padding={theme.sizes.padding}>
+                    <SimpleLineIcons
+                      name={"handbag"}
+                      color={theme.colors.gray3}
+                      size={40}
+                    />
                   </Block>
-                )}
-              ></FlatList>
-            } 
+                  <Text gray3>Não há promoções no momento.</Text>
+                </Block>
+              )}
+
+              {promotions.length !== 0 && (
+                <FlatList
+                  style={styles.flatlist}
+                  data={promotions}
+                  onRefresh={onRefresh}
+                  refreshing={refresh}
+                  keyExtractor={(post) => String(post.id)}
+                  onEndReached={() => {
+                    id != 0
+                      ? loadPromotionsByCategory()
+                      : loadPromotionsGeneral();
+                  }}
+                  onEndReachedThreshold={0.1}
+                  renderItem={({ item }) => (
+                    <PromotionCard item={item} onDetailsClicked={onDetailsClicked}/>
+                  )}
+                ></FlatList>
+              )}
+            </Block>
           </>
-        }
+        )}
       </KeyboardAvoidingView>
     );
   }
@@ -281,12 +272,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center"
   },
-
-  end: {
-    justifyContent: "flex-end",
-    marginBottom: 10
-  },
-
   flatlist: {
     zIndex: 1
   }

@@ -44,6 +44,30 @@ export default function Insert(props) {
   const [titleButtonModal, setTitleButtonModal] = useState('Cancelar')
   const [height, setHeight] = useState(theme.sizes.base * 3);
 
+  const [errors, setErrors] = useState([]);
+
+  const errorStyle = (key) => {
+    return errors.includes(key) ? true : false;
+  };
+
+  const checkErrors = (value) => {
+    errors.forEach((error, index) => {
+      if (error === value) {
+        errors.splice(index, 1);
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (title !== "") checkErrors("title");
+    if (description !== "") checkErrors("description");
+    if (localization !== "") checkErrors("localization");
+    if (address !== "") checkErrors("address");
+    if (numberContact !== "") checkErrors("numberContact");
+    if (price !== "") checkErrors("price");
+  }, [title, description, localization, address, numberContact, price]);
+
+
   if(!props.modal) {
     props.navigation.addListener("willBlur", () => {
       dispatch(setImagesPromotion([]));
@@ -51,9 +75,15 @@ export default function Insert(props) {
   }
 
   useEffect(() => {
-    function checkFields() {
+    function checkFieldsForModal() {
       if(props.modal) {
-        if(title !== '' && description !== '' && localization !== '' && address !== '' && price !== '' && numberContact !== '' && images.length !== 0) {
+        if(title !== '' && 
+          description !== '' && 
+          localization !== '' && 
+          address !== '' && 
+          price !== '' && 
+          numberContact !== '' && 
+          images.length !== 0) {
           setTitleButtonModal('Inserir')
         } else {
           setTitleButtonModal('Cancelar');
@@ -61,7 +91,7 @@ export default function Insert(props) {
       }
     }
 
-    checkFields()
+    checkFieldsForModal()
   })
 
   async function submitPicture(photo, promoId) {
@@ -77,9 +107,7 @@ export default function Insert(props) {
 
     await setPromotionPicture(promoId, formData).then(res => {
 
-    }, function({response}) {
-
-    })
+    }, function({response}) {})
 
   }
 
@@ -93,77 +121,84 @@ export default function Insert(props) {
 
     async function handleSubmit() { 
 
-      setLoader(true)
-      try {      
+      if(title === '') setErrors((prevErrors) => [...prevErrors, "title"]);
+      if(description === '') setErrors((prevErrors) => [...prevErrors, "description"]);
+      if(localization === '') setErrors((prevErrors) => [...prevErrors, "localization"]);
+      if(address === "") setErrors((prevErrors) => [...prevErrors, "address"]);
+      if(price === "") setErrors((prevErrors) => [...prevErrors, "price"]);
+      if(numberContact === '') setErrors((prevErrors) => [...prevErrors, "numberContact"]);
+
+      setLoader(true);
+      try {   
         if(props.modal) {
-  
-          if(titleButtonModal === 'Inserir') {
-            await setPromotion(description, price, localization, address, title, numberContact, id).then(res => {
-              let promo = res.headers.location
-              let N = res.config.baseURL
-              
-              promoId = JSON.parse(promo.substring(N.length + 11, promo.length))
-            })
-  
-            for (const img of images) {
-              await submitPicture(img, promoId)
-            }
-            
-            AlertMessage({
-              title: "Sucesso",
-              message: "Sua promoção foi publicada.",
-            });
-          }
-  
-          Keyboard.dismiss();
-
-          setLoader(false)
-          closeInsert() 
-  
+          addFromModal();
         } else {
-          if(title !== '' && description !== '' && localization !== '' && address !== '' && price !== '' && numberContact !== '' && images.length !== 0) {
-            await setPromotion(description, price, localization, address, title, numberContact, id).then(res => {
-              let promo = res.headers.location;
-              let N = res.config.baseURL;
-  
-              promoId = JSON.parse(promo.substring(N.length + 11, promo.length));
-            })
-  
-            for (const img of images) {
-              await submitPicture(img, promoId)
-            }
-  
-            setTitle('')
-            setDescription('')
-            setLocalization('')
-            setAddress('')
-            setPrice('')
-            setNumberContact('')
-
-  
-            AlertMessage({
-              title: "Sucesso",
-              message: "Sua promoção foi publicada.",
-            })
-  
-            Keyboard.dismiss();
-
-            setLoader(false)
-            dispatch(setImagesPromotion([]));
-  
-          } else {
-            AlertMessage({
-              title: 'Atenção',
-              message: 'O formulário contém campos não preenchidos.'
-            })
-
-            setLoader(false)
-          }
+          addFromScreen();
         }
       } catch ({response}) {
         setLoader(false)
       }
 
+    }
+
+    async function addFromModal() {
+      if(titleButtonModal === 'Inserir') {
+        await setPromotion(description, price, localization, address, title, numberContact, id).then(res => {
+          let promo = res.headers.location
+          let N = res.config.baseURL
+          
+          promoId = JSON.parse(promo.substring(N.length + 11, promo.length))
+        })
+        for (const img of images) {
+          await submitPicture(img, promoId)
+        }
+        
+        AlertMessage({
+          title: "Sucesso",
+          message: "Sua promoção foi publicada.",
+        });
+      }
+      Keyboard.dismiss();
+      setLoader(false)
+      closeInsert() 
+    }
+
+    async function addFromScreen() {
+      if(title !== '' && 
+        description !== '' && 
+        localization !== '' && 
+        address !== '' && 
+        price !== '' && 
+        numberContact !== '' && 
+        images.length !== 0) 
+      {
+        await setPromotion(description, price, localization, address, title, numberContact, id).then(res => {
+          let promo = res.headers.location;
+          let N = res.config.baseURL;
+          promoId = JSON.parse(promo.substring(N.length + 11, promo.length));
+        })
+        for (const img of images) {
+          await submitPicture(img, promoId)
+        }
+
+        setTitle('')
+        setDescription('')
+        setLocalization('')
+        setAddress('')
+        setPrice('')
+        setNumberContact('')
+
+        AlertMessage({
+          title: "Sucesso",
+          message: "Sua promoção foi publicada.",
+        })
+        Keyboard.dismiss();
+        setLoader(false)
+        dispatch(setImagesPromotion([]));
+  
+      } else {
+        setLoader(false)
+      }
     }
 
     return (
@@ -188,13 +223,13 @@ export default function Insert(props) {
     if(activeIcon) {
        return (
          <Header barStyle='dark-content' colorIcon={theme.colors.gray} onPress={onClickMenu} color={theme.colors.white}>
-          <Text gray>Inserir</Text>
+          <Text h3 bold gray>Inserir</Text>
         </Header>
        )
     } else {
         return (
           <Header barStyle='dark-content' colorIcon={theme.colors.white} color={theme.colors.white}>
-            <Text gray>Inserir</Text>
+            <Text h3 bold gray>Inserir</Text>
           </Header>
         );
     }
@@ -266,107 +301,135 @@ export default function Insert(props) {
         } 
       }
 
+      function splitPrice(value) {
+        const newPrice = value.split('R$').join('').split(',').join('.');
+        setPrice(newPrice);
+      }
+
       return (
         <>
           {renderGallery()}
-            <ScrollView
-              backgroundColor="white"
-              showsVerticalScrollIndicator={false}
+          <ScrollView
+            backgroundColor="white"
+            showsVerticalScrollIndicator={false}
+          >
+            {header(activeIcon)}
+            <Block
+              padding={[0, theme.sizes.padding]}
+              space="between"
+              color={theme.colors.white}
             >
-              {header(activeIcon)}
-              <Block
-                padding={[0, theme.sizes.padding]}
-                space="between"
-                color={theme.colors.white}
-              >
-                <Block margin={[theme.sizes.header, 0]} flex={false}>
-                  <Input
-                    label="Titulo"
-                    defaultValue={title}
-                    onChangeText={setTitle}
-                    next
-                    submitEditing={() => descriptionRef.current.focus()}
-                  />
-                  <Input
-                    box={height}
-                    onContentSizeChange={(e) =>
-                      setHeight(e.nativeEvent.contentSize.height)
-                    }
-                    multiline
-                    label="Descrição"
-                    defaultValue={description}
-                    onChangeText={setDescription}
-                    reference={descriptionRef}
-                    next
-                    submitEditing={() => localizationRef.current.focus()}
-                  />
-                  <Input
-                    label="Local"
-                    defaultValue={localization}
-                    onChangeText={setLocalization}
-                    reference={localizationRef}
-                    next
-                    submitEditing={() => numberContactRef.current.focus()}
-                  />
-                  <Input
-                    label="Número de Contato"
-                    mask={true}
-                    type={'cel-phone'}
-                    number
-                    value={numberContact}
-                    defaultValue={numberContact}
-                    onChangeText={setNumberContact}
-                    reference={numberContactRef}
-                    next
-                    submitEditing={() => addressRef.current.focus()}
-                  />
-                  <Input
-                    label="Endereço"
-                    defaultValue={address}
-                    onChangeText={setAddress}
-                    reference={addressRef}
-                    next
-                    submitEditing={() => priceRef.current.focus()}
-                  />
-
-                  <Block row>
-                    <Block padding={[0, theme.sizes.padding, 0, 0]}>
-                      <Input
-                        number
-                        label="Valor"
-                        defaultValue={price}
-                        onChangeText={setPrice}
-                        reference={priceRef}
-                        done
-                      />
-                    </Block>
-
-                    <Block margin={[theme.sizes.base / 1.5, 0]}>
-                      <Block
-                        padding={[0, 0, theme.sizes.base - 10, 4]}
-                        flex={false}
-                      >
-                        <Text gray>Categoria</Text>
-                      </Block>
-                      <Button onPress={onClickCategory} style={styles.button}>
-                        <Text gray>{name}</Text>
-                      </Button>
-                    </Block>
-                  </Block>
-                </Block>
+              <Block margin={[theme.sizes.header, 0]} flex={false}>
+                <Input
+                  label={errorStyle("title") ? "Titulo incorreto" : "Titulo"}
+                  error={errorStyle("title")}
+                  defaultValue={title}
+                  onChangeText={setTitle}
+                  next
+                  submitEditing={() => descriptionRef.current.focus()}
+                />
+                <Input
+                  box={height}
+                  onContentSizeChange={(e) =>
+                    setHeight(e.nativeEvent.contentSize.height)
+                  }
+                  multiline
+                  label={
+                    errorStyle("description")
+                      ? "Descrição incorreta"
+                      : "Descrição"
+                  }
+                  error={errorStyle("description")}
+                  defaultValue={description}
+                  onChangeText={setDescription}
+                  reference={descriptionRef}
+                  next
+                  submitEditing={() => localizationRef.current.focus()}
+                />
+                <Input
+                  label={
+                    errorStyle("localization")
+                      ? "Localização incorreta"
+                      : "Localização"
+                  }
+                  error={errorStyle("localization")}
+                  defaultValue={localization}
+                  onChangeText={setLocalization}
+                  reference={localizationRef}
+                  next
+                  submitEditing={() => numberContactRef.current.focus()}
+                />
+                <Input
+                  label={
+                    errorStyle("numberContact")
+                      ? "Número de contato incorreto"
+                      : "Número de contato"
+                  }
+                  error={errorStyle("numberContact")}
+                  mask={true}
+                  type={"cel-phone"}
+                  number
+                  value={numberContact}
+                  defaultValue={numberContact}
+                  onChangeText={setNumberContact}
+                  reference={numberContactRef}
+                  next
+                  submitEditing={() => addressRef.current.focus()}
+                />
+                <Input
+                  label={
+                    errorStyle("address") ? "Endereço incorreto" : "Endereço"
+                  }
+                  error={errorStyle("address")}
+                  defaultValue={address}
+                  onChangeText={setAddress}
+                  reference={addressRef}
+                  next
+                  submitEditing={() => priceRef.current.focus()}
+                />
 
                 <Block row>
-                  <Block flex={false}>
-                    <Text bold gray>
-                      Galeria
-                    </Text>
-                    {renderButtonGallery()}
+                  <Block padding={[0, theme.sizes.padding, 0, 0]}>
+                    <Input
+                      mask={true}
+                      type={"money"}
+                      number
+                      label={errorStyle("price") ? "Preço incorreto" : "Preço"}
+                      error={errorStyle("price")}
+                      value={price}
+                      defaultValue={price}
+                      onChangeText={(value) => splitPrice(value)}
+                      reference={priceRef}
+                      done
+                    />
+                  </Block>
+
+                  <Block margin={[theme.sizes.base / 1.5, 0]}>
+                    <Block
+                      padding={[0, 0, theme.sizes.base - 10, 4]}
+                      flex={false}
+                    >
+                      <Text gray>Categoria</Text>
+                    </Block>
+                    <Button onPress={onClickCategory} style={styles.button}>
+                      <Text gray>{name}</Text>
+                    </Button>
                   </Block>
                 </Block>
-
-                {buttonAction(titleModal)}
               </Block>
-            </ScrollView>
+
+              <Block row>
+                <Block flex={false}>
+                  <Text bold gray>
+                    Galeria
+                  </Text>
+                  {renderButtonGallery()}
+                </Block>
+              </Block>
+
+              {buttonAction(titleModal)}
+            </Block>
+          </ScrollView>
         </>
       );
     }
@@ -398,11 +461,10 @@ export default function Insert(props) {
   if (props.modal) {
     return onModal(titleButtonModal);
   } 
-  else {
-    return (
-      contentPattern('Inserir', true)
-    )
-  }
+  
+  return (
+    contentPattern('Inserir', true)
+  )
 
 };
 

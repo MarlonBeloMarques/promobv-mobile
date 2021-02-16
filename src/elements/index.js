@@ -2,7 +2,7 @@ import Block from './Block'
 import Input from './Input'
 import Text from './Text'
 import Button from './Button'
-import Header from './Header'
+import Header from '../components/Header'
 import Photo from './Photo'
 
 export {

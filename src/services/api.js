@@ -51,58 +51,55 @@ api.interceptors.response.use(function (response) {
 
   switch (errorObj.status) {
     case 401:
-      handle401()
+      handle401();
       break;
-
     case 403:
-      handle403()
+      handle403();
       break;
-
     case 422:
-      handle422(errorObj)
+      handle422(errorObj);
       break;
-
     default:
-      handleDefaultError(errorObj)
+      handleDefaultError(errorObj);
       break;
-
   }
 
   function handleDefaultError(errorObj) {
-    console.log(`DEFAULT ERROR: ${errorObj.status} : ${errorObj.error}, message: ${errorObj.message}`)
+    console.log(
+      `DEFAULT ERROR: ${errorObj.status} : ${errorObj.error}, message: ${errorObj.message}`
+    );
   }
-
   function handle422(errorObj) {
-    Alert.alert(
-      'Validação',
-      `${listErrors(errorObj.errors)}`
-
-    )
+    console.log(
+      `DEFAULT ERROR: ${errorObj.status} : ${
+        errorObj.error
+      }, errors: ${listErrors(errorObj.errors)}`
+    );
   }
-
   function handle401() {
-    AlertMessage({
-      title: 'Atenção',
-      message: 'Email ou senha incorretos.'
-    })
+    console.log(
+      `ERROR: ${errorObj.status} : ${errorObj.error}, message: ${errorObj.message}`
+    );
   }
-
   function handle403() {
     AlertMessage({
-      title: 'Atenção',
-      message: 'Sua sessão expirou.'
-    })
-    logout()
+      title: "Atenção",
+      message: "Sua sessão expirou.",
+    });
   }
 
-  function listErrors(messages) {
-    let s = ''
-    for (let index = 0; index < messages.length; index++) {
-      s = s + messages[i].fieldName + ': ' + messages[i].message
-    }
-
-    return s
-  }
+ function listErrors(messages) {
+   let s = "";
+   for (const iterator of messages) {
+     s +=
+       "fieldName : " +
+       iterator.fieldName +
+       ", message :" +
+       iterator.message +
+       "\n";
+   }
+   return s;
+ }
 
   return Promise.reject(error)
 })

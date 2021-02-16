@@ -42,7 +42,7 @@ export function Categories(props) {
       onRequestClose={props.onRequestClose}
     >
       <Header barStyle='dark-content' colorIcon={theme.colors.white} color={theme.colors.white}>
-        <Text gray>Categoria</Text>
+        <Text h3 gray bold>Categoria</Text>
       </Header>
       {props.screenPromotions === true && 
         <Block flex={false} border padding={[theme.sizes.base]}>

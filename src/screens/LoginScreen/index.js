@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { KeyboardAvoidingView, Image, Keyboard } from "react-native";
+import { KeyboardAvoidingView, Image, Keyboard, ScrollView } from "react-native";
 import { Block, Input, Button, Text} from '../../elements'
 import { theme } from "../../constants";
 
@@ -14,7 +14,6 @@ import { signInSuccess, signOutRequest } from "../../store/modules/auth/actions"
 import { getUser } from "../../services/user";
 
 import { DotIndicator } from 'react-native-indicators';
-import AlertMessage from "../../components/Alert";
 
 export default function LoginScreen(props) {
 
@@ -22,10 +21,28 @@ export default function LoginScreen(props) {
   const [password, setPassword] = useState('')
 
   const [loader, setLoader] = useState(false)
+  const [errors, setErrors] = useState([]);
+
+  const errorStyle = (key) => {
+    return errors.includes(key) ? true : false;
+  };
+
+  const checkErrors = (value) => {
+    errors.forEach((error, index) => {
+      if (error === value) {
+        errors.splice(index, 1);
+      }
+    });
+  };
 
   const dispatch = useDispatch()
 
   const passwordRef = useRef();
+
+  useEffect(() => {
+    if (email !== '') checkErrors("email");
+    if (password !== '') checkErrors("password");
+  }, [email, password]);
 
   useEffect(() => {
     dispatch(signOutRequest())
@@ -37,36 +54,29 @@ export default function LoginScreen(props) {
 
       const { headers : { authorization }, status } = await signIn(email, password)
 
-      switch (status) {
-        case 200:
-          await successfulLogin(authorization)
+      if(email !== '' && password !== '') {
+        switch (status) {
+          case 200:
+            await successfulLogin(authorization)
 
-          await getUser(email).then(res => {
-            let response = res.data
-            dispatch(signInSuccess(authorization, JSON.parse(response.id)))
-          })
+            await getUser(email).then(res => {
+              let response = res.data
+              dispatch(signInSuccess(authorization, JSON.parse(response.id)))
+            })
 
-          Keyboard.dismiss()
+            Keyboard.dismiss()
 
-          setLoader(false);
+            setLoader(false);
 
-          props.navigation.navigate('Promoções')
-        
-          break
+            props.navigation.navigate('Promoções')
+          
+            break
+        }
       }
-
-
     } catch ({ response }) {
       setLoader(false)
-      if(response.status === 403) {
-        AlertMessage({
-          title: "Atenção",
-          message: "Verifique no seu e-mail a confirmação de usuário.",
-        });
-
-        setEmail('')
-        setPassword('')
-      }
+      setErrors((prevErrors) => [...prevErrors, "email"]);
+      setErrors((prevErrors) => [...prevErrors, "password"]);
   }
 }
 
@@ -79,86 +89,92 @@ export default function LoginScreen(props) {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={"padding"}>
-      <StatusBar barStyle="dark-content" />
-      <Block
-        padding={[
-          theme.sizes.base,
-          theme.sizes.base * 2,
-          0,
-          theme.sizes.base * 2,
-        ]}
-      >
-        <Block flex={0.4} middle center>
-          <Image resizeMode="contain" source={logo} style={styles.logo} />
-        </Block>
-        <Block padding={[theme.sizes.base, 0]}>
-          <Block flex={false}>
-            <Input
-              label="E-mail"
-              defaultValue={email}
-              onChangeText={setEmail}
-              next
-              submitEditing={() => passwordRef.current.focus()}
-            />
-            <Input
-              secure
-              label="Senha"
-              defaultValue={password}
-              onChangeText={setPassword}
-              reference={passwordRef}
-              done
-              submitEditing={handleSubmit}
-            />
-            <Button onPress={onPasswordClicked} style={styles.forgotPassword}>
-              <Text
-                caption
-                primary
-                right
-                style={{ textDecorationLine: "underline" }}
-              >
-                Recuperar senha?
-              </Text>
-            </Button>
-
-            <Button onPress={handleSubmit} color={theme.colors.primary}>
-              {loader && (
-                <Block flex={false} center>
-                  <DotIndicator color={theme.colors.white} size={5} />
-                </Block>
-              )}
-              {!loader && (
-                <Text bold white center>
-                  Entrar
-                </Text>
-              )}
-            </Button>
-            <Button onPress={onSignupClicked} style={styles.signup}>
-              <Text
-                caption
-                primary
-                center
-                style={{ textDecorationLine: "underline" }}
-              >
-                Crie uma conta
-              </Text>
-            </Button>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <KeyboardAvoidingView behavior={"padding"}>
+        <StatusBar barStyle="dark-content" />
+        <Block
+          padding={[
+            theme.sizes.base,
+            theme.sizes.base * 2,
+            0,
+            theme.sizes.base * 2,
+          ]}
+        >
+          <Block flex={false} middle center>
+            <Image resizeMode="contain" source={logo} style={styles.logo} />
           </Block>
-          {/* <Block padding={[theme.sizes.base * 2, 0, theme.sizes.base, 0]}>
-            <Button color={theme.colors.google}>
-              <Text bold white center>
-                Entrar com o Google
-              </Text>
-            </Button>
-            <Button color={theme.colors.facebook}>
-              <Text bold white center>
-                Entrar com o Facebook
-              </Text>
-            </Button>
-            
-          </Block> */}
+          <Block flex={false} padding={[theme.sizes.base, 0]}>
+            <Block flex={false}>
+              <Input
+                label={errorStyle("email") ? "E-mail incorreto" : "E-mail"}
+                error={errorStyle("email")}
+                defaultValue={email}
+                email
+                onChangeText={setEmail}
+                next
+                submitEditing={() => passwordRef.current.focus()}
+              />
+              <Input
+                secure
+                label={errorStyle("password") ? "Senha incorreta" : "Senha"}
+                error={errorStyle("password")}
+                defaultValue={password}
+                onChangeText={setPassword}
+                reference={passwordRef}
+                done
+                submitEditing={handleSubmit}
+              />
+              <Button onPress={onPasswordClicked} style={styles.forgotPassword}>
+                <Text
+                  caption
+                  primary
+                  right
+                  style={{ textDecorationLine: "underline" }}
+                >
+                  Recuperar senha?
+                </Text>
+              </Button>
+
+              <Button onPress={handleSubmit} color={theme.colors.primary}>
+                {loader ? (
+                  <Block flex={false} center>
+                    <DotIndicator color={theme.colors.white} size={5} />
+                  </Block>
+                ) :
+                  <Text bold white center>
+                    Entrar
+                  </Text>
+                }
+              </Button>
+              <Button onPress={onSignupClicked} style={styles.signup}>
+                <Text
+                  caption
+                  primary
+                  center
+                  style={{ textDecorationLine: "underline" }}
+                >
+                  Crie uma conta
+                </Text>
+              </Button>
+            </Block>
+            <Block
+              flex={false}
+              padding={[theme.sizes.base * 2, 0, theme.sizes.base, 0]}
+            >
+              <Button color={theme.colors.google}>
+                <Text bold white center>
+                  Entrar com o Google
+                </Text>
+              </Button>
+              <Button color={theme.colors.facebook}>
+                <Text bold white center>
+                  Entrar com o Facebook
+                </Text>
+              </Button>
+            </Block>
+          </Block>
         </Block>
-      </Block>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 }
