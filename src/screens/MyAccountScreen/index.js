@@ -31,7 +31,7 @@ export default function MyAccountScreen(props) {
           padding={[theme.sizes.padding, 0, 0, theme.sizes.padding]}
           onPress={onClickMyPromotions}
         >
-          <Text gray>Minhas Promoções</Text>
+          <Text h3 gray>Minhas Promoções</Text>
         </Block>
         <Block
           button
@@ -39,7 +39,7 @@ export default function MyAccountScreen(props) {
           padding={[theme.sizes.padding, 0, 0, theme.sizes.padding]}
           onPress={onClickProfile}
         >
-          <Text gray>Editar Perfil</Text>
+          <Text h3 gray>Editar Perfil</Text>
         </Block>
       </Block>
     </KeyboardAvoidingView>

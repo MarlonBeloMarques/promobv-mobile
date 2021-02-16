@@ -23,16 +23,16 @@ const myPromotionCard = (props) => {
     >
       {item.imagem === null ? (
         <Photo
-          style={Platform.OS === "ios" && styles.radius}
+          style={styles.radius}
           height={100}
-          size={20}
+          size={28}
           image={no_photo}
         />
       ) : (
         <Photo
-          style={Platform.OS === "ios" && styles.radius}
+          style={styles.radius}
           height={100}
-          size={20}
+          size={28}
           image={item.imagem}
         />
       )}
