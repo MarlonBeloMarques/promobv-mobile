@@ -25,7 +25,7 @@ export default function Edit(props) {
   const [place, setPlace] = useState("");
   const [address, setAddress] = useState("");
   const [numberContact, setNumberContact] = useState("");
-  const [value, setValue] = useState('');
+  const [price, setPrice] = useState('');
   const [categoryId, setCategoryId] = useState();
   const [categoryName, setCategoryName] = useState('');
 
@@ -52,7 +52,7 @@ export default function Edit(props) {
           setPlace(response.localizacao);
           setAddress(response.endereco);
           setNumberContact(response.numeroContato)
-          setValue(response.preco.toString());
+          setPrice(response.preco.toString());
 
           setCategoryId(response.categoria.id);
           setCategoryName(response.categoria.nome);
@@ -86,7 +86,7 @@ export default function Edit(props) {
     try {
       setLoader(true)
 
-      await updatePromotion(idNavigation, description, value, place, address, title, numberContact, categoryId)
+      await updatePromotion(idNavigation, description, price, place, address, title, numberContact, categoryId)
 
       AlertMessage({
         title: 'Sucesso',
@@ -116,6 +116,11 @@ export default function Edit(props) {
 
   function onHideGallery() {
     setShowGallery(false);
+  }
+
+  function splitPrice(value) {
+    const newPrice = value.split("R$").join("").split(",").join(".");
+    setPrice(newPrice);
   }
 
   function renderGallery() {
@@ -180,7 +185,7 @@ export default function Edit(props) {
                 mask={true}
                 type={"cel-phone"}
                 number
-                value={numberContact}
+                price={numberContact}
                 defaultValue={numberContact}
                 onChangeText={setNumberContact}
               />
@@ -188,10 +193,13 @@ export default function Edit(props) {
               <Block row>
                 <Block padding={[0, theme.sizes.padding, 0, 0]}>
                   <Input
+                    mask={true}
+                    type={'money'}
                     label="Valor"
                     number
-                    defaultValue={value}
-                    onChangeText={setValue}
+                    value={price}
+                    defaultValue={price}
+                    onChangeText={(value) => splitPrice(value)}
                   />
                 </Block>
 
@@ -224,12 +232,11 @@ export default function Edit(props) {
 
             <Block middle padding={[theme.sizes.padding / 2, 0]}>
               <Button onPress={handleSubmit} color={theme.colors.primary}>
-                {loader && (
+                {loader ? (
                   <Block flex={false} center>
                     <DotIndicator color={theme.colors.white} size={5} />
                   </Block>
-                )}
-                {!loader && (
+                ) : (
                   <Text bold center white>
                     Atualizar
                   </Text>
