@@ -171,7 +171,7 @@ export default function Block(props) {
 
   if(button) {
     return (
-      <TouchableOpacity style={blockStyles} {...props}>
+      <TouchableOpacity style={blockStyles} opacity={0.8} {...props}>
         {children}
       </TouchableOpacity>
     );
