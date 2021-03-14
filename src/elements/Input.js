@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
   },
 });
 
-Input.propTypes = {
+Input.defaultProps = {
   submitEditing: () => {},
   mask: false
 };

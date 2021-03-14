@@ -27,8 +27,3 @@ export default function Header(props) {
   );
 }
 
-Header.propTypes = {
-  color: '',
-  colorIcon: ' '
-};
-

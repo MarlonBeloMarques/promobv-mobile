@@ -74,7 +74,7 @@ export function Categories(props) {
   );
 };
 
-Categories.propTypes = {
+Categories.defaultProps = {
   screenPromotions: false,
   visible: false,
   onRequestClose: () => {},

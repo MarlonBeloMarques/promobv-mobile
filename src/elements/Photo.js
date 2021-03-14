@@ -96,7 +96,3 @@ export const styles = StyleSheet.create({
     justifyContent: "flex-end"
   }
 });
-
-Photo.propTypes = {
-  image: ''
-};

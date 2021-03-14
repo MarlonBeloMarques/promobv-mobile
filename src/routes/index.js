@@ -102,7 +102,7 @@ const childrens = createStackNavigator({
     screen: menu,
     path: "",
     navigationOptions: {
-      header: null,
+      headerShown: false,
     },
   },
   Detalhes: {
@@ -122,13 +122,13 @@ const childrens = createStackNavigator({
         shadowColor: "transparent",
         backgroundColor: theme.colors.primary,
       },
-      headerRight: (
+      headerRight: () => 
         <Button style onPress={navigation.getParam("onClickDenounce")}>
           <Text h3 bold white>
             Denunciar
           </Text>
         </Button>
-      ),
+      ,
       headerBackTitleVisible: null,
       headerLeftContainerStyle: {
         alignItems: "center",
@@ -231,7 +231,7 @@ const screens = createStackNavigator(
     login: {
       screen: LoginScreen,
       navigationOptions: {
-        header: null,
+        headerShown: false,
       },
     },
     signup: {

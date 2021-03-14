@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Modal, StyleSheet, Keyboard, Image } from "react-native";
-import { Block, Text, Button, Input, Header } from "../elements";
+import { Block, Text, Button, Input } from "../elements";
+import  Header from './Header'
 import { theme } from "../constants";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -468,7 +469,7 @@ export default function Insert(props) {
 
 };
 
-Insert.propTypes = {
+Insert.defaultProps = {
   visible: false,
   modal: false,
   onRequestClose: () => {}

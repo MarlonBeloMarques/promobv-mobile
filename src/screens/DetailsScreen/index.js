@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { KeyboardAvoidingView, StatusBar, Share } from "react-native";
 import { Block, Button, Text, Photo } from "../../elements";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { theme } from "../../constants";
 import * as SecureStore from "expo-secure-store";
 import * as Linking from "expo-linking";
@@ -281,11 +281,19 @@ export default function DetailsScreen(props) {
               </Block>
               <Block row right>
                 <Button onPress={sharePromotion} style>
+                  {Platform.OS === 'ios' ?
                   <Ionicons
-                    name={Platform.OS === "ios" ? "ios-share" : "md-share-alt"}
+                    name={"ios-share"}
                     size={30}
                     color={theme.colors.gray3}
                   />
+                  :
+                  <MaterialCommunityIcons
+                    name={"share"}
+                    size={30}
+                    color={theme.colors.gray3}
+                  />
+            }
                 </Button>
               </Block>
             </Block>
