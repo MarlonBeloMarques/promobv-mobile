@@ -1,7 +1,5 @@
 import axios from 'axios'
-import { Alert } from 'react-native'
 import * as SecureStore from "expo-secure-store";
-import { logout } from './auth';
 import AlertMessage from '../components/Alert';
 
 const api = axios.create({

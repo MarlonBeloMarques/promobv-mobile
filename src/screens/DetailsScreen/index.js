@@ -4,7 +4,7 @@ import { Block, Button, Text, Photo } from "../../elements";
 import { Ionicons } from "@expo/vector-icons";
 import { theme } from "../../constants";
 import * as SecureStore from "expo-secure-store";
-import { Linking } from "expo";
+import * as Linking from "expo-linking";
 
 import styles from "./styles";
 import { ScrollView } from "react-native-gesture-handler";

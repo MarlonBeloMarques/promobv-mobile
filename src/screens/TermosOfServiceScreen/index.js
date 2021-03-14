@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { KeyboardAvoidingView, FlatList, StyleSheet, View, AsyncStorage } from "react-native";
-import { Block, Text, Button, Header, Photo, Input } from "../../elements";
-import { Insert } from "../../components";
+import { Block, Text, Button, Photo, Input } from "../../elements";
+import { Insert, Header } from "../../components";
 import { theme } from "../../constants";
 import { AntDesign } from "@expo/vector-icons";
 

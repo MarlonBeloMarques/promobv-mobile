@@ -3,7 +3,7 @@ import { StatusBar, Platform } from "react-native";
 import { Ionicons } from '@expo/vector-icons'
 
 import { theme } from '../constants';
-import { Text, Block, Button } from '../elements/index'
+import { Text, Block, Button } from '../elements'
 
 export default function Header(props) {
 

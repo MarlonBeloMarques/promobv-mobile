@@ -3,10 +3,11 @@ import { View, StatusBar } from "react-native";
 import createRoutes from "../src/routes";
 
 import { useSelector } from "react-redux";
-import { Linking } from "expo";
+import * as Linking from 'expo-linking';
 import { useState } from "react";
+import { LogBox } from "react-native";
 
-console.disableYellowBox = true;
+LogBox.ignoreAllLogs(true);
 
 export default function App() {
   const { signed, token } = useSelector((state) => state.auth, () => true);
@@ -29,13 +30,13 @@ export default function App() {
       if(signed) {
         let url = await Linking.getInitialURL()
         //app desenv
-        //if('details' === url.substring(27,34)) {
-        //  setPrefix(Linking.makeUrl('/'))
-        //}
-        //app prod
-        if('details' === url.substring(10,17)) {
+        if('details' === url.substring(27,34)) {
           setPrefix(Linking.makeUrl('/'))
         }
+        //app prod
+        //if('details' === url.substring(10,17)) {
+        ////  setPrefix(Linking.makeUrl('/'))
+        //}
       }
     }
 
