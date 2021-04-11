@@ -3,13 +3,13 @@ import * as SecureStore from "expo-secure-store";
 import AlertMessage from '../components/Alert';
 
 const api = axios.create({
-  baseURL: 'https://promobv-dev.herokuapp.com',
+  baseURL: "http://192.168.4.10:8080",
   headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-    'responseType': 'text'
-  }
-})
+    "Content-Type": "application/json",
+    Accept: "application/json",
+    responseType: "text",
+  },
+});
 
 //solicitacao
 api.interceptors.request.use(async function (config) {

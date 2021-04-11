@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Keyboard } from "react-native";
+import { Keyboard, KeyboardAvoidingView } from "react-native";
 import { Block, Input, Button, Text } from "../../elements";
-import { theme } from "../../constants";
+import { oauth2, theme } from "../../constants";
 
 import styles from "./styles";
 import { ScrollView } from "react-native-gesture-handler";
@@ -11,7 +11,7 @@ import { CheckBox } from 'react-native-elements'
 import { setUser } from "../../services/user";
 import AlertMessage from "../../components/Alert";
 import { DotIndicator } from 'react-native-indicators'
-import { KeyboardAvoidingView } from "react-native";
+import * as WebBrowser from "expo-web-browser";
 
 export default function SignupScreen(props) {
   const [userNickname, setUserNickname] = useState('')
@@ -139,17 +139,29 @@ export default function SignupScreen(props) {
     }
   }
 
+  async function signUpWithSocial(link) {
+    await WebBrowser.openBrowserAsync(link).then((res) => {
+      console.log(res);
+    });
+  }
+
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <KeyboardAvoidingView behavior={"padding"}>
         <Block flex={false} padding={[0, theme.sizes.base * 2]}>
           <Block flex={false}>
-            <Button color={theme.colors.google}>
+            <Button
+              color={theme.colors.google}
+              onPress={() => signUpWithSocial(oauth2.GOOGLE_AUTH_URL)}
+            >
               <Text bold white center>
                 Entrar com o Google
               </Text>
             </Button>
-            <Button color={theme.colors.facebook}>
+            <Button
+              color={theme.colors.facebook}
+              onPress={() => signUpWithSocial(oauth2.FACEBOOK_AUTH_URL)}
+            >
               <Text bold white center>
                 Entrar com o Facebook
               </Text>

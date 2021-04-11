@@ -19,6 +19,7 @@
     "expo-linking": "~2.0.1",
     "expo-multiple-imagepicker": "^1.0.6",
     "expo-secure-store": "~9.3.0",
+    "expo-web-browser": "^9.0.0",
     "jwt-decode": "^2.2.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
