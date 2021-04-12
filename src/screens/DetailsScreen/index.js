@@ -124,9 +124,9 @@ export default function DetailsScreen(props) {
     let idLink = EncryptedLinking(id == null ? idLinking : id)
     Share.share({
       // app prod
-      message: "Clique no link para visualizar a promoção, " + `https://promobv-dev.herokuapp.com/promocoes/redirect-details?id=${idLink}`,
+     // message: "Clique no link para visualizar a promoção, " + `https://promobv-dev.herokuapp.com/promocoes/redirect-details?id=${idLink}`,
       //app desenv
-      //message: "Clique no link para visualizar a promoção, " + Linking.makeUrl(`details/${idLink}`),
+      message: "Clique no link para visualizar a promoção, " + Linking.makeUrl(`details/${idLink}`),
       url: Linking.makeUrl(),
       title: details.title,
     })
