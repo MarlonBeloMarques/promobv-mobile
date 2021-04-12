@@ -12,6 +12,7 @@ import { setUser } from "../../services/user";
 import AlertMessage from "../../components/Alert";
 import { DotIndicator } from 'react-native-indicators'
 import * as WebBrowser from "expo-web-browser";
+import * as Linking from "expo-linking";
 
 export default function SignupScreen(props) {
   const [userNickname, setUserNickname] = useState('')
@@ -139,10 +140,25 @@ export default function SignupScreen(props) {
     }
   }
 
+  useEffect(() => {
+    Linking.addEventListener("url", handleOpenUrl);
+
+    return () => {
+      Linking.removeEventListener("url", handleOpenUrl);
+    }
+  })
+
+  async function handleOpenUrl(event) {
+    console.log('event =>')
+    console.log(event)
+
+    const handledUrl = event.url.split("?").join("");
+    
+    await Linking.openURL(handledUrl);
+  }
+
   async function signUpWithSocial(link) {
-    await WebBrowser.openBrowserAsync(link).then((res) => {
-      console.log(res);
-    });
+    await WebBrowser.openBrowserAsync(link);
   }
 
   return (

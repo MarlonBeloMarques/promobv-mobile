@@ -3,7 +3,7 @@ import * as SecureStore from "expo-secure-store";
 import AlertMessage from '../components/Alert';
 
 const api = axios.create({
-  baseURL: "http://192.168.4.10:8080",
+  baseURL: "https://promobv-dev.herokuapp.com",
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
