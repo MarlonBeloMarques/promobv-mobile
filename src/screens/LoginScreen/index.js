@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { KeyboardAvoidingView, Image, Keyboard, ScrollView } from "react-native";
+import { KeyboardAvoidingView, Image, Keyboard, ScrollView, Platform } from "react-native";
 import { Block, Input, Button, Text} from '../../elements'
 import { theme } from "../../constants";
 
@@ -14,6 +14,8 @@ import { signInSuccess, signOutRequest } from "../../store/modules/auth/actions"
 import { getUser } from "../../services/user";
 
 import { DotIndicator } from 'react-native-indicators';
+import * as WebBrowser from "expo-web-browser";
+import * as Linking from "expo-linking";
 
 export default function LoginScreen(props) {
 
@@ -88,6 +90,28 @@ export default function LoginScreen(props) {
     props.navigation.navigate("password");
   }
 
+  useEffect(() => {
+    Linking.addEventListener("url", handleOpenUrl);
+
+    return () => {
+      Linking.removeEventListener("url", handleOpenUrl);
+    };
+  });
+
+  async function handleOpenUrl(event) {
+    console.log("event =>");
+    console.log(event);
+
+    const handledUrl = event.url.split("?").join("");
+    if (Platform.OS === "ios") 
+      await WebBrowser.dismissBrowser();
+    await Linking.openURL(handledUrl);
+  }
+
+  async function signUpWithSocial(link) {
+    await WebBrowser.openBrowserAsync(link);
+  }
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <KeyboardAvoidingView behavior={"padding"}>
@@ -140,11 +164,11 @@ export default function LoginScreen(props) {
                   <Block flex={false} center>
                     <DotIndicator color={theme.colors.white} size={5} />
                   </Block>
-                ) :
+                ) : (
                   <Text bold white center>
                     Entrar
                   </Text>
-                }
+                )}
               </Button>
               <Button onPress={onSignupClicked} style={styles.signup}>
                 <Text
@@ -161,12 +185,18 @@ export default function LoginScreen(props) {
               flex={false}
               padding={[theme.sizes.base * 2, 0, theme.sizes.base, 0]}
             >
-              <Button color={theme.colors.google}>
+              <Button
+                color={theme.colors.google}
+                onPress={() => signUpWithSocial(oauth2.GOOGLE_AUTH_URL)}
+              >
                 <Text bold white center>
                   Entrar com o Google
                 </Text>
               </Button>
-              <Button color={theme.colors.facebook}>
+              <Button
+                color={theme.colors.facebook}
+                onPress={() => signUpWithSocial(oauth2.FACEBOOK_AUTH_URL)}
+              >
                 <Text bold white center>
                   Entrar com o Facebook
                 </Text>
