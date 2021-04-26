@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { KeyboardAvoidingView, Image, Keyboard, ScrollView, Platform } from "react-native";
 import { Block, Input, Button, Text} from '../../elements'
-import { theme } from "../../constants";
+import { oauth2, theme } from "../../constants";
 
 import styles from './styles'
 import logo from '../../../assets/images/promobv.png'
