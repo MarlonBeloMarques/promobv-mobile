@@ -13,6 +13,7 @@ import AlertMessage from "../../components/Alert";
 import { DotIndicator } from 'react-native-indicators'
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
+import { Platform } from "react-native";
 
 export default function SignupScreen(props) {
   const [userNickname, setUserNickname] = useState('')
@@ -153,7 +154,8 @@ export default function SignupScreen(props) {
     console.log(event)
 
     const handledUrl = event.url.split("?").join("");
-    await WebBrowser.dismissBrowser();
+    if(Platform.OS === 'ios')
+      await WebBrowser.dismissBrowser();
     await Linking.openURL(handledUrl);
   }
 

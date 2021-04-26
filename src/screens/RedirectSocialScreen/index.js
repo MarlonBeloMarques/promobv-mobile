@@ -21,15 +21,27 @@ const RedirectSocialScreen = (props) => {
 
     if(param.includes("error")) {
       setLoader(false);
-      const exception = param.substring(6, param.length);
-      setExceptionMsg(exception.split("%20").join(" ").split("%EA").join("ê"));
+      const exceptionDecode = decodeURIComponent(unescape(param.substring(6, param.length)))
+      setExceptionMsg(removesUnnecessary(exceptionDecode));
     } else {
-      accessThroughSocial(param.substring(6, (param.length - 1)))
+      let tokenDecode = param.substring(
+        6,
+        decodeURIComponent(unescape(param.length))
+      );
+
+      accessThroughSocial(removesUnnecessary(tokenDecode));
     }
   }, [])
+  
+  function removesUnnecessary(value = "") {
+    if(value.includes("#")) {
+      return value.split('#')[0];
+    }
+
+    return value;
+  }
 
   async function accessThroughSocial(token) {
-
     await logout();
     const authorization = token;
     await successfulLogin(authorization);
