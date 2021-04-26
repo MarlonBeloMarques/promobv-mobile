@@ -18,19 +18,20 @@ const RedirectSocialScreen = (props) => {
 
   useEffect(() => {
     const param = props.navigation.getParam("paramToken");
+
     if(param.includes("error")) {
       setLoader(false);
       const exception = param.substring(6, param.length);
       setExceptionMsg(exception.split("%20").join(" ").split("%EA").join("ê"));
     } else {
-      accessThroughSocial(param.substring(6, param.length))
+      accessThroughSocial(param.substring(6, (param.length - 1)))
     }
   }, [])
 
   async function accessThroughSocial(token) {
 
     await logout();
-    const authorization = `Bearer${token}`
+    const authorization = token;
     await successfulLogin(authorization);
 
     const email = await SecureStore.getItemAsync('user_email')

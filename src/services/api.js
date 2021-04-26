@@ -3,7 +3,7 @@ import * as SecureStore from "expo-secure-store";
 import AlertMessage from '../components/Alert';
 
 const api = axios.create({
-  baseURL: "https://promobv-dev.herokuapp.com",
+  baseURL: "http://192.168.4.8:8080",
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
@@ -23,7 +23,7 @@ api.interceptors.request.use(async function (config) {
 
   // se for entao pode enviar o authorization
   if(userToken && requestToApi) {
-    config.headers.Authorization = `Bearer${JSON.parse(userToken)}`
+    config.headers.Authorization = `Bearer ${JSON.parse(userToken)}`
   }
 
   return config

@@ -153,7 +153,7 @@ export default function SignupScreen(props) {
     console.log(event)
 
     const handledUrl = event.url.split("?").join("");
-    
+    await WebBrowser.dismissBrowser();
     await Linking.openURL(handledUrl);
   }
 
