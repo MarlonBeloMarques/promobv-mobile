@@ -1,9 +1,10 @@
 import axios from 'axios'
 import * as SecureStore from "expo-secure-store";
+import { API_BASE_URL } from '../../config';
 import AlertMessage from '../components/Alert';
 
 const api = axios.create({
-  baseURL: "http://192.168.4.8:8080",
+  baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",

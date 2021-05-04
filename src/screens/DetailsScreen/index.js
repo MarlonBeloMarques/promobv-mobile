@@ -93,7 +93,6 @@ export default function DetailsScreen(props) {
   }, [notifications])
 
   async function onClickDenounce() {
-    console.log('teste')
     if(idUser !== 0) {
       await interactNotification(FormatCurrentDate(), new Date().toLocaleTimeString(), 2, idUser, id).then(res => {
         let response = res.data
@@ -120,14 +119,16 @@ export default function DetailsScreen(props) {
     }
   }
 
+  function getLinkMessageSharePromotion(idLink) {
+    return __DEV__
+      ? Linking.makeUrl(`details/${idLink}`)
+      : `https://promobv-dev.herokuapp.com/promocoes/redirect-details?id=${idLink}`;
+  }
+
   function sharePromotion() {
     let idLink = EncryptedLinking(id == null ? idLinking : id)
-    Share.share({
-      // app prod
-     // message: "Clique no link para visualizar a promoção, " + `https://promobv-dev.herokuapp.com/promocoes/redirect-details?id=${idLink}`,
-      //app desenv
-      message: "Clique no link para visualizar a promoção, " + Linking.makeUrl(`details/${idLink}`),
-      url: Linking.makeUrl(),
+    Share.share({ 
+      message: "Clique no link para visualizar a promoção, " + getLinkMessageSharePromotion(idLink),
       title: details.title,
     })
       .then((result) => {
