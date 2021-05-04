@@ -17,10 +17,10 @@ const promotionCard = (props) => {
       border
     >
       {item.imagem !== null && (
-        <Photo height={100} size={40} image={item.imagem} />
+        <Photo image={item.imagem} style={{ flex: 1, maxWidth: 140 }} />
       )}
       {item.imagem === null && (
-        <Photo height={100} size={40} image={no_photo} />
+        <Photo image={no_photo} style={{ flex: 1, maxWidth: 140 }} />
       )}
       <Block padding={[15, 10, 0]}>
         <Text gray bold size={18}>

@@ -1,8 +1,6 @@
-import React, { Component } from "react";
-import { StyleSheet, View, Animated } from "react-native";
+import React from 'react';
+import { StyleSheet, Animated, Image } from "react-native";
 import { theme } from "../constants";
-
-import styled from "styled-components/native";
 
 export default function Photo(props) {
 
@@ -20,16 +18,14 @@ export default function Photo(props) {
     space,
     animated,
     wrap,
-    size,
+    width,
     height,
     style,
-    content,
     avatar
   } = props;
 
   const blockStyles = [
-    content === true && { width: size, height: height },
-    size && height && Image,
+    width && height && { width, height },
     avatar && styles.avatar,
     flex && { flex },
     flex === false && { flex: 0 }, // redefinir / desativar flex
@@ -46,11 +42,6 @@ export default function Photo(props) {
     wrap && { flexWrap: "wrap" },
     style // reescrever estilos predefinidos
   ];
-
-  const Image = styled.Image`
-    width: ${size}%;
-    height: ${height}%;
-  `;
 
   if (animated) {
     return <Animated.Image style={blockStyles} source={ typeof props.image === 'string' ? { uri: props.image } : props.image}></Animated.Image>;

@@ -263,10 +263,10 @@ export default function DetailsScreen(props) {
           </Block>
           <Block size={300} flex={false}>
             {details.image === null && (
-              <Photo height={100} size={100} image={no_photo} />
+              <Photo style={{ flex: 1 }} image={no_photo} />
             )}
             {details.image !== null && (
-              <Photo height={100} size={100} image={details.image} />
+              <Photo style={{ flex: 1 }} image={details.image} />
             )}
           </Block>
           <Block color="white">
@@ -281,19 +281,19 @@ export default function DetailsScreen(props) {
               </Block>
               <Block row right>
                 <Button onPress={sharePromotion} style>
-                  {Platform.OS === 'ios' ?
-                  <Ionicons
-                    name={"ios-share"}
-                    size={30}
-                    color={theme.colors.gray3}
-                  />
-                  :
-                  <MaterialCommunityIcons
-                    name={"share"}
-                    size={30}
-                    color={theme.colors.gray3}
-                  />
-            }
+                  {Platform.OS === "ios" ? (
+                    <Ionicons
+                      name={"ios-share"}
+                      size={30}
+                      color={theme.colors.gray3}
+                    />
+                  ) : (
+                    <MaterialCommunityIcons
+                      name={"share"}
+                      size={30}
+                      color={theme.colors.gray3}
+                    />
+                  )}
                 </Button>
               </Block>
             </Block>
@@ -346,7 +346,11 @@ export default function DetailsScreen(props) {
                       </Block>
                     )}
                 </Block>
-                <Block column padding={[0, 0, 0, theme.sizes.caption /2]} margin={[theme.sizes.base, 0]}>
+                <Block
+                  column
+                  padding={[0, 0, 0, theme.sizes.caption / 2]}
+                  margin={[theme.sizes.base, 0]}
+                >
                   <Block>
                     <Text>
                       {details.localization}
@@ -369,18 +373,11 @@ export default function DetailsScreen(props) {
                 <Block padding={[20, 0, 0, 0]} row flex={false}>
                   <Block padding={[0, 10, 0, 0]} flex={false}>
                     {imageGallery[0] == null && (
-                      <Photo
-                        content={true}
-                        size={80}
-                        height={80}
-                        card
-                        image={no_photo}
-                      />
+                      <Photo width={80} height={80} card image={no_photo} />
                     )}
                     {imageGallery[0] !== null && (
                       <Photo
-                        content={true}
-                        size={80}
+                        width={80}
                         height={80}
                         card
                         image={imageGallery[0]}
@@ -389,18 +386,11 @@ export default function DetailsScreen(props) {
                   </Block>
                   <Block flex={false}>
                     {imageGallery[1] == null && (
-                      <Photo
-                        content={true}
-                        size={80}
-                        height={80}
-                        card
-                        image={no_photo}
-                      />
+                      <Photo width={80} height={80} card image={no_photo} />
                     )}
                     {imageGallery[1] !== null && (
                       <Photo
-                        content={true}
-                        size={80}
+                        width={80}
                         height={80}
                         card
                         image={imageGallery[1]}
