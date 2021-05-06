@@ -16,6 +16,7 @@ import { getUser } from "../../services/user";
 import { DotIndicator } from 'react-native-indicators';
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
+import AlertMessage from "../../components/Alert";
 
 export default function LoginScreen(props) {
 
@@ -72,7 +73,14 @@ export default function LoginScreen(props) {
 
             props.navigation.navigate('Promoções')
           
-            break
+          break
+
+          case 202:
+            setLoader(false);
+            AlertMessage({
+              title: "Atenção",
+              message: "Seu email não está ativado.",
+            });
         }
       }
     } catch ({ response }) {
