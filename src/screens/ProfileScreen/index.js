@@ -36,8 +36,6 @@ export default function ProfileScreen(props) {
   const numberRef = useRef()
   const dateOfBirthRef = useRef()
 
-  console.log(avatar)
-
   useEffect(() => {
     async function loadProfile() {
 
@@ -126,6 +124,7 @@ export default function ProfileScreen(props) {
   };
 
   function unmaskCpf(cpf) {
+    if(cpf == null) return;
     return cpf
       .split(".")
       .join("")
@@ -139,10 +138,8 @@ export default function ProfileScreen(props) {
 
   async function handleSubmit() {
     try {
-
       setLoader(true)
       await updateUser(id, name, unmaskCpf(cpf), number, dateOfBirth).then(res => {
-        
         switch (res.status) {
           case 204:
             AlertMessage({
