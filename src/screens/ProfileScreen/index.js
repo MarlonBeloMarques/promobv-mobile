@@ -125,11 +125,23 @@ export default function ProfileScreen(props) {
     } catch (E) {}
   };
 
+  function unmaskCpf(cpf) {
+    return cpf
+      .split(".")
+      .join("")
+      .split(".")
+      .join("")
+      .split(".")
+      .join("")
+      .split("-")
+      .join("");
+  }
+
   async function handleSubmit() {
     try {
 
       setLoader(true)
-      await updateUser(id, name, cpf, number, dateOfBirth).then(res => {
+      await updateUser(id, name, unmaskCpf(cpf), number, dateOfBirth).then(res => {
         
         switch (res.status) {
           case 204:
