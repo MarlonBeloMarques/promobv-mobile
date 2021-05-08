@@ -84,9 +84,10 @@ Com isso feito, seu projeto já está configurado :sunglasses:.
 ### Iniciando
 
 Execute esses comandos no local do projeto:
-
-- `$ yarn`
-- `$ yarn start`
+```sh
+$ yarn
+$ yarn start
+```
 
 - Baixe o [Expo](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=pt_BR) em seu dispositivo e leia o Qr Code.
 
