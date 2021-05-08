@@ -11,6 +11,9 @@ PromoBV - Mobile
   <a href="https://github.com/MarlonBeloMarques">
     <img alt="Made by Marlon Marques" src="https://img.shields.io/badge/made%20by-Marlon%20Marques-brightgreen">
   </a>
+  <a href="https://github.com/Pantoja49">
+    <img alt="Idealized by Larissa Pantoja" src="https://img.shields.io/badge/idealized%20by-Larissa%20Pantoja-yellow">
+  </a>
 </p>
 <p align="center">
   <img alt="React-Native" src="https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB">
