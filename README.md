@@ -7,10 +7,6 @@
 PromoBV - Mobile
 </h1>
 
-O PromoBV é uma aplicação onde o usuário pode compartilhar suas promoções de diversas categorias. Esse é um projeto completo desde o back-end ao front-end(mobile). Aqui você encontrará os detalhes para rodar localmente a aplicação mobile. Para que possa ser totalmente util a aplicação mobile, você pode encontrar o projeto back-end [aqui](https://github.com/MarlonBeloMarques/promobv-backend) e realizar a comunicação localmente. Para configurar o back-end e rodar localmente, veja os detalhes no readme do projeto back-end.
-
-Esse é um projeto que foi idealizado pela [Larissa Pantoja](https://github.com/Pantoja49).
-
 <p align="center">
   <a href="https://github.com/MarlonBeloMarques">
     <img alt="Made by Marlon Marques" src="https://img.shields.io/badge/made%20by-Marlon%20Marques-brightgreen">
@@ -23,6 +19,10 @@ Esse é um projeto que foi idealizado pela [Larissa Pantoja](https://github.com/
   <img alt="Google" src="https://img.shields.io/badge/Google-D14836?style=for-the-badge">
   <img alt="Expo" src="https://img.shields.io/badge/Expo-20232A?style=for-the-badge">
 </p>
+
+O PromoBV é uma aplicação onde o usuário pode compartilhar suas promoções de diversas categorias. Esse é um projeto completo desde o back-end ao front-end(mobile). Aqui você encontrará os detalhes para rodar localmente a aplicação mobile. Para que possa ser totalmente util a aplicação mobile, você pode encontrar o projeto back-end [aqui](https://github.com/MarlonBeloMarques/promobv-backend) e realizar a comunicação localmente. Para configurar o back-end e rodar localmente, veja os detalhes no readme do projeto back-end.
+
+Esse é um projeto que foi idealizado pela [Larissa Pantoja](https://github.com/Pantoja49).
 
 <p align="center"
     <img src="./readme/login.png" width="225" height="487" />
