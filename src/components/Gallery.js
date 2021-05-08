@@ -7,6 +7,7 @@ import * as ImagePicker from "expo-image-picker";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import AlertMessage from "./Alert";
 import Lightbox from "react-native-lightbox";
+import * as ImageManipulator from "expo-image-manipulator";
 
 import { useDispatch } from "react-redux";
 
@@ -36,6 +37,15 @@ const Gallery = (props) => {
     loadGallery()
   }, [idGallery])
 
+  async function resizePicture(photo) {
+    const manipulatedImage = await ImageManipulator.manipulateAsync(
+      photo.uri,
+      [{ resize: { width: 500 } }]
+    );
+
+    return manipulatedImage;
+  }
+
   async function addImage() {
     if(image.length <= 4) {
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -44,7 +54,8 @@ const Gallery = (props) => {
       });
       
       if (!result.cancelled) {
-        setImage([...image, result]);
+        const picture = await resizePicture(result);
+        setImage([...image, picture]);
       }
     } else {
       AlertMessage({

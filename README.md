@@ -25,18 +25,18 @@ Esse é um projeto que foi idealizado pela [Larissa Pantoja](https://github.com/
 </p>
 
 <p align="center"
-    <img src="./readme/Simulator Screen Shot - iPhone X - 2020-03-28 at 22.38.21.png" width="225" height="487" />
-    <img src="./readme/Simulator Screen Shot - iPhone X - 2020-03-28 at 22.38.27.png" width="225" height="487" />
-    <img src="./readme/Simulator Screen Shot - iPhone X - 2020-03-28 at 22.38.34.png" width="225" height="487" />
-    <img src="./readme/Simulator Screen Shot - iPhone X - 2020-03-28 at 22.39.45.png" width="225" height="487" />
-    <img src="./readme/Simulator Screen Shot - iPhone X - 2020-03-28 at 22.39.56.png" width="225" height="487" />
-    <img src="./readme/Simulator Screen Shot - iPhone X - 2020-03-28 at 22.40.07.png" width="225" height="487" />
-    <img src="./readme/Simulator Screen Shot - iPhone X - 2020-03-28 at 22.40.13.png" width="225" height="487" />
-    <img src="./readme/Simulator Screen Shot - iPhone X - 2020-03-28 at 22.40.18.png" width="225" height="487" />
-    <img src="./readme/Simulator Screen Shot - iPhone X - 2020-03-28 at 22.40.28.png" width="225" height="487" />
-    <img src="./readme/Simulator Screen Shot - iPhone X - 2020-03-28 at 22.40.34.png" width="225" height="487" />
-    <img src="./readme/Simulator Screen Shot - iPhone X - 2020-03-28 at 22.40.40.png" width="225" height="487" />
-    <img src="./readme/Simulator Screen Shot - iPhone X - 2020-03-28 at 22.40.50.png" width="225" height="487" />
+    <img src="./readme/login.png" width="225" height="487" />
+    <img src="./readme/signup.png" width="225" height="487" />
+    <img src="./readme/password.png" width="225" height="487" />
+    <img src="./readme/promotions.png" width="225" height="487" />
+    <img src="./readme/categories.png" width="225" height="487" />
+    <img src="./readme/details.png" width="225" height="487" />
+    <img src="./readme/gallery.png" width="225" height="487" />
+    <img src="./readme/edit.png" width="225" height="487" />
+    <img src="./readme/notifications.png" width="225" height="487" />
+    <img src="./readme/mypromotions.png" width="225" height="487" />
+    <img src="./readme/profile.png" width="225" height="487" />
+    <img src="./readme/terms.png" width="225" height="487" />
 </p>
 
 ## :star: O que você pode fazer?
