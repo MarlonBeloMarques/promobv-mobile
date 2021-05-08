@@ -5,6 +5,7 @@ import * as SecureStore from "expo-secure-store";
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
+import * as ImageManipulator from "expo-image-manipulator";
 
 import profileImage from '../../../assets/images/profile-image.png'
 
@@ -101,20 +102,27 @@ export default function ProfileScreen(props) {
     setLoaderImage(false)
   }
 
-  async function pickImage () {
+  async function resizePicture(photo) {
+    const manipulatedImage = await ImageManipulator.manipulateAsync(photo.uri, [
+      { resize: { width: 500 } },
+    ]);
+
+    return manipulatedImage;
+  }
+
+  async function getImageGallery() {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
         aspect: [4, 4],
-        quality: 1,
+        quality: 0.5,
       });
       if (!result.cancelled) {
-        submitPicture(result)
+        const picture = await resizePicture(result);
+        submitPicture(picture);
       }
-
-    } catch (E) {
-    }
+    } catch (E) {}
   };
 
   async function handleSubmit() {
@@ -160,14 +168,11 @@ export default function ProfileScreen(props) {
               center
               middle
             >
-              <MaterialIndicator
-                color={theme.colors.tertiary}
-                size={16}
-              />
+              <MaterialIndicator color={theme.colors.tertiary} size={16} />
             </Block>
           )}
           {!loaderImage && (
-            <Button onPress={pickImage} style>
+            <Button onPress={() => getImageGallery()} style>
               {avatar == null && <Photo avatar image={profileImage} />}
               {avatar != null && <Photo avatar image={avatar} />}
             </Button>
