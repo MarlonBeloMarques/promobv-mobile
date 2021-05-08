@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { KeyboardAvoidingView, FlatList, StyleSheet, ActivityIndicator } from "react-native";
-import { Block, Text, Button, Header, Photo } from "../../elements";
-import { Insert, Categories, PromotionCard } from "../../components";
+import { Block, Text, Button, Photo } from "../../elements";
+import { Insert, Categories, PromotionCard, Header } from "../../components";
 import { theme } from "../../constants";
 import { AntDesign, SimpleLineIcons } from "@expo/vector-icons";
 import { DrawerActions } from "react-navigation-drawer";

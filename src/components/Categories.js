@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, FlatList } from "react-native";
-import { Block, Text, Button, Header } from "../elements";
+import { Block, Text, Button } from "../elements";
+import Header from './Header';
 import { theme } from "../constants";
 
 import { useDispatch } from 'react-redux'
@@ -73,7 +74,7 @@ export function Categories(props) {
   );
 };
 
-Categories.propTypes = {
+Categories.defaultProps = {
   screenPromotions: false,
   visible: false,
   onRequestClose: () => {},

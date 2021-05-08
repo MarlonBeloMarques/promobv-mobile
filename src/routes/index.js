@@ -29,6 +29,7 @@ import { Transition } from 'react-native-reanimated'
 import { logout } from '../services/auth'
 import { useDispatch } from "react-redux";
 import { signOutRequest } from '../store/modules/auth/actions'
+import RedirectSocialScreen from '../screens/RedirectSocialScreen'
 
 const Header = (props) => {
   const dispatch = useDispatch();
@@ -102,7 +103,7 @@ const childrens = createStackNavigator({
     screen: menu,
     path: "",
     navigationOptions: {
-      header: null,
+      headerShown: false,
     },
   },
   Detalhes: {
@@ -122,13 +123,13 @@ const childrens = createStackNavigator({
         shadowColor: "transparent",
         backgroundColor: theme.colors.primary,
       },
-      headerRight: (
+      headerRight: () => 
         <Button style onPress={navigation.getParam("onClickDenounce")}>
           <Text h3 bold white>
             Denunciar
           </Text>
         </Button>
-      ),
+      ,
       headerBackTitleVisible: null,
       headerLeftContainerStyle: {
         alignItems: "center",
@@ -231,7 +232,7 @@ const screens = createStackNavigator(
     login: {
       screen: LoginScreen,
       navigationOptions: {
-        header: null,
+        headerShown: false,
       },
     },
     signup: {
@@ -284,6 +285,43 @@ const screens = createStackNavigator(
   }
 );
 
+const redirect = createStackNavigator(
+  {
+    redirectSocial: {
+      screen: RedirectSocialScreen,
+      path: "oauth2/redirect/:paramToken",
+      navigationOptions: {
+        headerShown: false,
+      },
+    },
+  },
+  {
+    defaultNavigationOptions: {
+      headerTintColor: theme.colors.gray,
+      headerStyle: {
+        height:
+          Platform.OS === "ios" ? theme.sizes.base * 6 : theme.sizes.base * 5,
+        shadowColor: "transparent",
+        backgroundColor: theme.colors.white,
+        elevation: 0,
+      },
+      cardStyle: { backgroundColor: "white" },
+      headerBackTitleVisible: null,
+      title: null,
+      headerLeftContainerStyle: {
+        alignItems: "center",
+        marginLeft: Platform.OS === "ios" ? theme.sizes.base : 0,
+        padding: theme.sizes.base,
+      },
+      headerRightContainerStyle: {
+        alignItems: "center",
+        marginLeft: Platform.OS === "ios" ? theme.sizes.base : 0,
+        padding: theme.sizes.base,
+      },
+    },
+  }
+);
+
 
 function getInitialRoute(signed) {
   
@@ -299,6 +337,10 @@ export default (signed) =>
     createAnimatedSwitchNavigator({
       auth: {
         screen: screens,
+        path: ''
+      },
+      redirect: {
+        screen: redirect,
         path: ''
       },
       childrens : {

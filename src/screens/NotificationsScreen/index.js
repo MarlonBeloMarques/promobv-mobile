@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { KeyboardAvoidingView, FlatList, StyleSheet, ActivityIndicator, AsyncStorage } from "react-native";
-import { Block, Text, Photo, Header } from "../../elements";
+import { Block, Text, Photo } from "../../elements";
+import { Header } from "../../components";
 import { theme } from "../../constants";
 import { getNotifications, checkReports } from '../../services/notification'
 import * as SecureStore from "expo-secure-store";

@@ -1,10 +1,11 @@
 
 import { AntDesign } from '@expo/vector-icons';
 import React from 'react';
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { theme } from '../constants';
 import { Block, Button, Photo, Text } from '../elements';
 import no_photo from "../../assets/images/no-photo.png";
+import { Platform } from 'react-native';
 
 const myPromotionCard = (props) => {
   const { item, deletePromotionClicked, onDetailsClicked, onClickEdit } = props;
@@ -17,22 +18,18 @@ const myPromotionCard = (props) => {
       size={115}
       flex={false}
       row
-      card
+      card={Platform.OS === 'ios'}
       shadow
       color={theme.colors.white}
     >
       {item.imagem === null ? (
         <Photo
-          style={styles.radius}
-          height={100}
-          size={28}
+          style={styles.radius, { flex: 1, maxWidth: 100 }}    
           image={no_photo}
         />
       ) : (
         <Photo
-          style={styles.radius}
-          height={100}
-          size={28}
+          style={[styles.radius, { flex: 1, maxWidth: 100 }]}
           image={item.imagem}
         />
       )}

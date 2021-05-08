@@ -1,17 +1,16 @@
 import axios from 'axios'
-import { Alert } from 'react-native'
 import * as SecureStore from "expo-secure-store";
-import { logout } from './auth';
+import { API_BASE_URL } from '../../config';
 import AlertMessage from '../components/Alert';
 
 const api = axios.create({
-  baseURL: 'https://promobv-dev.herokuapp.com',
+  baseURL: API_BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-    'responseType': 'text'
-  }
-})
+    "Content-Type": "application/json",
+    Accept: "application/json",
+    responseType: "text",
+  },
+});
 
 //solicitacao
 api.interceptors.request.use(async function (config) {
@@ -25,7 +24,7 @@ api.interceptors.request.use(async function (config) {
 
   // se for entao pode enviar o authorization
   if(userToken && requestToApi) {
-    config.headers.Authorization = `Bearer${JSON.parse(userToken)}`
+    config.headers.Authorization = `Bearer ${JSON.parse(userToken)}`
   }
 
   return config

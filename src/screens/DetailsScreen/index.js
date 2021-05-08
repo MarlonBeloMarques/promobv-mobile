@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { KeyboardAvoidingView, StatusBar, Share } from "react-native";
 import { Block, Button, Text, Photo } from "../../elements";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { theme } from "../../constants";
 import * as SecureStore from "expo-secure-store";
-import { Linking } from "expo";
+import * as Linking from "expo-linking";
 
 import styles from "./styles";
 import { ScrollView } from "react-native-gesture-handler";
@@ -93,7 +93,6 @@ export default function DetailsScreen(props) {
   }, [notifications])
 
   async function onClickDenounce() {
-    console.log('teste')
     if(idUser !== 0) {
       await interactNotification(FormatCurrentDate(), new Date().toLocaleTimeString(), 2, idUser, id).then(res => {
         let response = res.data
@@ -120,14 +119,16 @@ export default function DetailsScreen(props) {
     }
   }
 
+  function getLinkMessageSharePromotion(idLink) {
+    return __DEV__
+      ? Linking.makeUrl(`details/${idLink}`)
+      : `https://promobv-dev.herokuapp.com/promocoes/redirect-details?id=${idLink}`;
+  }
+
   function sharePromotion() {
     let idLink = EncryptedLinking(id == null ? idLinking : id)
-    Share.share({
-      // app prod
-      message: "Clique no link para visualizar a promoção, " + `https://promobv-dev.herokuapp.com/promocoes/redirect-details?id=${idLink}`,
-      //app desenv
-      //message: "Clique no link para visualizar a promoção, " + Linking.makeUrl(`details/${idLink}`),
-      url: Linking.makeUrl(),
+    Share.share({ 
+      message: "Clique no link para visualizar a promoção, " + getLinkMessageSharePromotion(idLink),
       title: details.title,
     })
       .then((result) => {
@@ -263,10 +264,10 @@ export default function DetailsScreen(props) {
           </Block>
           <Block size={300} flex={false}>
             {details.image === null && (
-              <Photo height={100} size={100} image={no_photo} />
+              <Photo style={{ flex: 1 }} image={no_photo} />
             )}
             {details.image !== null && (
-              <Photo height={100} size={100} image={details.image} />
+              <Photo style={{ flex: 1 }} image={details.image} />
             )}
           </Block>
           <Block color="white">
@@ -281,11 +282,19 @@ export default function DetailsScreen(props) {
               </Block>
               <Block row right>
                 <Button onPress={sharePromotion} style>
-                  <Ionicons
-                    name={Platform.OS === "ios" ? "ios-share" : "md-share-alt"}
-                    size={30}
-                    color={theme.colors.gray3}
-                  />
+                  {Platform.OS === "ios" ? (
+                    <Ionicons
+                      name={"ios-share"}
+                      size={30}
+                      color={theme.colors.gray3}
+                    />
+                  ) : (
+                    <MaterialCommunityIcons
+                      name={"share"}
+                      size={30}
+                      color={theme.colors.gray3}
+                    />
+                  )}
                 </Button>
               </Block>
             </Block>
@@ -338,7 +347,11 @@ export default function DetailsScreen(props) {
                       </Block>
                     )}
                 </Block>
-                <Block column padding={[0, 0, 0, theme.sizes.caption /2]} margin={[theme.sizes.base, 0]}>
+                <Block
+                  column
+                  padding={[0, 0, 0, theme.sizes.caption / 2]}
+                  margin={[theme.sizes.base, 0]}
+                >
                   <Block>
                     <Text>
                       {details.localization}
@@ -361,18 +374,11 @@ export default function DetailsScreen(props) {
                 <Block padding={[20, 0, 0, 0]} row flex={false}>
                   <Block padding={[0, 10, 0, 0]} flex={false}>
                     {imageGallery[0] == null && (
-                      <Photo
-                        content={true}
-                        size={80}
-                        height={80}
-                        card
-                        image={no_photo}
-                      />
+                      <Photo width={80} height={80} card image={no_photo} />
                     )}
                     {imageGallery[0] !== null && (
                       <Photo
-                        content={true}
-                        size={80}
+                        width={80}
                         height={80}
                         card
                         image={imageGallery[0]}
@@ -381,18 +387,11 @@ export default function DetailsScreen(props) {
                   </Block>
                   <Block flex={false}>
                     {imageGallery[1] == null && (
-                      <Photo
-                        content={true}
-                        size={80}
-                        height={80}
-                        card
-                        image={no_photo}
-                      />
+                      <Photo width={80} height={80} card image={no_photo} />
                     )}
                     {imageGallery[1] !== null && (
                       <Photo
-                        content={true}
-                        size={80}
+                        width={80}
                         height={80}
                         card
                         image={imageGallery[1]}
